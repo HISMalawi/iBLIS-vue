@@ -1,0 +1,7 @@
+{
+  "name": "iblis vue",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
