@@ -17,12 +17,12 @@
 
           <div id="flex-container">
 
-            <options-card btnTitle="Settings"/> 
-            <options-card btnTitle="Setting"/> 
-            <options-card btnTitle="Setting"/> 
-            <options-card btnTitle="Setting"/> 
-            <options-card btnTitle="Setting"/> 
-            <options-card btnTitle="Setting"/> 
+            <options-card btnTitle="Search" icon="search"/> 
+            <options-card btnTitle="Register" icon="register"/> 
+            <options-card btnTitle="Order" icon="order"/> 
+            <options-card btnTitle="Results" icon="results"/> 
+            <options-card btnTitle="Pending" icon="pending"/> 
+            <options-card btnTitle="Configurations" icon="configurations"/> 
             
           
           </div>
