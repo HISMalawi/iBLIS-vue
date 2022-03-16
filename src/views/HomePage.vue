@@ -3,6 +3,14 @@
     <ion-header :translucent="true">
       <ion-toolbar>
         <ion-title>iBLIS</ion-title>
+        <ion-buttons slot="secondary">
+          <ion-button>
+            <ion-icon slot="icon-only" :icon="mailOutline"></ion-icon>
+          </ion-button>
+          <ion-button>
+            <ion-icon slot="icon-only" :icon="notificationsOutline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
       </ion-toolbar>
     </ion-header>
     
@@ -10,6 +18,14 @@
       <ion-header collapse="condense">
         <ion-toolbar>
           <ion-title size="large">iBLIS</ion-title>
+          <ion-buttons slot="secondary">
+          <ion-button>
+            <ion-icon slot="icon-only" :icon="mailOutline"></ion-icon>
+          </ion-button>
+          <ion-button>
+            <ion-icon slot="icon-only" :icon="notificationsOutline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
         </ion-toolbar>
       </ion-header>
     
@@ -19,12 +35,11 @@
 
             <options-card btnTitle="Search" icon="search"/> 
             <options-card btnTitle="Register" icon="register"/> 
-            <options-card btnTitle="Order" icon="order"/> 
+            <options-card btnTitle="Order" icon="order"/>
             <options-card btnTitle="Results" icon="results"/> 
             <options-card btnTitle="Pending" icon="pending"/> 
             <options-card btnTitle="Configurations" icon="configurations"/> 
-            
-          
+             
           </div>
       </div>
     </ion-content>
@@ -32,7 +47,8 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonButton, IonIcon } from '@ionic/vue';
+import { notificationsOutline, mailOutline} from "ionicons/icons"
 import { defineComponent } from 'vue';
 import OptionsCard from "@/components/OptionsCard.vue"
 
@@ -44,7 +60,14 @@ export default defineComponent({
     IonPage,
     IonTitle,
     IonToolbar,
+    IonButtons, 
+    IonButton,
+    IonIcon,
     OptionsCard
+  },
+  setup(){
+
+    return { notificationsOutline, mailOutline }
   }
 });
 </script>
