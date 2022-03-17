@@ -1,10 +1,8 @@
 <template>
   <ion-card class="opt-card">
     <ion-card-content class="opt-content">
-        
       <ion-row>
-        <ion-col col-4></ion-col>
-        <ion-col col-4>
+        <ion-col>
           <img
             v-if="icon == 'search'"
             class="opt-img"
@@ -40,19 +38,16 @@
             class="opt-img"
             src="../assets/configurations-icon.png"
           />
-
         </ion-col>
-        <ion-col col-4></ion-col>
       </ion-row>
 
       <ion-label>{{ btnTitle }}</ion-label>
-
     </ion-card-content>
   </ion-card>
 </template>
 
 <script lang="ts">
-import { IonCard, IonCardContent, IonLabel, IonCol, IonRow} from "@ionic/vue";
+import { IonCard, IonCardContent, IonLabel, IonCol, IonRow } from "@ionic/vue";
 import { defineComponent } from "vue";
 
 export default defineComponent({
@@ -69,7 +64,6 @@ export default defineComponent({
     },
   },
   setup() {
-
     return {};
   },
 });
@@ -86,9 +80,20 @@ export default defineComponent({
 }
 
 .opt-img {
-  width: 60px;
-  text-align: center;
-  display: block;
-  align-self: center;
+  height: 60px !important;
+  width: auto !important;
+  align-items: center;
+}
+
+@media screen and (max-width: 1138px) and (max-height: 712px) {
+  .opt-card {
+    min-width: 300px;
+  }
+}
+
+@media screen and (max-width: 712px) and (max-height: 1138px) {
+  .opt-card {
+    min-width: 300px;
+  }
 }
 </style>
