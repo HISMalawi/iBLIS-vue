@@ -1,5 +1,5 @@
 <template>
-  <ion-card class="opt-card" @click="Navigate">
+  <ion-card class="opt-card" @click="Navigate(btnTitle)">
     <ion-card-content class="opt-content">
       <ion-row>
         <ion-col>
@@ -63,11 +63,12 @@ export default defineComponent({
       required: true,
     },
   },
-  setup() {
+  emits: ['OpenView'],
+  setup(props, context) {
 
-    const Navigate = () => {
-      
-        console.log("Clicked")
+    const Navigate = (viewName : string) => {
+
+        context.emit('OpenView', viewName)
     }
 
     return { Navigate };
@@ -82,6 +83,7 @@ export default defineComponent({
   margin-top: 0px;
   background-color: white;
 }
+
 .opt-content {
   text-align: center;
 }

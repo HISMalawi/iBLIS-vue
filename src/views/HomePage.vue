@@ -11,12 +11,12 @@
 
           <div id="flex-container">
 
-            <options-card btnTitle="Search" icon="search"/> 
-            <options-card btnTitle="Register" icon="register"/> 
-            <options-card btnTitle="Order" icon="order"/>
-            <options-card btnTitle="Results" icon="results"/> 
-            <options-card btnTitle="Pending" icon="pending"/> 
-            <options-card btnTitle="Configurations" icon="configurations"/> 
+            <options-card @OpenView="Navigate" btnTitle="Search" icon="search"/> 
+            <options-card @OpenView="Navigate" btnTitle="Register" icon="register"/> 
+            <options-card @OpenView="Navigate" btnTitle="Order" icon="order"/>
+            <options-card @OpenView="Navigate" btnTitle="Results" icon="results"/> 
+            <options-card @OpenView="Navigate" btnTitle="Pending" icon="pending"/> 
+            <options-card @OpenView="Navigate" btnTitle="Configurations" icon="configurations"/> 
              
           </div>
       </div>
@@ -29,8 +29,8 @@
 
 <script lang="ts">
 import { IonContent, IonPage } from '@ionic/vue';
-import { notificationsOutline, mailOutline} from "ionicons/icons"
 import { defineComponent } from 'vue';
+import { useRouter } from "vue-router";
 import CollapseToolBar from "@/components/CollapseToolBar.vue"
 import ToolBar from "@/components/ToolBar.vue"
 import AppFooter from "@/components/AppFooter.vue"
@@ -48,7 +48,43 @@ export default defineComponent({
   },
   setup(){
 
-    return { notificationsOutline, mailOutline }
+    const router = useRouter();
+
+    const Navigate = (viewName : string) => {
+
+        
+        switch(viewName) {
+          case "Search":
+            // code block
+
+            router.push("/search");
+            break;
+          case "Register":
+            // code block
+            console.log("2")
+            break;
+          case "Order":
+            // code block
+            console.log("3")
+            break;
+          case "Results":
+            // code block
+            console.log("4")
+            break;
+          case "Pending":
+            // code block
+            console.log("5")
+            break;
+          case "Configurations":
+            // code block
+            console.log("6")
+            break;
+          default:
+            // code block
+        }
+    }
+
+    return { Navigate }
   }
 });
 </script>
