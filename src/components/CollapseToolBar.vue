@@ -1,0 +1,45 @@
+<template>
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">iBLISx</ion-title>
+      <ion-buttons slot="secondary">
+        <ion-button>
+          <ion-icon slot="icon-only" :icon="mailOutline"></ion-icon>
+        </ion-button>
+        <ion-button>
+          <ion-icon slot="icon-only" :icon="notificationsOutline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+</template>
+
+<script lang="ts">
+import {
+  IonHeader,
+  IonTitle,
+  IonToolbar,
+  IonButtons,
+  IonButton,
+  IonIcon,
+} from "@ionic/vue";
+import { notificationsOutline, mailOutline } from "ionicons/icons";
+import { defineComponent } from "vue";
+
+export default defineComponent({
+  name: "CollapseToolBar",
+  components: {
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    IonButtons,
+    IonButton,
+    IonIcon,
+  },
+  setup() {
+    return { notificationsOutline, mailOutline };
+  },
+});
+</script>
+
+<style></style>

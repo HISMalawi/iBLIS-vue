@@ -1,33 +1,11 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>iBLIS</ion-title>
-        <ion-buttons slot="secondary">
-          <ion-button>
-            <ion-icon slot="icon-only" :icon="mailOutline"></ion-icon>
-          </ion-button>
-          <ion-button>
-            <ion-icon slot="icon-only" :icon="notificationsOutline"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
+    
+    <tool-bar/>
     
     <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">iBLIS</ion-title>
-          <ion-buttons slot="secondary">
-          <ion-button>
-            <ion-icon slot="icon-only" :icon="mailOutline"></ion-icon>
-          </ion-button>
-          <ion-button>
-            <ion-icon slot="icon-only" :icon="notificationsOutline"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
+
+      <collapse-tool-bar/>
     
       <div id="container">
 
@@ -47,22 +25,20 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButtons, IonButton, IonIcon } from '@ionic/vue';
+import { IonContent, IonPage } from '@ionic/vue';
 import { notificationsOutline, mailOutline} from "ionicons/icons"
 import { defineComponent } from 'vue';
+import CollapseToolBar from "@/components/CollapseToolBar.vue"
+import ToolBar from "@/components/ToolBar.vue"
 import OptionsCard from "@/components/OptionsCard.vue"
 
 export default defineComponent({
   name: 'HomePage',
   components: {
     IonContent,
-    IonHeader,
     IonPage,
-    IonTitle,
-    IonToolbar,
-    IonButtons, 
-    IonButton,
-    IonIcon,
+    ToolBar,
+    CollapseToolBar,
     OptionsCard
   },
   setup(){

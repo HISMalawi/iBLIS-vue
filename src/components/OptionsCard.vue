@@ -56,6 +56,7 @@ import { IonCard, IonCardContent, IonLabel, IonCol, IonRow} from "@ionic/vue";
 import { defineComponent } from "vue";
 
 export default defineComponent({
+  name: "OptionsCard",
   components: { IonCard, IonCardContent, IonLabel, IonCol, IonRow },
   props: {
     btnTitle: {
