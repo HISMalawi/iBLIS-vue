@@ -61,7 +61,8 @@ export default defineComponent({
             break;
           case "Register":
             // code block
-            console.log("2")
+
+            router.push("/register");
             break;
           case "Order":
             // code block
