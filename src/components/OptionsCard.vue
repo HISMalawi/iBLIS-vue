@@ -1,4 +1,5 @@
 <template>
+   
   <ion-card class="opt-card" @click="Navigate(btnTitle)">
     <ion-card-content class="opt-content">
       <ion-row>
@@ -44,6 +45,7 @@
       <ion-label>{{ btnTitle }}</ion-label>
     </ion-card-content>
   </ion-card>
+  
 </template>
 
 <script lang="ts">
