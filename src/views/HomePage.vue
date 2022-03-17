@@ -76,7 +76,8 @@ export default defineComponent({
             break;
           case "Pending":
             // code block
-            console.log("5")
+            
+            router.push("/pending");
             break;
           case "Configurations":
             // code block
