@@ -1,7 +1,7 @@
 <template>
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-buttons slot="start">
+      <ion-buttons v-if="defaltBackButtonLink !== '#'"  slot="start">
         <ion-back-button :default-href="defaltBackButtonLink"></ion-back-button>
       </ion-buttons>
       <ion-title size="large">{{pageTitle}}</ion-title>
@@ -50,7 +50,7 @@ export default defineComponent({
     defaltBackButtonLink: {
       type: String,
       required: false,
-      default: "/home",
+      default: "#",
     },
   },
   setup() {

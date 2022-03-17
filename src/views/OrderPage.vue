@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     
-    <tool-bar pageTitle="iBLIS | Order"/>
+    <tool-bar pageTitle="iBLIS | Order" defaltBackButtonLink="/home"/>
     
     <ion-content :fullscreen="true">
 
