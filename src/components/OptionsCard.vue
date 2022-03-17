@@ -1,5 +1,5 @@
 <template>
-  <ion-card class="opt-card">
+  <ion-card class="opt-card" @click="Navigate">
     <ion-card-content class="opt-content">
       <ion-row>
         <ion-col>
@@ -64,7 +64,13 @@ export default defineComponent({
     },
   },
   setup() {
-    return {};
+
+    const Navigate = () => {
+      
+        console.log("Clicked")
+    }
+
+    return { Navigate };
   },
 });
 </script>
