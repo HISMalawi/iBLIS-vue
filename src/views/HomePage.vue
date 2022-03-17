@@ -81,7 +81,8 @@ export default defineComponent({
             break;
           case "Configurations":
             // code block
-            console.log("6")
+            
+            router.push("/configurations");
             break;
           default:
             // code block

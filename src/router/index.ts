@@ -6,6 +6,7 @@ import RegisterPage from '../views/RegisterPage.vue'
 import OrderPage from '../views/OrderPage.vue'
 import ResultsPage from '../views/ResultsPage.vue'
 import PendingPage from '../views/PendingPage.vue'
+import ConfigurationsPage from '../views/ConfigurationsPage.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -41,6 +42,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/pending',
     name: 'Pending',
     component: PendingPage
+  },
+  {
+    path: '/configurations',
+    name: 'Configurations',
+    component: ConfigurationsPage
   }
 ]
 
