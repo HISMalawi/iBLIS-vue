@@ -71,7 +71,8 @@ export default defineComponent({
             break;
           case "Results":
             // code block
-            console.log("4")
+            
+            router.push("/results");
             break;
           case "Pending":
             // code block

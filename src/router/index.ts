@@ -4,6 +4,7 @@ import HomePage from '../views/HomePage.vue'
 import SearchPage from '../views/SearchPage.vue'
 import RegisterPage from '../views/RegisterPage.vue'
 import OrderPage from '../views/OrderPage.vue'
+import ResultsPage from '../views/ResultsPage.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -29,6 +30,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/order',
     name: 'Order',
     component: OrderPage
+  },
+  {
+    path: '/results',
+    name: 'Results',
+    component: ResultsPage
   }
 ]
 
