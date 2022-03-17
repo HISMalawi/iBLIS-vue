@@ -63,9 +63,11 @@ export default defineComponent({
 }
 
 #container {
-  height: 100%;
-  background: #eee;
   padding-top: 15px;
+}
+
+ion-content{
+  --ion-background-color:#eee;
 }
 
 </style>

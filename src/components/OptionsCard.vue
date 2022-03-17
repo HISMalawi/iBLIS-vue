@@ -74,6 +74,7 @@ export default defineComponent({
   flex: 1;
   min-width: 160px;
   margin-top: 0px;
+  background-color: white;
 }
 .opt-content {
   text-align: center;
