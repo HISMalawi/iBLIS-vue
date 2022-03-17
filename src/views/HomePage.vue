@@ -21,6 +21,9 @@
           </div>
       </div>
     </ion-content>
+
+    <app-footer />
+
   </ion-page>
 </template>
 
@@ -30,6 +33,7 @@ import { notificationsOutline, mailOutline} from "ionicons/icons"
 import { defineComponent } from 'vue';
 import CollapseToolBar from "@/components/CollapseToolBar.vue"
 import ToolBar from "@/components/ToolBar.vue"
+import AppFooter from "@/components/AppFooter.vue"
 import OptionsCard from "@/components/OptionsCard.vue"
 
 export default defineComponent({
@@ -39,6 +43,7 @@ export default defineComponent({
     IonPage,
     ToolBar,
     CollapseToolBar,
+    AppFooter,
     OptionsCard
   },
   setup(){
