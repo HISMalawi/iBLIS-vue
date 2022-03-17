@@ -66,7 +66,8 @@ export default defineComponent({
             break;
           case "Order":
             // code block
-            console.log("3")
+            
+            router.push("/order");
             break;
           case "Results":
             // code block
