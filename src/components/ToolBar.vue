@@ -1,7 +1,10 @@
 <template>
   <ion-header :translucent="true">
     <ion-toolbar>
-      <ion-title>{{pageTitle}}</ion-title>
+      <ion-buttons slot="start">
+        <ion-back-button :default-href="defaltBackButtonLink"></ion-back-button>
+      </ion-buttons>
+      <ion-title>{{ pageTitle }}</ion-title>
       <ion-buttons slot="secondary">
         <ion-button>
           <ion-icon slot="icon-only" :icon="mailOutline"></ion-icon>
@@ -21,6 +24,7 @@ import {
   IonToolbar,
   IonButtons,
   IonButton,
+  IonBackButton,
   IonIcon,
 } from "@ionic/vue";
 import { notificationsOutline, mailOutline } from "ionicons/icons";
@@ -34,6 +38,7 @@ export default defineComponent({
     IonToolbar,
     IonButtons,
     IonButton,
+    IonBackButton,
     IonIcon,
   },
   props: {
@@ -41,6 +46,11 @@ export default defineComponent({
       type: String,
       required: false,
       default: "iBLIS",
+    },
+    defaltBackButtonLink: {
+      type: String,
+      required: false,
+      default: "/home",
     },
   },
   setup() {
