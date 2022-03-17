@@ -1,7 +1,7 @@
 <template>
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">iBLISx</ion-title>
+      <ion-title size="large">{{pageTitle}}</ion-title>
       <ion-buttons slot="secondary">
         <ion-button>
           <ion-icon slot="icon-only" :icon="mailOutline"></ion-icon>
@@ -35,6 +35,13 @@ export default defineComponent({
     IonButtons,
     IonButton,
     IonIcon,
+  },
+  props: {
+    pageTitle: {
+      type: String,
+      required: false,
+      default: "iBLIS",
+    },
   },
   setup() {
     return { notificationsOutline, mailOutline };

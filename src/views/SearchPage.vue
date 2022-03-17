@@ -1,11 +1,11 @@
 <template>
   <ion-page>
     
-    <tool-bar/>
+    <tool-bar pageTitle="iBLIS | Search"/>
     
     <ion-content :fullscreen="true">
 
-      <collapse-tool-bar/>
+      <collapse-tool-bar pageTitle="iBLIS | Search"/>
     
       <div id="container">
 
