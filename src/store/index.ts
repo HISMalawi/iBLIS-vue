@@ -17,7 +17,7 @@ import { Ward } from "@/interfaces/Ward";
 const axios = require("axios").create({
   baseURL: process.env.VUE_APP_SERVICE_BASE_URL,
   timeout: process.env.VUE_APP_REQUEST_TIMEOUT,
-});
+}).default;
 
 const user: User = {
   id: 0,
