@@ -3,7 +3,7 @@
     <ion-content :fullscreen="true">
       <div id="container">
         <div id="flex-container">
-          <ion-card class="login-card" @click="Navigate(btnTitle)">
+          <ion-card class="login-card">
             <ion-card-content class="login-content">
               <ion-row>
                 <ion-col class="login-avatar-col">
@@ -17,11 +17,11 @@
                 <ion-col>
                   <ion-item>
                     <ion-label position="floating">Username</ion-label>
-                    <ion-input></ion-input>
+                    <ion-input v-model="authCred.username"></ion-input>
                   </ion-item>
                   <ion-item>
                     <ion-label position="floating">Password</ion-label>
-                    <ion-input></ion-input>
+                    <ion-input v-model="authCred.password"></ion-input>
                   </ion-item>
                 </ion-col>
               </ion-row>
@@ -50,9 +50,16 @@ import {
   IonCol,
   IonItem,
   IonLabel,
-  IonInput
+  IonInput,
+  IonButton
 } from "@ionic/vue";
-import { defineComponent } from "vue";
+import { defineComponent, reactive, ref, watch, watchEffect } from "vue";
+import { AuthRequest } from "@/interfaces/AuthRequest";
+import { useRouter } from "vue-router";
+import { useStore } from "@/store";
+import Authenticate from "@/composables/authenticate";
+import GetAllWards from "@/composables/getAllWards";
+import { Ward } from "@/interfaces/Ward";
 
 export default defineComponent({
   name: "LoginPage",
@@ -65,10 +72,51 @@ export default defineComponent({
     IonCol,
     IonItem,
     IonLabel,
-    IonInput
+    IonInput,
+    IonButton
   },
   setup() {
-    return {};
+    const store = useStore();
+    const router = useRouter();
+
+    const selectedWard = ref<Ward>({
+      id: 0,
+      name: "--- Select Ward / Location ---",
+    });
+
+    const { Wards, fetchWards } = GetAllWards();
+
+    fetchWards();
+
+    const { login, message } = Authenticate();
+
+    const authCred: AuthRequest = reactive({
+      username: "",
+      password: "",
+    });
+
+    const Signin = () => {
+      if (selectedWard.value.id == 0) {
+        message.value = "Requesting Ward / Location is required"
+      } else {
+        login(authCred, selectedWard.value);
+      }
+    };
+
+    watchEffect(() => {
+      if (store.getters.isLoggedIn) {
+        router.push("/");
+      }
+    });
+
+    watch(
+      () => [selectedWard.value],
+      () => {
+        message.value = ""
+      }
+    );
+
+    return { authCred, Signin, message, Wards, selectedWard };
   },
 });
 </script>

@@ -1,7 +1,6 @@
 import { ref } from "vue";
 import { useStore } from "@/store";
 import { Ward } from "@/interfaces/Ward";
-import { VisitType } from "@/interfaces/VisitType";
 import TokenCheck from "@/composables/tokenCheck";
 
 const { logout } = TokenCheck()
