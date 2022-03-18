@@ -20,19 +20,19 @@
                     <ion-input class="custom-item" v-model="authCred.username"></ion-input>
                   </ion-item>
 
+                </ion-col>
+              </ion-row>
+
+              <ion-row>
+                <ion-col>
+
                   <ion-item>
                     <ion-label position="floating">Password</ion-label>
                     <ion-input v-model="authCred.password"></ion-input>
                   </ion-item>
-
-                </ion-col>
-              </ion-row>
-
-              <!-- <ion-row>
-                <ion-col>
                   
                 </ion-col>
-              </ion-row> -->
+              </ion-row>
               <ion-row>
                 <ion-col class="error-msgs-col">
                   <ion-item>
