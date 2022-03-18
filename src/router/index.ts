@@ -7,6 +7,7 @@ import OrderPage from '../views/OrderPage.vue'
 import ResultsPage from '../views/ResultsPage.vue'
 import PendingPage from '../views/PendingPage.vue'
 import ConfigurationsPage from '../views/ConfigurationsPage.vue'
+import LoginPage from '../views/LoginPage.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -47,6 +48,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/configurations',
     name: 'Configurations',
     component: ConfigurationsPage
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: LoginPage
   }
 ]
 

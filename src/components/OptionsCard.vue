@@ -41,7 +41,6 @@
           />
         </ion-col>
       </ion-row>
-
       <ion-label>{{ btnTitle }}</ion-label>
     </ion-card-content>
   </ion-card>
