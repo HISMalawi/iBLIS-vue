@@ -15,21 +15,42 @@
               </ion-row>
               <ion-row>
                 <ion-col>
-                  <ion-item>
+                  <ion-item >
                     <ion-label position="floating">Username</ion-label>
-                    <ion-input v-model="authCred.username"></ion-input>
+                    <ion-input class="custom-item" v-model="authCred.username"></ion-input>
                   </ion-item>
+
                   <ion-item>
                     <ion-label position="floating">Password</ion-label>
                     <ion-input v-model="authCred.password"></ion-input>
                   </ion-item>
+
+                </ion-col>
+              </ion-row>
+
+              <!-- <ion-row>
+                <ion-col>
+                  
+                </ion-col>
+              </ion-row> -->
+              <ion-row>
+                <ion-col class="error-msgs-col">
+                  <ion-item>
+                    <ion-label>Ward / Location</ion-label>
+                    <ion-select v-model="selectedWard">
+                      <ion-select-option :value="ward" v-for="ward in Wards" :key="ward.id">{{ ward.name }}</ion-select-option>
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col class="error-msgs-col">
+                  <ion-label class="error-msgs-label">{{ message }}</ion-label>
                 </ion-col>
               </ion-row>
               <ion-row>
                 <ion-col>
-
-                  <ion-button expand="block">Login</ion-button>
-                  
+                  <ion-button expand="block" @click="Signin">Login</ion-button>
                 </ion-col>
               </ion-row>
             </ion-card-content>
@@ -51,7 +72,9 @@ import {
   IonItem,
   IonLabel,
   IonInput,
-  IonButton
+  IonButton,
+  IonSelect,
+  IonSelectOption
 } from "@ionic/vue";
 import { defineComponent, reactive, ref, watch, watchEffect } from "vue";
 import { AuthRequest } from "@/interfaces/AuthRequest";
@@ -73,7 +96,9 @@ export default defineComponent({
     IonItem,
     IonLabel,
     IonInput,
-    IonButton
+    IonButton,
+    IonSelect,
+    IonSelectOption
   },
   setup() {
     const store = useStore();
@@ -81,7 +106,7 @@ export default defineComponent({
 
     const selectedWard = ref<Ward>({
       id: 0,
-      name: "--- Select Ward / Location ---",
+      name: "--- Select ---",
     });
 
     const { Wards, fetchWards } = GetAllWards();
@@ -96,8 +121,12 @@ export default defineComponent({
     });
 
     const Signin = () => {
-      if (selectedWard.value.id == 0) {
-        message.value = "Requesting Ward / Location is required"
+      if (authCred.username == "") {
+        message.value = "Username is required";
+      } else if (authCred.password == "") {
+        message.value = "Password is required";
+      } else if (selectedWard.value.id == 0) {
+        message.value = "Requesting Ward / Location is required";
       } else {
         login(authCred, selectedWard.value);
       }
@@ -112,7 +141,7 @@ export default defineComponent({
     watch(
       () => [selectedWard.value],
       () => {
-        message.value = ""
+        message.value = "";
       }
     );
 
@@ -138,7 +167,7 @@ ion-content {
 }
 .login-card {
   width: 400px;
-  margin-top: 8%;
+  margin-top: 6%;
   padding: 10px;
   background-color: white;
 }
@@ -152,4 +181,11 @@ ion-content {
 .login-avatar-col {
   text-align: center;
 }
+.error-msgs-col {
+  text-align: center;
+}
+.error-msgs-label {
+  color: rgb(201, 19, 19);
+}
+
 </style>
