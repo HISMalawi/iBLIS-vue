@@ -28,7 +28,7 @@
 
                   <ion-item>
                     <ion-label position="floating">Password</ion-label>
-                    <ion-input v-model="authCred.password"></ion-input>
+                    <ion-input type="password" v-model="authCred.password"></ion-input>
                   </ion-item>
                   
                 </ion-col>
@@ -140,6 +140,20 @@ export default defineComponent({
 
     watch(
       () => [selectedWard.value],
+      () => {
+        message.value = "";
+      }
+    );
+
+    watch(
+      () => [authCred.username],
+      () => {
+        message.value = "";
+      }
+    );
+
+    watch(
+      () => [authCred.password],
       () => {
         message.value = "";
       }
