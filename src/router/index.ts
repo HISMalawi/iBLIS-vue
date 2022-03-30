@@ -1,11 +1,9 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 import HomePage from '../views/HomePage.vue'
-import SearchPage from '../views/SearchPage.vue'
-import RegisterPage from '../views/RegisterPage.vue'
-import OrderPage from '../views/OrderPage.vue'
-import ResultsPage from '../views/ResultsPage.vue'
-import PendingPage from '../views/PendingPage.vue'
+import SearchOrRegisterPage from '../views/SearchOrRegisterPage.vue'
+import PendingOrdersPage from '../views/PendingOrdersPage.vue'
+import SummaryPage from '../views/SummaryPage.vue'
 import ConfigurationsPage from '../views/ConfigurationsPage.vue'
 import LoginPage from '../views/LoginPage.vue'
 
@@ -20,29 +18,19 @@ const routes: Array<RouteRecordRaw> = [
     component: HomePage
   },
   {
-    path: '/search',
-    name: 'Search',
-    component: SearchPage
+    path: '/search_or_register',
+    name: 'SearchOrRegister',
+    component: SearchOrRegisterPage
   },
   {
-    path: '/register',
-    name: 'Register',
-    component: RegisterPage
+    path: '/summary',
+    name: 'Summary',
+    component: SummaryPage
   },
   {
-    path: '/order',
-    name: 'Order',
-    component: OrderPage
-  },
-  {
-    path: '/results',
-    name: 'Results',
-    component: ResultsPage
-  },
-  {
-    path: '/pending',
-    name: 'Pending',
-    component: PendingPage
+    path: '/pending_orders',
+    name: 'PendingOrders',
+    component: PendingOrdersPage
   },
   {
     path: '/configurations',

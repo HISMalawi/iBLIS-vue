@@ -1,11 +1,11 @@
 <template>
   <ion-page>
     
-    <tool-bar pageTitle="iBLIS | Search" defaltBackButtonLink="/home"/>
+    <tool-bar pageTitle="iBLIS | Search / Register" defaltBackButtonLink="/home"/>
     
     <ion-content :fullscreen="true">
 
-      <collapse-tool-bar pageTitle="iBLIS | Search"/>
+      <collapse-tool-bar pageTitle="iBLIS | Search / Register"/>
     
       <div id="container">
 
@@ -30,7 +30,7 @@ import ToolBar from "@/components/ToolBar.vue"
 import AppFooter from "@/components/AppFooter.vue"
 
 export default defineComponent({
-  name: 'SearchPage',
+  name: 'SearchOrRegisterPage',
   components: {
     IonContent,
     IonPage,

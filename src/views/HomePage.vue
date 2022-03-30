@@ -62,30 +62,22 @@ export default defineComponent({
 
     const Navigate = (viewName: string) => {
       switch (viewName) {
-        case "Search":
+        
+        case "Search / Register":
           // code block
 
-          router.push("/search");
+          router.push("/search_or_register");
           break;
-        case "Register":
+        case "Summary":
           // code block
 
-          router.push("/register");
+          router.push("/summary");
           break;
-        case "Order":
+    
+        case "Pending Orders":
           // code block
 
-          router.push("/order");
-          break;
-        case "Results":
-          // code block
-
-          router.push("/results");
-          break;
-        case "Pending":
-          // code block
-
-          router.push("/pending");
+          router.push("/pending_orders");
           break;
         case "Configurations":
           // code block

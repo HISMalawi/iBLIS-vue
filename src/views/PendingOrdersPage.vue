@@ -1,11 +1,11 @@
 <template>
   <ion-page>
     
-    <tool-bar pageTitle="iBLIS | Order" defaltBackButtonLink="/home"/>
+    <tool-bar pageTitle="iBLIS | Pending Orders" defaltBackButtonLink="/home"/>
     
     <ion-content :fullscreen="true">
 
-      <collapse-tool-bar pageTitle="iBLIS | Order"/>
+      <collapse-tool-bar pageTitle="iBLIS | Pending Orders"/>
     
       <div id="container">
 
@@ -30,7 +30,7 @@ import ToolBar from "@/components/ToolBar.vue"
 import AppFooter from "@/components/AppFooter.vue"
 
 export default defineComponent({
-  name: 'OrderPage',
+  name: 'PendingOrdersPage',
   components: {
     IonContent,
     IonPage,
