@@ -10,26 +10,21 @@
          
             <options-card
               @OpenView="Navigate"
-              btnTitle="Search"
+              btnTitle="Search / Register"
               icon="search"
             />
+            
             <options-card
               @OpenView="Navigate"
-              btnTitle="Register"
-              icon="register"
-            />
-            <options-card @OpenView="Navigate" btnTitle="Order" icon="order" />
-            <options-card
-              @OpenView="Navigate"
-              btnTitle="Results"
+              btnTitle="Summary"
               icon="results"
             />
             <options-card
               @OpenView="Navigate"
-              btnTitle="Pending"
+              btnTitle="Pending Orders"
               icon="pending"
             />
-            <options-card
+            <options-card class="last-option"
               @OpenView="Navigate"
               btnTitle="Configurations"
               icon="configurations"
@@ -113,6 +108,14 @@ export default defineComponent({
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
+}
+
+
+@media screen and (max-width: 1138px) and (max-height: 712px) {
+  .last-option {
+    margin-right: auto;
+    order: 2;
+  }
 }
 
 #container {

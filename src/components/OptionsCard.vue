@@ -81,6 +81,7 @@ export default defineComponent({
 .opt-card {
   flex: 1;
   min-width: 160px;
+  max-width: 360px; 
   margin-top: 0px;
   background-color: white;
 }
