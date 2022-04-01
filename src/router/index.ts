@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
 import HomePage from '../views/HomePage.vue'
 import SearchOrRegisterPage from '../views/SearchOrRegisterPage.vue'
+import SearchPage from '../views/SearchPage.vue'
+import RegisterPage from '../views/RegisterPage.vue'
 import PendingOrdersPage from '../views/PendingOrdersPage.vue'
 import SummaryPage from '../views/SummaryPage.vue'
 import ConfigurationsPage from '../views/ConfigurationsPage.vue'
@@ -21,6 +23,16 @@ const routes: Array<RouteRecordRaw> = [
     path: '/search_or_register',
     name: 'SearchOrRegister',
     component: SearchOrRegisterPage
+  },
+  {
+    path: '/search',
+    name: 'Search',
+    component: SearchPage
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: RegisterPage
   },
   {
     path: '/summary',

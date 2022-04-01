@@ -1,27 +1,17 @@
 <template>
   <ion-page>
     
-    <tool-bar pageTitle="iBLIS | Search / Register" defaltBackButtonLink="/home"/>
+    <tool-bar pageTitle="iBLIS | Search" defaltBackButtonLink="/search_or_register"/>
     
     <ion-content :fullscreen="true">
 
-      <collapse-tool-bar pageTitle="iBLIS | Search / Register"/>
+      <collapse-tool-bar pageTitle="iBLIS | Search"/>
     
       <div id="container">
 
           <div id="flex-container">
 
-            <options-card
-              @OpenView="Navigate"
-              btnTitle="Search"
-              icon="search"
-            />
-
-            <options-card
-              @OpenView="Navigate"
-              btnTitle="Register"
-              icon="register"
-            /> 
+         
              
           </div>
       </div>
@@ -37,43 +27,24 @@ import { IonContent, IonPage } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import { useRouter } from "vue-router";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
-import OptionsCard from "@/components/OptionsCard.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import AppFooter from "@/components/AppFooter.vue";
 
 export default defineComponent({
-  name: 'SearchOrRegisterPage',
+  name: 'SearchPage',
   components: {
     IonContent,
     IonPage,
     ToolBar,
     CollapseToolBar,
     AppFooter,
-    OptionsCard
   },
   setup(){
 
     const router = useRouter();
 
-    const Navigate = (viewName: string) => {
-      switch (viewName) {
-        
-        case "Search":
-          // code block
-
-          router.push("/search");
-          break;
-        case "Register":
-          // code block
-
-          router.push("register");
-          break;
-        default:
-        // code block
-      }
-    };
-
-    return { Navigate }
+    
+    return { }
   }
 });
 </script>
