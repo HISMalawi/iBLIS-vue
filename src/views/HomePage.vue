@@ -10,16 +10,23 @@
          
             <options-card
               @OpenView="Navigate"
-              btnTitle="Search / Register"
+              btnTitle="Search"
               icon="search"
               CusClass="card-3"
+            />
+
+            <options-card
+              @OpenView="Navigate"
+              btnTitle="Register"
+              icon="register"
+              CusClass="card-2"
             />
             
             <options-card
               @OpenView="Navigate"
               btnTitle="Summary"
               icon="results"
-              CusClass="card-2"
+              CusClass="card-1"
             />
             <options-card
               @OpenView="Navigate"
@@ -67,10 +74,15 @@ export default defineComponent({
     const Navigate = (viewName: string) => {
       switch (viewName) {
         
-        case "Search / Register":
+        case "Search":
           // code block
 
-          router.push("/search_or_register");
+          router.push("/search");
+          break;
+        case "Register":
+          // code block
+
+          router.push("/register");
           break;
         case "Summary":
           // code block
@@ -106,11 +118,19 @@ export default defineComponent({
   justify-content: center;
 }
 
-
 @media screen and (max-width: 1138px) and (max-height: 712px) {
   .last-option {
     margin-right: auto;
-    order: 2;
+    order: 5;
+  }
+}
+
+@media screen and (max-width: 712px) and (max-height: 1138px) {
+  .last-option {
+    margin-right: auto;
+    max-width: 335px;
+    min-width: 300px;
+    order: 5;
   }
 }
 
