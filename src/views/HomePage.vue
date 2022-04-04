@@ -12,22 +12,26 @@
               @OpenView="Navigate"
               btnTitle="Search / Register"
               icon="search"
+              CusClass="card-3"
             />
             
             <options-card
               @OpenView="Navigate"
               btnTitle="Summary"
               icon="results"
+              CusClass="card-2"
             />
             <options-card
               @OpenView="Navigate"
               btnTitle="Pending Orders"
               icon="pending"
+              CusClass="card-4-orange"
             />
             <options-card class="last-option"
               @OpenView="Navigate"
               btnTitle="Configurations"
               icon="configurations"
+              CusClass="card-4-violet"
             />
          
         </div>

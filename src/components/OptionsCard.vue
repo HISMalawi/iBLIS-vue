@@ -1,6 +1,6 @@
 <template>
    
-  <ion-card class="opt-card" @click="Navigate(btnTitle)">
+  <ion-card class="opt-card" :class="CusClass" @click="Navigate(btnTitle)">
     <ion-card-content class="opt-content">
       <ion-row>
         <ion-col>
@@ -63,6 +63,10 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    CusClass: {
+      type: String,
+      required: false,
+    },
   },
   emits: ['OpenView'],
   setup(props, context) {
@@ -83,7 +87,6 @@ export default defineComponent({
   min-width: 160px;
   max-width: 360px; 
   margin-top: 0px;
-  background-color: white;
 }
 
 .opt-content {

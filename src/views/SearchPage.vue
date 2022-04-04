@@ -31,6 +31,31 @@
             
           </ion-radio-group>
         </ion-list>
+
+        <ion-card v-if="currentPage == 4" class="card-4 card-4-yellow">
+            <ion-card-content>
+              <ion-row>
+                <ion-col size="10">
+                  <ion-row>
+                    <ion-col size="12">
+                      <h1>Search info</h1>
+                    </ion-col>
+                    <ion-col size="12">
+                      <div class="bolder"><h2> <span class="light-text">Name</span> --</h2></div>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row>
+                    <ion-col size="12">
+                      <div class="bolder"><h2> <span class="light-text">Gender</span> -- </h2></div>
+                    </ion-col>
+                  </ion-row>
+                </ion-col>
+                <ion-col size="2" class="dashboard-card-icon-col">
+                  <ion-icon :icon="bandageOutline" style="" class="dashboard-card-icon"></ion-icon>
+                </ion-col>
+              </ion-row>
+            </ion-card-content>
+          </ion-card>
       </div>
     </ion-content>
 
@@ -44,7 +69,7 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage, IonInput, IonList, IonRadioGroup, IonItem, IonLabel, IonRadio} from "@ionic/vue";
+import { IonContent, IonPage, IonInput, IonList, IonRadioGroup, IonItem, IonLabel, IonRadio, IonCard, IonCardContent, IonRow, IonCol} from "@ionic/vue";
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
@@ -64,11 +89,12 @@ export default defineComponent({
     IonRadioGroup, 
     IonItem, 
     IonLabel, 
-    IonRadio
+    IonRadio,
+    IonCard, IonCardContent, IonRow, IonCol
   },
   setup() {
     const router = useRouter();
-    const numberOfPages = ref<number>(3);
+    const numberOfPages = ref<number>(4);
     const currentPage = ref<number>(1);
 
     const MoveNextField = () => {

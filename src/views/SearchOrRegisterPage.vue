@@ -15,12 +15,14 @@
               @OpenView="Navigate"
               btnTitle="Search"
               icon="search"
+              CusClass="card-3"
             />
 
             <options-card
               @OpenView="Navigate"
               btnTitle="Register"
               icon="register"
+              CusClass="card-2"
             /> 
              
           </div>

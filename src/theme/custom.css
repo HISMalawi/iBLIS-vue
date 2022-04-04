@@ -1,0 +1,46 @@
+.card-1 {
+    background-color: #8862e0;
+    color: white;
+    background: rgb(74, 140, 208);
+    background: linear-gradient( 90deg, rgba(74, 140, 208, 1) 0%, rgba(136, 98, 224, 1) 49%);
+}
+
+.card-2 {
+    background: rgb(87, 167, 139);
+    background: linear-gradient( 346deg, rgba(87, 167, 139, 1) 0%, rgba(25, 216, 149, 1) 49%);
+    color: white;
+}
+
+.card-3 {
+    background: rgb(2, 105, 186);
+    background: linear-gradient( 346deg, rgba(2, 105, 186, 1) 0%, rgba(33, 150, 243, 1) 49%);
+    color: white;
+}
+
+.card-4-orange{
+    background-color: rgba(235, 186, 131, 0.795);
+    background-image: linear-gradient(150deg, rgba(226, 148, 58, 0.795), rgba(252, 181, 101, 0.795),rgba(231, 136, 20, 0.795));
+    color: #ffffff;
+  }
+  
+  .card-4-violet{
+    color: #ffffff; 
+    background-color: #862f5f;
+  }
+  
+  .card-4-yellow{
+    color: #ffffff;
+    background-color: rgba(48, 113, 151, 0.7);
+    background-image: linear-gradient(150deg, rgba(141, 198, 231, 0.7), rgba(126, 197, 255, 0.7), rgba(50, 118, 156, 0.7));
+  }
+  
+  .card-4-green{
+    color: #ffffff;
+    background-color: rgb(50, 136, 84);
+  }
+  
+  .card-4-gray{
+    color: #ffffff;
+    background-color: rgba(85, 116, 124, 0.699);
+    background-image: linear-gradient(150deg, rgba(129, 151, 158, 0.699), rgba(138, 146, 148, 0.699), rgba(81, 97, 102, 0.699));
+  }
