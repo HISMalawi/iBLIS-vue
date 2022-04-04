@@ -1,69 +1,105 @@
 <template>
   <ion-page>
-    
-    <tool-bar pageTitle="iBLIS | Search" defaltBackButtonLink="/search_or_register"/>
-    
+    <tool-bar
+      pageTitle="iBLIS | Search"
+      defaltBackButtonLink="/search_or_register"
+    />
+
     <ion-content :fullscreen="true">
+      <collapse-tool-bar pageTitle="iBLIS | Search" />
 
-      <collapse-tool-bar pageTitle="iBLIS | Search"/>
-    
       <div id="container">
+        <ion-input v-if="currentPage == 1" placeholder="First Name"></ion-input>
+        <ion-input v-if="currentPage == 2" placeholder="Last Name"></ion-input>
 
-          <div id="flex-container">
+        <ion-list v-if="currentPage == 3">
+          <ion-radio-group>
+            <ion-list-header>
+              <ion-label class="gender-label"> Gender </ion-label>
+            </ion-list-header>
 
-         
-             
-          </div>
+            <ion-item>
+              <ion-label>Male</ion-label>
+              <ion-radio value="male"></ion-radio>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>Female</ion-label>
+              <ion-radio value="female"></ion-radio>
+            </ion-item>
+
+            
+          </ion-radio-group>
+        </ion-list>
       </div>
     </ion-content>
 
-    <app-footer />
-
+    <search-patient-footer
+      @NavigateBack="MovePreviousField"
+      @NavigateNext="MoveNextField"
+      :currentPage="currentPage"
+      :numberOfPages="numberOfPages"
+    />
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage } from '@ionic/vue';
-import { defineComponent } from 'vue';
+import { IonContent, IonPage, IonInput, IonList, IonRadioGroup, IonItem, IonLabel, IonRadio} from "@ionic/vue";
+import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
-import AppFooter from "@/components/AppFooter.vue";
+import SearchPatientFooter from "@/components/SearchPatientFooter.vue";
 
 export default defineComponent({
-  name: 'SearchPage',
+  name: "SearchPage",
   components: {
     IonContent,
     IonPage,
     ToolBar,
     CollapseToolBar,
-    AppFooter,
+    SearchPatientFooter,
+    IonInput,
+    IonList, 
+    IonRadioGroup, 
+    IonItem, 
+    IonLabel, 
+    IonRadio
   },
-  setup(){
-
+  setup() {
     const router = useRouter();
+    const numberOfPages = ref<number>(3);
+    const currentPage = ref<number>(1);
 
-    
-    return { }
-  }
+    const MoveNextField = () => {
+      currentPage.value = currentPage.value + 1;
+    };
+
+    const MovePreviousField = () => {
+      currentPage.value = currentPage.value - 1;
+    };
+
+    return { currentPage, numberOfPages, MoveNextField, MovePreviousField };
+  },
 });
 </script>
 
 <style scoped>
-
-#flex-container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content:center;
-}
-
 #container {
-  padding-top: 15px;
+  padding: 15px;
 }
 
-ion-content{
-  --ion-background-color:#eee;
+ion-content {
+  --ion-background-color: #eee;
 }
 
+ion-input {
+  border: solid 3px rgb(226, 224, 224);
+  border-radius: 8px;
+  background-color: white;
+  font-size: 23px;
+}
+.gender-label {
+  font-size: 23px;
+}
 </style>
