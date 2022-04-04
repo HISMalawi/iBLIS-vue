@@ -1,6 +1,11 @@
 <template>
   <ion-footer collapse="fade">
     <ion-toolbar>
+      <ion-title v-if="currentPage == 1" size="small" slot="start"
+        ><ion-button color="danger" @click="NavigateToMainMenu"
+          >Cancel</ion-button
+        ></ion-title
+      >
       <ion-title v-if="currentPage > 1" size="small" slot="start"
         ><ion-button color="medium" @click="NavigateBack"
           >Back</ion-button
@@ -16,6 +21,7 @@
 <script lang="ts">
 import { IonFooter, IonTitle, IonToolbar, IonButton } from "@ionic/vue";
 import { defineComponent } from "vue";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "SearchPatientFooter",
@@ -37,6 +43,13 @@ export default defineComponent({
   },
   emits: ["NavigateNext", "NavigateBack"],
   setup(props, context) {
+
+    const router = useRouter();
+
+    const NavigateToMainMenu = () => {
+      router.push("/home");
+    }
+
     const NavigateNext = () => {
       context.emit("NavigateNext");
     };
@@ -45,7 +58,7 @@ export default defineComponent({
       context.emit("NavigateBack");
     };
 
-    return { NavigateNext, NavigateBack };
+    return { NavigateNext, NavigateBack, NavigateToMainMenu };
   },
 });
 </script>

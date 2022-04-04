@@ -120,7 +120,7 @@ ion-content {
 }
 
 ion-input {
-  border: solid 3px rgb(226, 224, 224);
+  border: solid 2px rgb(202, 201, 201);
   border-radius: 8px;
   background-color: white;
   font-size: 23px;
