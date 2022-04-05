@@ -15,7 +15,6 @@ const code = ref<string>("");
 
 const SearchPatient = () => {
 
-  
   const axios = ref(store.getters.axios)
 
   const token = ref(store.getters.user.token)
@@ -39,8 +38,6 @@ const SearchPatient = () => {
           if (code.value == "200") {
 
             patients.value = responseData[0]
-            
-
 
             message.value = response.data.message;
           } else {

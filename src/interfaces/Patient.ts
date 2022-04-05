@@ -8,7 +8,7 @@ export interface Patient {
     email:                   string;
     external_patient_number: string;
     first_name_code:         string;
-    gender:                  number;
+    gender:                  string;
     id:                      number;
     last_name_code:          string;
     name:                    string;

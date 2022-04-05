@@ -69,7 +69,7 @@ const patient: Patient = {
   email: "",
   external_patient_number: "",
   first_name_code: "",
-  gender: 0,
+  gender: "",
   id: 0,
   last_name_code: "",
   name: "",

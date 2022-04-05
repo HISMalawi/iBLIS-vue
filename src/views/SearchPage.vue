@@ -76,7 +76,7 @@
           </ion-list-header>
 
           <ion-item v-for="patient in patients" :key="patient.id">
-            <ion-label>Male</ion-label>
+            <ion-label>{{patient.name + ", " + patient.gender + ", " }}</ion-label>
           </ion-item>
 
         </ion-list>
@@ -148,6 +148,8 @@ export default defineComponent({
 
     const { search, patients } = SearchPatient();
 
+    patients.value.length = 0;
+
     const MoveNextField = () => {
       currentPage.value = currentPage.value + 1;
     };
@@ -210,4 +212,5 @@ ion-input {
 .poss-match-list {
   padding: 0 10px;
 }
+
 </style>
