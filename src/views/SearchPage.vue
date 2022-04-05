@@ -71,14 +71,16 @@
         </ion-card>
 
         <ion-list class="poss-match-list" v-if="currentPage == 4">
+          <ion-radio-group>
           <ion-list-header class="card-4-yellow">
             <ion-label class="matches-label"> Possible Matches </ion-label>
           </ion-list-header>
 
           <ion-item v-for="patient in patients" :key="patient.id">
             <ion-label>{{patient.name + ", " + patient.gender + ", " + patient.age + "yrs" }}</ion-label>
+            <ion-radio :value="patient"></ion-radio>
           </ion-item>
-
+          </ion-radio-group>
         </ion-list>
       </div>
     </ion-content>
@@ -164,7 +166,7 @@ export default defineComponent({
         if (currentPage.value == 4) {
 
           patients.value.length = 0;
-          
+
           search(
             searchClient.value.first_name + " " + searchClient.value.last_name, searchClient.value.gender
           );
