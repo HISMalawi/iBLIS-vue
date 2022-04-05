@@ -66,6 +66,7 @@ const patient: Patient = {
   deleted_at: "",
   dob: "",
   dob_estimated: 0,
+  age: "",
   email: "",
   external_patient_number: "",
   first_name_code: "",

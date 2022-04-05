@@ -76,7 +76,7 @@
           </ion-list-header>
 
           <ion-item v-for="patient in patients" :key="patient.id">
-            <ion-label>{{patient.name + ", " + patient.gender + ", " }}</ion-label>
+            <ion-label>{{patient.name + ", " + patient.gender + ", " + patient.age + "yrs" }}</ion-label>
           </ion-item>
 
         </ion-list>

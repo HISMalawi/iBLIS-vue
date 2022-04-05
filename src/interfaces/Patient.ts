@@ -5,6 +5,7 @@ export interface Patient {
     deleted_at:              string;
     dob:                     string;
     dob_estimated:           number;
+    age:                     string;
     email:                   string;
     external_patient_number: string;
     first_name_code:         string;
