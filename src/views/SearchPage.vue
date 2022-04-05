@@ -162,6 +162,9 @@ export default defineComponent({
       () => [currentPage.value],
       () => {
         if (currentPage.value == 4) {
+
+          patients.value.length = 0;
+          
           search(
             searchClient.value.first_name + " " + searchClient.value.last_name, searchClient.value.gender
           );
