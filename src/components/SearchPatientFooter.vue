@@ -58,7 +58,7 @@ export default defineComponent({
     }
 
     const NavigateNext = () => {
-      console.log(props.searchClient)
+
       emit("NavigateNext");
      
     };

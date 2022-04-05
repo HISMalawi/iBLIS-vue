@@ -20,7 +20,7 @@
 
         <ion-list v-if="currentPage == 3">
           <ion-radio-group v-model="searchClient.gender">
-            <ion-list-header>
+            <ion-list-header class="card-4-yellow">
               <ion-label class="gender-label"> Gender </ion-label>
             </ion-list-header>
 
@@ -36,7 +36,7 @@
           </ion-radio-group>
         </ion-list>
 
-        <ion-card v-if="currentPage == 4" class="card-4 card-4-yellow">
+        <ion-card v-if="currentPage == 4" class="card-3">
             <ion-card-content>
               <ion-row>
                 <ion-col size="10">
@@ -57,6 +57,20 @@
               </ion-row>
             </ion-card-content>
         </ion-card>
+
+        <ion-list class="poss-match-list" v-if="currentPage == 4">
+            <ion-list-header class="card-4-yellow">
+              <ion-label class="matches-label"> Possible Matches </ion-label>
+            </ion-list-header>
+
+            <ion-item>
+              <ion-label>Male</ion-label>
+            </ion-item>
+
+            <ion-item>
+              <ion-label>Female</ion-label>
+            </ion-item>
+        </ion-list>
 
 
       </div>
@@ -142,5 +156,11 @@ ion-input {
 }
 .gender-label {
   font-size: 23px;
+}
+.matches-label {
+  font-size: 22px;
+}
+.poss-match-list{
+  padding: 0 10px;
 }
 </style>
