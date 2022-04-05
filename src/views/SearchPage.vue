@@ -37,42 +37,49 @@
         </ion-list>
 
         <ion-card v-if="currentPage == 4" class="card-3">
-            <ion-card-content>
-              <ion-row>
-                <ion-col size="10">
-                  <ion-row>
-                    <ion-col size="12">
-                      <h1>Search info</h1>
-                    </ion-col>
-                    <ion-col size="12">
-                      <div class="bolder"><h2> <span class="light-text">Name :</span> {{ searchClient.first_name + " " + searchClient.last_name}}</h2></div>
-                    </ion-col>
-                  </ion-row>
-                  <ion-row>
-                    <ion-col size="12">
-                      <div class="bolder"><h2> <span class="light-text">Gender :</span> {{ searchClient.gender }} </h2></div>
-                    </ion-col>
-                  </ion-row>
-                </ion-col>
-              </ion-row>
-            </ion-card-content>
+          <ion-card-content>
+            <ion-row>
+              <ion-col size="10">
+                <ion-row>
+                  <ion-col size="12">
+                    <h1>Search info</h1>
+                  </ion-col>
+                  <ion-col size="12">
+                    <div class="bolder">
+                      <h2>
+                        <span class="light-text">Name :</span>
+                        {{
+                          searchClient.first_name + " " + searchClient.last_name
+                        }}
+                      </h2>
+                    </div>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col size="12">
+                    <div class="bolder">
+                      <h2>
+                        <span class="light-text">Gender :</span>
+                        {{ searchClient.gender }}
+                      </h2>
+                    </div>
+                  </ion-col>
+                </ion-row>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
         </ion-card>
 
         <ion-list class="poss-match-list" v-if="currentPage == 4">
-            <ion-list-header class="card-4-yellow">
-              <ion-label class="matches-label"> Possible Matches </ion-label>
-            </ion-list-header>
+          <ion-list-header class="card-4-yellow">
+            <ion-label class="matches-label"> Possible Matches </ion-label>
+          </ion-list-header>
 
-            <ion-item>
-              <ion-label>Male</ion-label>
-            </ion-item>
+          <ion-item v-for="patient in patients" :key="patient.id">
+            <ion-label>Male</ion-label>
+          </ion-item>
 
-            <ion-item>
-              <ion-label>Female</ion-label>
-            </ion-item>
         </ion-list>
-
-
       </div>
     </ion-content>
 
@@ -87,13 +94,29 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage, IonInput, IonList, IonRadio, IonRadioGroup, IonItem, IonLabel, IonListHeader, IonCard, IonCardContent, IonRow, IonCol, onIonViewDidLeave } from "@ionic/vue";
-import { defineComponent, ref } from "vue";
+import {
+  IonContent,
+  IonPage,
+  IonInput,
+  IonList,
+  IonRadio,
+  IonRadioGroup,
+  IonItem,
+  IonLabel,
+  IonListHeader,
+  IonCard,
+  IonCardContent,
+  IonRow,
+  IonCol,
+  onIonViewDidLeave,
+} from "@ionic/vue";
+import { defineComponent, ref, watch } from "vue";
 // import { useRouter } from "vue-router";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import SearchPatientFooter from "@/components/SearchPatientFooter.vue";
 import { SearchClient } from "@/interfaces/SearchClient";
+import SearchPatient from "@/composables/searchPatient";
 
 export default defineComponent({
   name: "SearchPage",
@@ -104,14 +127,26 @@ export default defineComponent({
     CollapseToolBar,
     SearchPatientFooter,
     IonInput,
-    IonList, IonRadio, IonRadioGroup, IonItem, IonLabel, IonListHeader, IonCard, IonCardContent, IonRow, IonCol
+    IonList,
+    IonRadio,
+    IonRadioGroup,
+    IonItem,
+    IonLabel,
+    IonListHeader,
+    IonCard,
+    IonCardContent,
+    IonRow,
+    IonCol,
   },
   setup() {
     // const router = useRouter();
+
     const numberOfPages = ref<number>(4);
     const currentPage = ref<number>(1);
 
     const searchClient = ref<SearchClient>({} as SearchClient);
+
+    const { search, message, patients, code } = SearchPatient();
 
     const MoveNextField = () => {
       currentPage.value = currentPage.value + 1;
@@ -121,11 +156,22 @@ export default defineComponent({
       currentPage.value = currentPage.value - 1;
     };
 
+    watch(
+      () => [currentPage.value],
+      () => {
+        if (currentPage.value == 4) {
+          search(
+            searchClient.value.first_name + " " + searchClient.value.last_name
+          );
+
+        }
+      }
+    );
 
     onIonViewDidLeave(() => {
-      searchClient.value.first_name = ""
-      searchClient.value.last_name = ""
-      searchClient.value.gender = ""
+      searchClient.value.first_name = "";
+      searchClient.value.last_name = "";
+      searchClient.value.gender = "";
     });
 
     return {
@@ -134,6 +180,7 @@ export default defineComponent({
       searchClient,
       MoveNextField,
       MovePreviousField,
+      patients,
     };
   },
 });
@@ -160,7 +207,7 @@ ion-input {
 .matches-label {
   font-size: 22px;
 }
-.poss-match-list{
+.poss-match-list {
   padding: 0 10px;
 }
 </style>

@@ -51,12 +51,13 @@
 
 <script lang="ts">
 import { IonContent, IonPage } from "@ionic/vue";
-import { defineComponent } from "vue";
+import { defineComponent, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import AppFooter from "@/components/AppFooter.vue";
 import OptionsCard from "@/components/OptionsCard.vue";
+import { useStore } from "@/store";
 
 export default defineComponent({
   name: "HomePage",
@@ -69,6 +70,9 @@ export default defineComponent({
     OptionsCard,
   },
   setup() {
+
+    const store = useStore();
+    
     const router = useRouter();
 
     const Navigate = (viewName: string) => {
@@ -104,6 +108,12 @@ export default defineComponent({
         // code block
       }
     };
+
+    watchEffect(() => {
+      if (!store.getters.isLoggedIn) {
+        router.push("/login");
+      }
+    });
 
     return { Navigate };
   },

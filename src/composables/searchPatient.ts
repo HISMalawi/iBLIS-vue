@@ -1,5 +1,5 @@
-import { ref, watch } from "vue";
-import { MutationTypes, useStore } from "@/store";
+import { ref } from "vue";
+import { useStore } from "@/store";
 import { Patient } from "@/interfaces/Patient";
 import TokenCheck from "@/composables/tokenCheck";
 
@@ -13,25 +13,15 @@ const message = ref<string>("");
 
 const code = ref<string>("");
 
-watch(
-  () => [patients.value],
-  () => {
-    
-    setTimeout(()=> {
-
-      store.commit(MutationTypes.SEARCH_PATIENT_IN_PROGRESS, false);
-
-    }, 1500)
-  }
-);
-
 const SearchPatient = () => {
 
+  
   const axios = ref(store.getters.axios)
 
   const token = ref(store.getters.user.token)
 
   const search = (value: string) => {
+    
     axios.value
       .post("/patients/search", {
         token: token.value,
@@ -49,12 +39,17 @@ const SearchPatient = () => {
           if (code.value == "200") {
 
             patients.value = responseData[0]
+            
 
 
             message.value = response.data.message;
           } else {
             message.value = response.data.message;
           }
+
+        } else {
+
+          console.log("Search Patient Error");
 
         }
       })
