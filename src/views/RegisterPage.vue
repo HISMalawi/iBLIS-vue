@@ -25,7 +25,7 @@
 <script lang="ts">
 import { IonContent, IonPage } from '@ionic/vue';
 import { defineComponent } from 'vue';
-import { useRouter } from "vue-router";
+// import { useRouter } from "vue-router";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import AppFooter from "@/components/AppFooter.vue";
@@ -41,7 +41,7 @@ export default defineComponent({
   },
   setup(){
 
-    const router = useRouter();
+    // const router = useRouter();
 
     
     return { }

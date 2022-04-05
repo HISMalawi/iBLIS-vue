@@ -12,7 +12,7 @@
         ></ion-title
       >
       <ion-title size="small" slot="end"
-        ><ion-button @click="NavigateNext">Next</ion-button></ion-title
+        ><ion-button @click="NavigateNext" :disabled="enableNext">Next</ion-button></ion-title
       >
     </ion-toolbar>
   </ion-footer>
@@ -20,8 +20,9 @@
 
 <script lang="ts">
 import { IonFooter, IonTitle, IonToolbar, IonButton } from "@ionic/vue";
-import { defineComponent } from "vue";
+import { defineComponent, PropType, ref, watch } from "vue";
 import { useRouter } from "vue-router";
+import { SearchClient } from "@/interfaces/SearchClient";
 
 export default defineComponent({
   name: "SearchPatientFooter",
@@ -40,9 +41,15 @@ export default defineComponent({
       type: Number,
       required: true,
     },
+    searchClient: {
+      type: Object as PropType<SearchClient>,
+      required: true,
+    }
   },
   emits: ["NavigateNext", "NavigateBack"],
-  setup(props, context) {
+  setup(props, { emit }) {
+
+    const enableNext = ref<boolean>(true)
 
     const router = useRouter();
 
@@ -51,14 +58,41 @@ export default defineComponent({
     }
 
     const NavigateNext = () => {
-      context.emit("NavigateNext");
+      console.log(props.searchClient)
+      emit("NavigateNext");
+     
     };
+
+    watch(
+      () => [props.searchClient.first_name, props.searchClient.last_name, props.searchClient.gender, props.currentPage],
+      () => {
+
+        if (props.currentPage == 1 && 'first_name' in props.searchClient  && props.searchClient.first_name !== "" ) {
+
+          enableNext.value = false
+
+        } else if (props.currentPage == 2 && 'last_name' in props.searchClient && props.searchClient.last_name !== "" ){
+
+          enableNext.value = false
+
+        } else if (props.currentPage == 3 && 'gender' in props.searchClient && props.searchClient.gender !== ""){
+
+          enableNext.value = false
+
+        } else {
+
+          enableNext.value = true
+
+        }
+
+      }
+    );
 
     const NavigateBack = () => {
-      context.emit("NavigateBack");
+      emit("NavigateBack");
     };
 
-    return { NavigateNext, NavigateBack, NavigateToMainMenu };
+    return { NavigateNext, NavigateBack, NavigateToMainMenu, enableNext };
   },
 });
 </script>
