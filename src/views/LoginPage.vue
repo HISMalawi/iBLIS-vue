@@ -134,7 +134,7 @@ export default defineComponent({
 
     watchEffect(() => {
       if (store.getters.isLoggedIn) {
-        router.push("/");
+        router.push({ name: 'Home', replace: true })
       }
     });
 

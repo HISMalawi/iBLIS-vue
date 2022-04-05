@@ -146,7 +146,7 @@ export default defineComponent({
 
     const searchClient = ref<SearchClient>({} as SearchClient);
 
-    const { search, message, patients, code } = SearchPatient();
+    const { search, patients } = SearchPatient();
 
     const MoveNextField = () => {
       currentPage.value = currentPage.value + 1;

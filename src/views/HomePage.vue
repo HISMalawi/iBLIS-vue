@@ -6,7 +6,7 @@
       <collapse-tool-bar pageTitle="iBLIS" />
 
       <div id="container">
-        <div id="flex-container">
+        <div id="flex-container" v-if="$store.state.loggedIn">
          
             <options-card
               @OpenView="Navigate"
@@ -111,7 +111,7 @@ export default defineComponent({
 
     watchEffect(() => {
       if (!store.getters.isLoggedIn) {
-        router.push("/login");
+        router.push({ name: 'Login', replace: true })
       }
     });
 

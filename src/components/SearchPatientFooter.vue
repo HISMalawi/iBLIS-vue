@@ -54,7 +54,7 @@ export default defineComponent({
     const router = useRouter();
 
     const NavigateToMainMenu = () => {
-      router.push("/home");
+      router.push({ name: 'Home', replace: true })
     }
 
     const NavigateNext = () => {
