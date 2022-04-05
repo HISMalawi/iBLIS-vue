@@ -163,7 +163,7 @@ export default defineComponent({
       () => {
         if (currentPage.value == 4) {
           search(
-            searchClient.value.first_name + " " + searchClient.value.last_name
+            searchClient.value.first_name + " " + searchClient.value.last_name, searchClient.value.gender
           );
 
         }

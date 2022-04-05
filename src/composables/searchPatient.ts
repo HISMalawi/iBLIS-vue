@@ -19,12 +19,13 @@ const SearchPatient = () => {
 
   const token = ref(store.getters.user.token)
 
-  const search = (value: string) => {
+  const search = (client_name: string, gender: string) => {
     
     axios.value
       .post("/patients/search", {
         token: token.value,
-        value: value
+        client_name: client_name,
+        gender:gender
       })
       .then(function (response: any) {
         if (response.statusText === "OK") {
