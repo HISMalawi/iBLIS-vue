@@ -7,6 +7,7 @@ import PendingOrdersPage from '../views/PendingOrdersPage.vue'
 import SummaryPage from '../views/SummaryPage.vue'
 import ConfigurationsPage from '../views/ConfigurationsPage.vue'
 import LoginPage from '../views/LoginPage.vue'
+import PatientDashboardPage from '@/views/PatientDashboardPage.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -42,6 +43,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/configurations',
     name: 'Configurations',
     component: ConfigurationsPage
+  },
+  {
+    path: '/client_dashboard',
+    name: 'PatientDashboard',
+    component: PatientDashboardPage
   },
   {
     path: '/login',

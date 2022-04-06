@@ -14,8 +14,12 @@
       <ion-title size="small" slot="end" v-if="newClient"
         ><ion-button @click="NavigateToRegisterClient">New Client</ion-button></ion-title
       >
-      <ion-title size="small" slot="end"
+      <ion-title v-if="currentPage < 5" size="small" slot="end"
         ><ion-button @click="NavigateNext" :disabled="disableNext" :class="clientFound ? 'client-found':''">Next</ion-button></ion-title
+      >
+
+      <ion-title size="small" slot="end" v-if="currentPage == 5"
+        ><ion-button @click="NavigateToPatientDashboard">Proceed</ion-button></ion-title
       >
     </ion-toolbar>
   </ion-footer>
@@ -71,6 +75,10 @@ export default defineComponent({
 
     const NavigateToRegisterClient = () => {
       router.push({ name: 'Register', replace: true })
+    }
+
+    const NavigateToPatientDashboard = () => {
+      router.push({ name: 'PatientDashboard', replace: true })
     }
 
     const NavigateNext = () => {
@@ -149,7 +157,7 @@ export default defineComponent({
     );
 
 
-    return { NavigateNext, NavigateBack, NavigateToMainMenu, disableNext, clientFound, newClient, NavigateToRegisterClient};
+    return { NavigateNext, NavigateBack, NavigateToMainMenu, disableNext, clientFound, newClient, NavigateToRegisterClient, NavigateToPatientDashboard};
   },
 });
 </script>
