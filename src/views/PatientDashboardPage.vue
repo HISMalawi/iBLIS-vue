@@ -1,69 +1,138 @@
 <template>
   <ion-page>
-    
-    <tool-bar pageTitle="iBLIS | Client Dashboard" defaltBackButtonLink="/home"/>
-    
-    <ion-content :fullscreen="true">
+    <tool-bar
+      pageTitle="iBLIS | Client Dashboard"
+      defaltBackButtonLink="/home"
+    />
 
-      <collapse-tool-bar pageTitle="iBLIS | Client Dashboard"/>
-    
+    <ion-content :fullscreen="true">
+      <collapse-tool-bar pageTitle="iBLIS | Client Dashboard" />
+
       <div id="container">
 
-          <div id="flex-container">
+        <ion-card class="card-4-orange client-info-card">
+          <ion-card-content>
+            <ion-row>
+              <ion-col size="10">
+                <ion-row>
+                  <ion-col size="12">
+                    <h1>Client Details</h1>
+                  </ion-col>
+                  <ion-col size="12">
+                    <div class="bolder">
+                      <h2>
+                        <span class="light-text">Name :</span>
+                      </h2>
+                    </div>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col size="12">
+                    <div class="bolder">
+                      <h2>
+                        <span class="light-text">Gender :</span>
+                      </h2>
+                    </div>
+                  </ion-col>
+                </ion-row>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
 
-         
-             
-          </div>
+        <div id="flex-container" v-if="$store.state.loggedIn">
+          <options-card
+            @OpenView="Navigate"
+            btnTitle="Press Order"
+            icon="order"
+            CusClass="card-3"
+          />
+
+          <options-card
+            @OpenView="Navigate"
+            btnTitle="View Results"
+            icon="results"
+            CusClass="card-1"
+          />
+
+          <options-card
+            class="last-option"
+            @OpenView="Navigate"
+            btnTitle="Upload Results"
+            icon="configurations"
+            CusClass="card-4-violet"
+          />
+        </div>
       </div>
     </ion-content>
 
     <app-footer />
-
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage } from '@ionic/vue';
-import { defineComponent } from 'vue';
+import { IonContent, IonPage, IonCard, IonCardContent, IonCol, IonRow} from "@ionic/vue";
+import { defineComponent } from "vue";
 // import { useRouter } from "vue-router";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import AppFooter from "@/components/AppFooter.vue";
+import OptionsCard from "@/components/OptionsCard.vue";
 
 export default defineComponent({
-  name: 'PatientDashboardPage',
+  name: "PatientDashboardPage",
   components: {
     IonContent,
     IonPage,
     ToolBar,
     CollapseToolBar,
     AppFooter,
+    OptionsCard, IonCard, IonCardContent, IonCol, IonRow
   },
-  setup(){
-
+  setup() {
     // const router = useRouter();
+    const Navigate = () => {
+      console.log("Navigate");
+    };
 
-    
-    return { }
-  }
+    return { Navigate };
+  },
 });
 </script>
 
 <style scoped>
-
 #flex-container {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content:center;
+  justify-content: center;
+}
+
+@media screen and (max-width: 1138px) and (max-height: 712px) {
+  .last-option {
+    margin-right: auto;
+    order: 3;
+  }
+}
+
+@media screen and (max-width: 712px) and (max-height: 1138px) {
+  .last-option {
+    margin-right: auto;
+    max-width: 335px;
+    min-width: 300px;
+    order: 3;
+  }
 }
 
 #container {
   padding-top: 15px;
 }
 
-ion-content{
-  --ion-background-color:#eee;
+ion-content {
+  --ion-background-color: #eee;
 }
 
+.client-info-card{
+  margin-bottom: 20px;
+}
 </style>

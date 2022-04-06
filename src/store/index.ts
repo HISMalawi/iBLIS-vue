@@ -13,6 +13,7 @@ import { Axios } from "axios";
 import { Patient } from "@/interfaces/Patient";
 import { TestResult } from "@/interfaces/TestResult";
 import { Ward } from "@/interfaces/Ward";
+import { reactive } from "vue";
 
 const axios = require("axios").create({
   baseURL: process.env.VUE_APP_SERVICE_BASE_URL,
@@ -59,25 +60,7 @@ const selectedWard = {
 
 const createdOrdersTrackingNum: string[] = [];
 
-const patient: Patient = {
-  address: "",
-  created_at: "",
-  created_by: 0,
-  deleted_at: "",
-  dob: "",
-  dob_estimated: 0,
-  age: "",
-  email: "",
-  external_patient_number: "",
-  first_name_code: "",
-  gender: "",
-  id: 0,
-  last_name_code: "",
-  name: "",
-  patient_number: "",
-  phone_number: "",
-  updated_at: "",
-};
+const patient: Patient = reactive({} as Patient);
 
 export type State = {
   lockTimeOut:number,
