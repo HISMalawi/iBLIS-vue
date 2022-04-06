@@ -29,6 +29,19 @@
           />
 
           <img
+            v-if="icon == 'view-results'"
+            class="opt-img"
+            src="../assets/view-results-icon.png"
+          />
+
+          <img
+            v-if="icon == 'upload-results'"
+            class="opt-img"
+            src="../assets/upload-results-icon.png"
+          />
+
+
+          <img
             v-if="icon == 'pending'"
             class="opt-img"
             src="../assets/pending-icon.png"

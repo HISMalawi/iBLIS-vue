@@ -51,7 +51,7 @@
           <options-card
             @OpenView="Navigate"
             btnTitle="View Results"
-            icon="results"
+            icon="view-results"
             CusClass="card-1"
           />
 
@@ -59,7 +59,7 @@
             class="last-option"
             @OpenView="Navigate"
             btnTitle="Upload Results"
-            icon="configurations"
+            icon="upload-results"
             CusClass="card-4-violet"
           />
         </div>
