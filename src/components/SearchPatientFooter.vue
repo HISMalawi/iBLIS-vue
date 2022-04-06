@@ -23,6 +23,7 @@ import { IonFooter, IonTitle, IonToolbar, IonButton } from "@ionic/vue";
 import { defineComponent, PropType, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { SearchClient } from "@/interfaces/SearchClient";
+import { Patient } from "@/interfaces/Patient";
 
 export default defineComponent({
   name: "SearchPatientFooter",
@@ -43,6 +44,10 @@ export default defineComponent({
     },
     searchClient: {
       type: Object as PropType<SearchClient>,
+      required: true,
+    },
+    selectedPatient: {
+      type: Object as PropType<Patient>,
       required: true,
     }
   },
@@ -84,6 +89,15 @@ export default defineComponent({
           enableNext.value = true
 
         }
+
+      }
+    );
+
+    watch(
+      () => [props.selectedPatient],
+      () => {
+
+        enableNext.value = false;
 
       }
     );

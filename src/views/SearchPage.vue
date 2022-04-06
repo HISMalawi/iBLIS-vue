@@ -71,7 +71,7 @@
         </ion-card>
 
         <ion-list class="poss-match-list" v-if="currentPage == 4">
-          <ion-radio-group>
+          <ion-radio-group v-model="selectedPatient ">
           <ion-list-header class="card-4-yellow">
             <ion-label class="matches-label"> Possible Matches </ion-label>
           </ion-list-header>
@@ -91,6 +91,7 @@
       :currentPage="currentPage"
       :numberOfPages="numberOfPages"
       :searchClient="searchClient"
+      :selectedPatient="selectedPatient"
     />
   </ion-page>
 </template>
@@ -118,6 +119,7 @@ import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import SearchPatientFooter from "@/components/SearchPatientFooter.vue";
 import { SearchClient } from "@/interfaces/SearchClient";
+import { Patient } from '@/interfaces/Patient';
 import SearchPatient from "@/composables/searchPatient";
 
 export default defineComponent({
@@ -147,6 +149,8 @@ export default defineComponent({
     const currentPage = ref<number>(1);
 
     const searchClient = ref<SearchClient>({} as SearchClient);
+
+    const selectedPatient = ref<Patient>({} as Patient);
 
     const { search, patients } = SearchPatient();
 
@@ -181,6 +185,8 @@ export default defineComponent({
       searchClient.value.gender = "";
     });
 
+
+
     return {
       currentPage,
       numberOfPages,
@@ -188,6 +194,7 @@ export default defineComponent({
       MoveNextField,
       MovePreviousField,
       patients,
+      selectedPatient,
     };
   },
 });
