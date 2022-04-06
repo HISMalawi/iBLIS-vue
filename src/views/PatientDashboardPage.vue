@@ -21,7 +21,7 @@
                   <ion-col size="12">
                     <div class="bolder">
                       <h2>
-                        <span class="light-text">Name :</span>
+                        <span class="light-text">Name : {{$store.state.selectedPatient.name + " (" + selectedPatientGender + ")"}}</span>
                       </h2>
                     </div>
                   </ion-col>
@@ -30,7 +30,7 @@
                   <ion-col size="12">
                     <div class="bolder">
                       <h2>
-                        <span class="light-text">Gender :</span>
+                        <span class="light-text">Age : {{$store.state.selectedPatient.age}}</span>
                       </h2>
                     </div>
                   </ion-col>
@@ -78,6 +78,7 @@ import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import AppFooter from "@/components/AppFooter.vue";
 import OptionsCard from "@/components/OptionsCard.vue";
+import { useStore } from "@/store";
 
 export default defineComponent({
   name: "PatientDashboardPage",
@@ -90,12 +91,28 @@ export default defineComponent({
     OptionsCard, IonCard, IonCardContent, IonCol, IonRow
   },
   setup() {
+
+    const store = useStore();
+
+    let selectedPatientGender: string = store.getters.selectedPatient.gender;
+
+    if (selectedPatientGender == "Female") {
+
+      selectedPatientGender = "F";
+      
+    } else {
+
+      selectedPatientGender = "M";
+      
+    }
+
     // const router = useRouter();
+
     const Navigate = () => {
       console.log("Navigate");
     };
 
-    return { Navigate };
+    return { Navigate, selectedPatientGender };
   },
 });
 </script>

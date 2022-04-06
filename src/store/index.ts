@@ -20,38 +20,9 @@ const axios = require("axios").create({
   timeout: process.env.VUE_APP_REQUEST_TIMEOUT,
 });
 
-const user: User = {
-  id: 0,
-  username: "",
-  email: "",
-  name: "",
-  role: "",
-  token: "",
-};
+const user: User = reactive({} as User);
 
-const test: TestResult = {
-    id: 0,
-    visit_id: 0,
-    test_type_id: 0,
-    specimen_id: 0,
-    short_name: "",
-    test_name:"",
-    interpretation:"",
-    test_status_id: 0,
-    created_by: 0,
-    tested_by: 0,
-    verified_by: 0,
-    requested_by: "",
-    time_created: "",
-    time_started: "",
-    time_completed: "",
-    time_verified: "",
-    panel_id: 0,
-    time_sent: "",
-    external_id: 0,
-    not_done_reasons: "",
-    person_talked_to_for_not_done: "",
-}
+const test: TestResult = reactive({} as TestResult);
 
 const selectedWard = {
   id: 0,

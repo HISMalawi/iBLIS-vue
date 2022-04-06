@@ -29,8 +29,10 @@
 import { IonFooter, IonTitle, IonToolbar, IonButton } from "@ionic/vue";
 import { defineComponent, PropType, ref, watch } from "vue";
 import { useRouter } from "vue-router";
+import { MutationTypes, useStore } from "@/store";
 import { SearchClient } from "@/interfaces/SearchClient";
 import { Patient } from "@/interfaces/Patient";
+
 
 export default defineComponent({
   name: "SearchPatientFooter",
@@ -61,13 +63,15 @@ export default defineComponent({
   emits: ["NavigateNext", "NavigateBack"],
   setup(props, { emit }) {
 
+    const store = useStore();
+
+    const router = useRouter();
+
     const disableNext = ref<boolean>(true);
 
     const clientFound = ref<boolean>(false);
 
     const newClient = ref<boolean>(false);
-
-    const router = useRouter();
 
     const NavigateToMainMenu = () => {
       router.push({ name: 'Home', replace: true })
@@ -78,6 +82,9 @@ export default defineComponent({
     }
 
     const NavigateToPatientDashboard = () => {
+
+      store.commit(MutationTypes.SET_SELECTED_PATIENT, props.selectedPatient);
+
       router.push({ name: 'PatientDashboard', replace: true })
     }
 
