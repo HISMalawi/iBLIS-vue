@@ -15,7 +15,7 @@
         ><ion-button @click="NavigateToRegisterClient">New Client</ion-button></ion-title
       >
       <ion-title size="small" slot="end"
-        ><ion-button @click="NavigateNext" :disabled="enableNext" :class="clientFound ? 'client-found':''">Next</ion-button></ion-title
+        ><ion-button @click="NavigateNext" :disabled="disableNext" :class="clientFound ? 'client-found':''">Next</ion-button></ion-title
       >
     </ion-toolbar>
   </ion-footer>
@@ -57,7 +57,7 @@ export default defineComponent({
   emits: ["NavigateNext", "NavigateBack"],
   setup(props, { emit }) {
 
-    const enableNext = ref<boolean>(true);
+    const disableNext = ref<boolean>(true);
 
     const clientFound = ref<boolean>(false);
 
@@ -79,25 +79,33 @@ export default defineComponent({
      
     };
 
+    const NavigateBack = () => {
+      emit("NavigateBack");
+    };
+
     watch(
-      () => [props.searchClient.first_name, props.searchClient.last_name, props.searchClient.gender, props.currentPage],
+      () => [props.searchClient.first_name, props.searchClient.last_name, props.searchClient.gender, props.currentPage, props.selectedPatient.name],
       () => {
 
         if (props.currentPage == 1 && 'first_name' in props.searchClient  && props.searchClient.first_name !== "" ) {
 
-          enableNext.value = false
+          disableNext.value = false
 
         } else if (props.currentPage == 2 && 'last_name' in props.searchClient && props.searchClient.last_name !== "" ){
 
-          enableNext.value = false
+          disableNext.value = false
 
         } else if (props.currentPage == 3 && 'gender' in props.searchClient && props.searchClient.gender !== ""){
 
-          enableNext.value = false
+          disableNext.value = false
+
+        } else if (props.currentPage == 4 && Object.keys(props.selectedPatient).length > 0 && props.selectedPatient.name !== ""){
+
+          disableNext.value = false
 
         } else {
 
-          enableNext.value = true
+          disableNext.value = true;
 
         }
 
@@ -108,7 +116,7 @@ export default defineComponent({
       () => [props.selectedPatient],
       () => {
         
-        enableNext.value = false;
+        disableNext.value = false;
 
       }
     );
@@ -136,17 +144,12 @@ export default defineComponent({
           newClient.value = false;
 
         }
-        
-        enableNext.value = false;
 
       }
     );
 
-    const NavigateBack = () => {
-      emit("NavigateBack");
-    };
 
-    return { NavigateNext, NavigateBack, NavigateToMainMenu, enableNext, clientFound, newClient, NavigateToRegisterClient};
+    return { NavigateNext, NavigateBack, NavigateToMainMenu, disableNext, clientFound, newClient, NavigateToRegisterClient};
   },
 });
 </script>
