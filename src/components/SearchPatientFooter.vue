@@ -11,8 +11,11 @@
           >Back</ion-button
         ></ion-title
       >
+      <ion-title size="small" slot="end" v-if="newClient"
+        ><ion-button @click="NavigateToRegisterClient">New Client</ion-button></ion-title
+      >
       <ion-title size="small" slot="end"
-        ><ion-button @click="NavigateNext" :disabled="enableNext">Next</ion-button></ion-title
+        ><ion-button @click="NavigateNext" :disabled="enableNext" :class="clientFound ? 'client-found':''">Next</ion-button></ion-title
       >
     </ion-toolbar>
   </ion-footer>
@@ -54,12 +57,20 @@ export default defineComponent({
   emits: ["NavigateNext", "NavigateBack"],
   setup(props, { emit }) {
 
-    const enableNext = ref<boolean>(true)
+    const enableNext = ref<boolean>(true);
+
+    const clientFound = ref<boolean>(false);
+
+    const newClient = ref<boolean>(false);
 
     const router = useRouter();
 
     const NavigateToMainMenu = () => {
       router.push({ name: 'Home', replace: true })
+    }
+
+    const NavigateToRegisterClient = () => {
+      router.push({ name: 'Register', replace: true })
     }
 
     const NavigateNext = () => {
@@ -96,7 +107,36 @@ export default defineComponent({
     watch(
       () => [props.selectedPatient],
       () => {
+        
+        enableNext.value = false;
 
+      }
+    );
+
+    watch(
+      () => [props.currentPage, props.selectedPatient.name],
+      () => {
+
+        if (props.currentPage == 4 && Object.keys(props.selectedPatient).length > 0 && props.selectedPatient.name.length > 0){
+         
+            clientFound.value = true;
+
+        } else {
+
+          clientFound.value = false;
+
+        }
+
+        if (props.currentPage == 4) {
+
+          newClient.value = true;
+          
+        } else {
+
+          newClient.value = false;
+
+        }
+        
         enableNext.value = false;
 
       }
@@ -106,9 +146,13 @@ export default defineComponent({
       emit("NavigateBack");
     };
 
-    return { NavigateNext, NavigateBack, NavigateToMainMenu, enableNext };
+    return { NavigateNext, NavigateBack, NavigateToMainMenu, enableNext, clientFound, newClient, NavigateToRegisterClient};
   },
 });
 </script>
 
-<style></style>
+<style>
+.client-found {
+  --background:green;
+}
+</style>

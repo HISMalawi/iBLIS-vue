@@ -161,7 +161,13 @@ export default defineComponent({
     };
 
     const MovePreviousField = () => {
+
+      if (currentPage.value == 4 || currentPage.value > 4) {
+        selectedPatient.value.name = "";
+      }
+    
       currentPage.value = currentPage.value - 1;
+
     };
 
     watch(
