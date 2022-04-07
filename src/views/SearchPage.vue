@@ -10,12 +10,14 @@
           v-if="currentPage == 1"
           v-model="searchClient.first_name"
           placeholder="First Name"
+          @keyup="CapitalizeFirst(searchClient.first_name, 'first_name')"
         ></ion-input>
 
         <ion-input
           v-if="currentPage == 2"
           v-model="searchClient.last_name"
           placeholder="Last Name"
+          @keyup="CapitalizeFirst(searchClient.last_name, 'last_name')"
         ></ion-input>
 
         <ion-list v-if="currentPage == 3">
@@ -114,11 +116,13 @@
 
 
       </div>
+      
     </ion-content>
 
     <search-patient-footer
       @NavigateBack="MovePreviousField"
       @NavigateNext="MoveNextField"
+      @NavigateToRegisterClient="NavigateToRegisterClient"
       :currentPage="currentPage"
       :numberOfPages="numberOfPages"
       :searchClient="searchClient"
@@ -145,13 +149,14 @@ import {
   onIonViewDidLeave,
 } from "@ionic/vue";
 import { defineComponent, ref, watch } from "vue";
-// import { useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import SearchPatientFooter from "@/components/SearchPatientFooter.vue";
 import { SearchClient } from "@/interfaces/SearchClient";
 import { Patient } from '@/interfaces/Patient';
 import SearchPatient from "@/composables/searchPatient";
+import { MutationTypes, useStore } from "@/store";
 
 export default defineComponent({
   name: "SearchPage",
@@ -174,7 +179,10 @@ export default defineComponent({
     IonCol,
   },
   setup() {
-    // const router = useRouter();
+
+    const store = useStore();
+
+    const router = useRouter();
 
     const numberOfPages = ref<number>(4);
     const currentPage = ref<number>(1);
@@ -200,6 +208,43 @@ export default defineComponent({
       currentPage.value = currentPage.value - 1;
 
     };
+
+    const NavigateToRegisterClient = () => {
+
+      store.commit(MutationTypes.SET_SEARCH_CLIENT, searchClient.value);
+
+      store.commit(MutationTypes.SET_PREVIOUS_LINK, "/search");
+
+      router.push({ name: 'Register', replace: true });
+    }
+
+    const CapitalizeFirst = (input: string, field : string) => {
+
+      let userInput = input.trim();
+      let firstChar = userInput.charAt(0)
+      userInput = userInput.slice(1);
+
+      let output = firstChar.toUpperCase() + userInput;
+
+      switch (field) {
+        
+        case "first_name":
+          // code block
+
+          searchClient.value.first_name = output;
+
+          break;
+        case "last_name":
+          // code block
+
+          searchClient.value.last_name = output;
+          
+          break;
+        default:
+        // code block
+      }
+
+    }
 
     watch(
       () => [currentPage.value],
@@ -230,8 +275,10 @@ export default defineComponent({
       searchClient,
       MoveNextField,
       MovePreviousField,
+      NavigateToRegisterClient,
       patients,
       selectedPatient,
+      CapitalizeFirst,
     };
   },
 });

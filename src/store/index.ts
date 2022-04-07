@@ -14,6 +14,7 @@ import { Patient } from "@/interfaces/Patient";
 import { TestResult } from "@/interfaces/TestResult";
 import { Ward } from "@/interfaces/Ward";
 import { reactive } from "vue";
+import { SearchClient } from "@/interfaces/SearchClient";
 
 const axios = require("axios").create({
   baseURL: process.env.VUE_APP_SERVICE_BASE_URL,
@@ -24,10 +25,9 @@ const user: User = reactive({} as User);
 
 const test: TestResult = reactive({} as TestResult);
 
-const selectedWard = {
-  id: 0,
-  name: "--- Select Ward / Location ---",
-};
+const searchClient: SearchClient = reactive({} as SearchClient);
+
+const selectedWard: Ward = reactive({} as Ward);
 
 const createdOrdersTrackingNum: string[] = [];
 
@@ -56,6 +56,8 @@ export type State = {
   selectedTest: TestResult;
   searchingInProgress: boolean;
   selectedWard: Ward;
+  searchClient: SearchClient;
+  previousLink: string;
   createdOrdersTrackingNum: string[];
 };
 
@@ -82,6 +84,8 @@ const state: State = {
   selectedTest: test,
   searchingInProgress: false,
   selectedWard: selectedWard,
+  searchClient: searchClient,
+  previousLink: "#",
   createdOrdersTrackingNum: createdOrdersTrackingNum,
 };
 
@@ -107,6 +111,8 @@ export enum MutationTypes {
   SET_SELECTED_TEST = "SETTING_SELECTED_TEST",
   SEARCH_PATIENT_IN_PROGRESS = "SEARCHING_PATIENT_IN_PROGRESS",
   SET_SELECTED_WARD = "SETTING_SELECTED_WARD",
+  SET_SEARCH_CLIENT = "SETTING_SEARCH_CLIENT",
+  SET_PREVIOUS_LINK = "SETTING_PREVIOUS_LINK",
   ADD_ORDER = "ADDING_ORDER",
 }
 
@@ -132,6 +138,8 @@ export enum ActionTypes {
   SET_SELECTED_TEST = "SETTING_SELECTED_TEST",
   SEARCH_PATIENT_IN_PROGRESS = "SEARCHING_PATIENT_IN_PROGRESS",
   SET_SELECTED_WARD = "SETTING_SELECTED_WARD",
+  SET_SEARCH_CLIENT = "SETTING_SEARCH_CLIENT",
+  SET_PREVIOUS_LINK = "SETTING_PREVIOUS_LINK",
   ADD_ORDER = "ADDING_ORDER",
 }
 
@@ -157,6 +165,8 @@ export type Mutations<S = State> = {
   [MutationTypes.SET_SELECTED_TEST](state: S, payload: TestResult): void;
   [MutationTypes.SEARCH_PATIENT_IN_PROGRESS](state: S, payload: boolean): void;
   [MutationTypes.SET_SELECTED_WARD](state: S, payload: Ward): void;
+  [MutationTypes.SET_SEARCH_CLIENT](state: S, payload: SearchClient): void;
+  [MutationTypes.SET_PREVIOUS_LINK](state: S, payload: string): void;
   [MutationTypes.ADD_ORDER](state: S, payload: string): void;
 };
 
@@ -226,6 +236,12 @@ const mutations: MutationTree<State> & Mutations = {
   [MutationTypes.SET_SELECTED_WARD](state: State, payload: Ward) {
     state.selectedWard = payload;
   },
+  [MutationTypes.SET_SEARCH_CLIENT](state: State, payload: SearchClient) {
+    state.searchClient = payload;
+  },
+  [MutationTypes.SET_PREVIOUS_LINK](state: State, payload: string) {
+    state.previousLink = payload;
+  },
   [MutationTypes.ADD_ORDER](state: State, payload: string) {
     state.createdOrdersTrackingNum.push(payload);
   },
@@ -260,6 +276,10 @@ export interface Actions {
   [ActionTypes.SET_SELECTED_TEST]({ commit }: AugmentedActionContext, payload: TestResult): void;
 
   [ActionTypes.SET_SELECTED_WARD]({ commit }: AugmentedActionContext, payload: Ward): void;
+
+  [ActionTypes.SET_SEARCH_CLIENT]({ commit }: AugmentedActionContext, payload: SearchClient): void;
+
+  [ActionTypes.SET_PREVIOUS_LINK]({ commit }: AugmentedActionContext, payload: string): void;
 
   [ActionTypes.ADD_ORDER]({ commit }: AugmentedActionContext, payload: string): void;
 }
@@ -298,6 +318,12 @@ export const actions: ActionTree<State, State> & Actions = {
   [ActionTypes.SET_SELECTED_WARD]({ commit }, payload: Ward) {
     commit(MutationTypes.SET_SELECTED_WARD, payload);
   },
+  [ActionTypes.SET_SEARCH_CLIENT]({ commit }, payload: SearchClient) {
+    commit(MutationTypes.SET_SEARCH_CLIENT, payload);
+  },
+  [ActionTypes.SET_PREVIOUS_LINK]({ commit }, payload: string) {
+    commit(MutationTypes.SET_PREVIOUS_LINK, payload);
+  },
   [ActionTypes.ADD_ORDER]({ commit }, payload: string) {
     commit(MutationTypes.ADD_ORDER, payload);
   },
@@ -317,6 +343,8 @@ export type Getters = {
   selectedTest(state: State): TestResult;
   isSearchingInProgress(state: State): boolean;
   selectedWard(state: State): Ward;
+  searchClient(state: State): SearchClient;
+  previousLink(state: State): string;
   createdOrders(state: State): string[];
 };
 
@@ -360,6 +388,12 @@ export const getters: GetterTree<State, State> & Getters = {
   },
   selectedWard: (state) => {
     return state.selectedWard;
+  },
+  searchClient: (state) => {
+    return state.searchClient;
+  },
+  previousLink: (state) => {
+    return state.previousLink;
   },
   createdOrders: (state) => {
     return state.createdOrdersTrackingNum;

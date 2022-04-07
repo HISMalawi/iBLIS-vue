@@ -11,11 +11,9 @@
           >Back</ion-button
         ></ion-title
       >
-      <ion-title size="small" slot="end" v-if="newClient"
-        ><ion-button @click="NavigateToRegisterClient">New Client</ion-button></ion-title
-      >
+      
       <ion-title v-if="currentPage < 5" size="small" slot="end"
-        ><ion-button @click="NavigateNext" :disabled="disableNext" :class="clientFound ? 'client-found':''">Next</ion-button></ion-title
+        ><ion-button @click="NavigateNext" :disabled="disableNext">Next</ion-button></ion-title
       >
 
       <ion-title size="small" slot="end" v-if="currentPage == 5"
@@ -30,12 +28,12 @@ import { IonFooter, IonTitle, IonToolbar, IonButton } from "@ionic/vue";
 import { defineComponent, PropType, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { MutationTypes, useStore } from "@/store";
-import { SearchClient } from "@/interfaces/SearchClient";
 import { Patient } from "@/interfaces/Patient";
+import { SearchClient } from "@/interfaces/SearchClient";
 
 
 export default defineComponent({
-  name: "SearchPatientFooter",
+  name: "RegisterPatientFooter",
   components: {
     IonFooter,
     IonTitle,
@@ -51,14 +49,15 @@ export default defineComponent({
       type: Number,
       required: true,
     },
-    searchClient: {
+    patient: {
+      type: Object as PropType<Patient>,
+      required: true
+    },
+    client: {
       type: Object as PropType<SearchClient>,
       required: true,
     },
-    selectedPatient: {
-      type: Object as PropType<Patient>,
-      required: true,
-    }
+
   },
   emits: ["NavigateNext", "NavigateBack", "NavigateToRegisterClient"],
   setup(props, { emit }) {
@@ -69,9 +68,17 @@ export default defineComponent({
 
     const disableNext = ref<boolean>(true);
 
-    const clientFound = ref<boolean>(false);
+    if (store.getters.previousLink == "/search") {
 
-    const newClient = ref<boolean>(false);
+      disableNext.value = false
+      store.commit(MutationTypes.SET_PREVIOUS_LINK, "#");
+
+    } else {
+      
+      store.commit(MutationTypes.SET_PREVIOUS_LINK, "#");
+      disableNext.value = true
+
+    }
 
     const NavigateToMainMenu = () => {
       router.push({ name: 'Home', replace: true })
@@ -84,7 +91,7 @@ export default defineComponent({
 
     const NavigateToPatientDashboard = () => {
 
-      store.commit(MutationTypes.SET_SELECTED_PATIENT, props.selectedPatient);
+      // store.commit(MutationTypes.SET_SELECTED_PATIENT, props.selectedPatient);
 
       router.push({ name: 'PatientDashboard', replace: true })
     }
@@ -100,22 +107,18 @@ export default defineComponent({
     };
 
     watch(
-      () => [props.searchClient.first_name, props.searchClient.last_name, props.searchClient.gender, props.currentPage, props.selectedPatient.name],
+      () => [props.client.first_name, props.client.last_name, props.client.gender, props.currentPage],
       () => {
 
-        if (props.currentPage == 1 && 'first_name' in props.searchClient  && props.searchClient.first_name !== "" ) {
+        if (props.currentPage == 1 && 'first_name' in props.client  && props.client.first_name !== "" ) {
 
           disableNext.value = false
 
-        } else if (props.currentPage == 2 && 'last_name' in props.searchClient && props.searchClient.last_name !== "" ){
+        } else if (props.currentPage == 2 && 'last_name' in props.client && props.client.last_name !== "" ){
 
           disableNext.value = false
 
-        } else if (props.currentPage == 3 && 'gender' in props.searchClient && props.searchClient.gender !== ""){
-
-          disableNext.value = false
-
-        } else if (props.currentPage == 4 && Object.keys(props.selectedPatient).length > 0 && props.selectedPatient.name !== ""){
+        } else if (props.currentPage == 3 && 'gender' in props.client && props.client.gender !== ""){
 
           disableNext.value = false
 
@@ -128,44 +131,8 @@ export default defineComponent({
       }
     );
 
-    watch(
-      () => [props.selectedPatient],
-      () => {
-        
-        disableNext.value = false;
 
-      }
-    );
-
-    watch(
-      () => [props.currentPage, props.selectedPatient.name],
-      () => {
-
-        if (props.currentPage == 4 && Object.keys(props.selectedPatient).length > 0 && props.selectedPatient.name.length > 0){
-         
-            clientFound.value = true;
-
-        } else {
-
-          clientFound.value = false;
-
-        }
-
-        if (props.currentPage == 4) {
-
-          newClient.value = true;
-          
-        } else {
-
-          newClient.value = false;
-
-        }
-
-      }
-    );
-
-
-    return { NavigateNext, NavigateBack, NavigateToMainMenu, disableNext, clientFound, newClient, NavigateToRegisterClient, NavigateToPatientDashboard};
+    return { NavigateNext, NavigateBack, NavigateToMainMenu, disableNext, NavigateToRegisterClient, NavigateToPatientDashboard};
   },
 });
 </script>
