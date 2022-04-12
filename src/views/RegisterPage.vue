@@ -6,7 +6,6 @@
       <collapse-tool-bar pageTitle="iBLIS | Register" />
 
       <div id="container">
-
         <ion-input
           v-if="currentPage == 1"
           v-model="client.first_name"
@@ -36,6 +35,19 @@
             </ion-item>
           </ion-radio-group>
         </ion-list>
+
+        <ion-list v-if="currentPage == 4">
+            <ion-list-header class="card-3">
+              <ion-label class="gender-label"> Date of Birth </ion-label>
+            </ion-list-header>
+
+            <ion-datetime 	presentation="date" placeholder="Date of Birth"></ion-datetime>
+          
+
+        </ion-list>
+
+        
+
       </div>
     </ion-content>
 
@@ -60,6 +72,7 @@ import {
   IonItem,
   IonLabel,
   IonListHeader,
+  IonDatetime,
 } from "@ionic/vue";
 import { defineComponent, reactive, ref } from "vue";
 import { useStore } from "@/store";
@@ -84,6 +97,7 @@ export default defineComponent({
     IonItem,
     IonLabel,
     IonListHeader,
+    IonDatetime,
     RegisterPatientFooter,
   },
   setup() {
@@ -98,11 +112,9 @@ export default defineComponent({
     const client = ref<SearchClient>({} as SearchClient);
 
     if (store.getters.previousLink == "/search") {
-
       client.value.first_name = store.getters.searchClient.first_name;
       client.value.last_name = store.getters.searchClient.last_name;
       client.value.gender = store.getters.searchClient.gender;
-
     }
 
     const MoveNextField = () => {
