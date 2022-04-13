@@ -11,12 +11,18 @@
           >Back</ion-button
         ></ion-title
       >
-      
-      <ion-title v-if="currentPage < 5" size="small" slot="end"
-        ><ion-button @click="NavigateNext" :disabled="disableNext">Next</ion-button></ion-title
+
+      <ion-title v-if="currentPage < 6" size="small" slot="end"
+        ><ion-button @click="NavigateNext" :disabled="disableNext"
+          >Next</ion-button
+        ></ion-title
       >
 
-      <ion-title size="small" slot="end" v-if="currentPage == 5"
+      <ion-title size="small" slot="end" v-if="currentPage == 6"
+        ><ion-button @click="RegisterClient">Save</ion-button></ion-title
+      >
+
+      <ion-title size="small" slot="end" v-if="currentPage == 7"
         ><ion-button @click="NavigateToPatientDashboard">Proceed</ion-button></ion-title
       >
     </ion-toolbar>
@@ -28,9 +34,9 @@ import { IonFooter, IonTitle, IonToolbar, IonButton } from "@ionic/vue";
 import { defineComponent, PropType, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { MutationTypes, useStore } from "@/store";
-import { Patient } from "@/interfaces/Patient";
+import { PatientReg } from "@/interfaces/PatientReg";
 import { SearchClient } from "@/interfaces/SearchClient";
-
+import { Patient } from "@/interfaces/Patient";
 
 export default defineComponent({
   name: "RegisterPatientFooter",
@@ -50,18 +56,20 @@ export default defineComponent({
       required: true,
     },
     patient: {
-      type: Object as PropType<Patient>,
-      required: true
+      type: Object as PropType<PatientReg>,
+      required: true,
     },
     client: {
       type: Object as PropType<SearchClient>,
       required: true,
     },
-
+    selectedPatient: {
+      type: Object as PropType<Patient>,
+      required: true,
+    }
   },
-  emits: ["NavigateNext", "NavigateBack", "NavigateToRegisterClient"],
+  emits: ["NavigateNext", "NavigateBack", "RegisterClient"],
   setup(props, { emit }) {
-
     const store = useStore();
 
     const router = useRouter();
@@ -69,37 +77,31 @@ export default defineComponent({
     const disableNext = ref<boolean>(true);
 
     if (store.getters.previousLink == "/search") {
-
-      disableNext.value = false
+      disableNext.value = false;
       store.commit(MutationTypes.SET_PREVIOUS_LINK, "#");
-
     } else {
-      
       store.commit(MutationTypes.SET_PREVIOUS_LINK, "#");
-      disableNext.value = true
-
+      disableNext.value = true;
     }
 
     const NavigateToMainMenu = () => {
-      router.push({ name: 'Home', replace: true })
-    }
+      router.push({ name: "Home", replace: true });
+    };
 
-    const NavigateToRegisterClient = () => {
+    const RegisterClient = () => {
 
-      emit("NavigateToRegisterClient");
-    }
+      emit("RegisterClient");
+
+    };
 
     const NavigateToPatientDashboard = () => {
+      store.commit(MutationTypes.SET_SELECTED_PATIENT, props.selectedPatient);
 
-      // store.commit(MutationTypes.SET_SELECTED_PATIENT, props.selectedPatient);
-
-      router.push({ name: 'PatientDashboard', replace: true })
-    }
+      router.push({ name: "PatientDashboard", replace: true });
+    };
 
     const NavigateNext = () => {
-
       emit("NavigateNext");
-     
     };
 
     const NavigateBack = () => {
@@ -107,38 +109,62 @@ export default defineComponent({
     };
 
     watch(
-      () => [props.client.first_name, props.client.last_name, props.client.gender, props.currentPage],
+      () => [
+        props.client.first_name,
+        props.client.last_name,
+        props.client.gender,
+        props.currentPage,
+        props.patient.dob,
+        props.patient.phoneNumber,
+        props.patient.physicalAddress,
+      ],
       () => {
-
-        if (props.currentPage == 1 && 'first_name' in props.client  && props.client.first_name !== "" ) {
-
-          disableNext.value = false
-
-        } else if (props.currentPage == 2 && 'last_name' in props.client && props.client.last_name !== "" ){
-
-          disableNext.value = false
-
-        } else if (props.currentPage == 3 && 'gender' in props.client && props.client.gender !== ""){
-
-          disableNext.value = false
-
+        if (
+          props.currentPage == 1 &&
+          "first_name" in props.client &&
+          props.client.first_name !== ""
+        ) {
+          disableNext.value = false;
+        } else if (
+          props.currentPage == 2 &&
+          "last_name" in props.client &&
+          props.client.last_name !== ""
+        ) {
+          disableNext.value = false;
+        } else if (
+          props.currentPage == 3 &&
+          "gender" in props.client &&
+          props.client.gender !== ""
+        ) {
+          disableNext.value = false;
+        } else if (
+          props.currentPage == 4 &&
+          "dob" in props.patient &&
+          props.patient.dob !== ""
+        ) {
+          disableNext.value = false;
+        } else if (props.currentPage == 5) {
+          disableNext.value = false;
         } else {
-
           disableNext.value = true;
-
         }
-
       }
     );
 
-
-    return { NavigateNext, NavigateBack, NavigateToMainMenu, disableNext, NavigateToRegisterClient, NavigateToPatientDashboard};
+    return {
+      NavigateNext,
+      NavigateBack,
+      NavigateToMainMenu,
+      disableNext,
+      RegisterClient,
+      NavigateToPatientDashboard,
+    };
   },
 });
 </script>
 
 <style>
 .client-found {
-  --background:green;
+  --background: green;
 }
 </style>

@@ -220,11 +220,11 @@ export default defineComponent({
 
     const CapitalizeFirst = (input: string, field : string) => {
 
-      let userInput = input.trim();
+      let userInput = input;
       let firstChar = userInput.charAt(0)
       userInput = userInput.slice(1);
 
-      let output = firstChar.toUpperCase() + userInput;
+      let output = firstChar.toUpperCase() + userInput.toLowerCase();
 
       switch (field) {
         

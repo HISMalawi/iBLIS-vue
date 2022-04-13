@@ -29,8 +29,6 @@ const addPatient = () => {
 
           code.value = response.data.code;
 
-          const responseData = response.data.data;
-
 
           if (code.value == "200") {
 
