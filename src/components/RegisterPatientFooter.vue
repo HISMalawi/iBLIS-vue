@@ -23,7 +23,7 @@
       >
 
       <ion-title size="small" slot="end" v-if="currentPage == 7"
-        ><ion-button @click="NavigateToPatientDashboard">Proceed</ion-button></ion-title
+        ><ion-button :disabled="disableProceed" @click="NavigateToPatientDashboard">Proceed</ion-button></ion-title
       >
     </ion-toolbar>
   </ion-footer>
@@ -76,6 +76,8 @@ export default defineComponent({
 
     const disableNext = ref<boolean>(true);
 
+    const disableProceed = ref<boolean>(true);
+
     if (store.getters.previousLink == "/search") {
       disableNext.value = false;
       store.commit(MutationTypes.SET_PREVIOUS_LINK, "#");
@@ -107,6 +109,15 @@ export default defineComponent({
     const NavigateBack = () => {
       emit("NavigateBack");
     };
+
+    watch(
+      () => [props.selectedPatient],
+      () => {
+        
+        disableProceed.value = false;
+
+      }
+    );
 
     watch(
       () => [
@@ -158,6 +169,7 @@ export default defineComponent({
       disableNext,
       RegisterClient,
       NavigateToPatientDashboard,
+      disableProceed,
     };
   },
 });
