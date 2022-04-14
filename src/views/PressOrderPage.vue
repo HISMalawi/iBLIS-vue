@@ -43,7 +43,9 @@
               <ion-list>
                 <ion-radio-group>
                   <ion-list-header class="card-1">
-                    <ion-label class="gender-label"> MAIN TEST(S) REASON</ion-label>
+                    <ion-label class="gender-label">
+                      MAIN TEST(S) REASON</ion-label
+                    >
                   </ion-list-header>
                   <ion-item>
                     <ion-label>Routine</ion-label>
@@ -67,6 +69,15 @@
                   </ion-item>
                 </ion-radio-group>
               </ion-list>
+
+              <ion-grid>
+                <ion-row>
+                  <ion-col class="head-col"> Test </ion-col>
+                  <ion-col class="head-col"> Specimen </ion-col>
+                  <ion-col class="head-col"> Reason </ion-col>
+                  <ion-col class="head-col"> Action </ion-col>
+                </ion-row>
+              </ion-grid>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -138,5 +149,10 @@ ion-content {
 
 .custom-aside {
   border-right: solid 1px rgb(202, 201, 201);
+}
+.head-col{
+  text-align: center;
+  background: #FFFFE2;
+  border-left: solid 1px rgb(202, 201, 201);
 }
 </style>
