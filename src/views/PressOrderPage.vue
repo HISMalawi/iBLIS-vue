@@ -84,7 +84,7 @@
       </div>
     </ion-content>
 
-    <app-footer />
+    <press-order-footer/>
   </ion-page>
 </template>
 
@@ -101,11 +101,12 @@ import {
   IonLabel,
   IonListHeader,
   IonCheckbox,
+  IonRadio,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
-import AppFooter from "@/components/AppFooter.vue";
+import PressOrderFooter from "@/components/PressOrderFooter.vue";
 import { useStore } from "@/store";
 import { Patient } from "@/interfaces/Patient";
 import GetTests from "@/composables/getTests";
@@ -117,13 +118,14 @@ export default defineComponent({
     IonPage,
     ToolBar,
     CollapseToolBar,
-    AppFooter,
+    PressOrderFooter,
     IonGrid,
     IonRow,
     IonCol,
     IonList,
     IonItem,
     IonRadioGroup,
+    IonRadio,
     IonLabel,
     IonListHeader,
     IonCheckbox,
@@ -150,9 +152,9 @@ ion-content {
 .custom-aside {
   border-right: solid 1px rgb(202, 201, 201);
 }
-.head-col{
+.head-col {
   text-align: center;
-  background: #FFFFE2;
+  background: #ffffe2;
   border-left: solid 1px rgb(202, 201, 201);
 }
 </style>
