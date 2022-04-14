@@ -10,6 +10,7 @@ import LoginPage from '../views/LoginPage.vue'
 import PatientDashboardPage from '@/views/PatientDashboardPage.vue'
 import PressOrderPage from '@/views/PressOrderPage.vue'
 import ViewResultsPage from '@/views/ViewResultsPage.vue'
+import UploadResultsPage from '@/views/UploadResultsPage.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -60,6 +61,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/view_results',
     name: 'ViewResults',
     component: ViewResultsPage
+  },
+  {
+    path: '/upload_results',
+    name: 'UploadResults',
+    component: UploadResultsPage
   },
   {
     path: '/login',

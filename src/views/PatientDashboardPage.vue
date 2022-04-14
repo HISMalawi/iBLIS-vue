@@ -66,7 +66,8 @@
       </div>
     </ion-content>
 
-    <app-footer />
+    <patient-dashboard-footer/>
+    
   </ion-page>
 </template>
 
@@ -76,7 +77,7 @@ import { defineComponent } from "vue";
 import { useRouter } from "vue-router";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
-import AppFooter from "@/components/AppFooter.vue";
+import PatientDashboardFooter from "@/components/PatientDashboardFooter.vue";
 import OptionsCard from "@/components/OptionsCard.vue";
 import { useStore } from "@/store";
 
@@ -87,7 +88,7 @@ export default defineComponent({
     IonPage,
     ToolBar,
     CollapseToolBar,
-    AppFooter,
+    PatientDashboardFooter,
     OptionsCard, IonCard, IonCardContent, IonCol, IonRow
   },
   setup() {
@@ -116,10 +117,17 @@ export default defineComponent({
 
           router.push("/press_order");
           break;
+
         case "View Results":
           // code block
 
           router.push("/view_results");
+          break;
+
+        case "Upload Results":
+          // code block
+
+          router.push("/upload_results");
           break;
       
         default:
