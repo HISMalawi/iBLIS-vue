@@ -12,7 +12,7 @@
         ></ion-title
       >
 
-      <ion-title v-if="currentPage < 6" size="small" slot="end"
+      <ion-title v-if="currentPage < 8 && currentPage != 6" size="small" slot="end"
         ><ion-button @click="NavigateNext" :disabled="disableNext"
           >Next</ion-button
         ></ion-title
@@ -22,7 +22,7 @@
         ><ion-button @click="RegisterClient">Save</ion-button></ion-title
       >
 
-      <ion-title size="small" slot="end" v-if="currentPage == 7"
+      <ion-title size="small" slot="end" v-if="currentPage == 8"
         ><ion-button :disabled="disableProceed" @click="NavigateToPatientDashboard">Proceed</ion-button></ion-title
       >
     </ion-toolbar>
@@ -156,9 +156,12 @@ export default defineComponent({
           disableNext.value = false;
         } else if (props.currentPage == 5) {
           disableNext.value = false;
-        } else {
+        } else if (props.currentPage == 7) {
+          disableNext.value = false;
+        }else {
           disableNext.value = true;
         }
+
       }
     );
 
