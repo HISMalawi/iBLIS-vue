@@ -9,7 +9,7 @@ const store = useStore();
 
 const Tests = ref<Test[]>([]);
 
-const getTests = () => {
+const getTestsBySpecimenTypeID = () => {
 
   const axios = ref(store.getters.axios)
 
@@ -18,10 +18,11 @@ const getTests = () => {
   const message = ref<string>("");
   const code = ref<string>("");
 
-  const fetchTests = () => {
+  const fetchTests = (specimen_type_id: number) => {
     axios.value
       .post("/tests", {
-        token: token.value
+        token: token.value,
+        specimen_type_id:specimen_type_id,
       })
       .then(function (response: any) {
         if (response.statusText === "OK") {
@@ -52,4 +53,4 @@ const getTests = () => {
   return { fetchTests, message, Tests };
 };
 
-export default getTests;
+export default getTestsBySpecimenTypeID;

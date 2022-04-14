@@ -17,24 +17,10 @@
                   <ion-list-header class="card-3">
                     <ion-label class="gender-label"> SELECT TEST</ion-label>
                   </ion-list-header>
-                  <ion-item>
-                    <ion-label>Male</ion-label>
-                    <ion-radio value="Male"></ion-radio>
+                  <ion-item v-for="test in Tests" :key="test.id">
+                    <ion-label>{{test.name}}</ion-label>
+                    <ion-radio :value="test"></ion-radio>
                   </ion-item>
-                  <ion-item>Menu Item</ion-item>
-                  <ion-item>Menu Item</ion-item>
-                  <ion-item>Menu Item</ion-item>
-                  <ion-item>Menu Item</ion-item>
-                  <ion-item>Menu Item</ion-item>
-                  <ion-item>Menu Item</ion-item>
-                  <ion-item>Menu Item</ion-item>
-                  <ion-item>Menu Item</ion-item>
-                  <ion-item>Menu Item</ion-item>
-                  <ion-item>Menu Item</ion-item>
-                  <ion-item>Menu Item</ion-item>
-                  <ion-item>Menu Item</ion-item>
-                  <ion-item>Menu Item</ion-item>
-                  <ion-item>Menu Item</ion-item>
                 </ion-radio-group>
               </ion-list>
             </ion-col>
@@ -66,6 +52,9 @@ import { defineComponent } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import AppFooter from "@/components/AppFooter.vue";
+import { useStore } from "@/store";
+import { Patient } from "@/interfaces/Patient";
+import GetTests from "@/composables/getTests";
 
 export default defineComponent({
   name: "PressOrderPage",
@@ -86,7 +75,16 @@ export default defineComponent({
     IonListHeader
   },
   setup() {
-    return {};
+
+    const store = useStore();
+
+    let selectedPatient: Patient = store.getters.selectedPatient;
+
+    const { fetchTests, Tests } = GetTests();
+
+    fetchTests();
+    
+    return {Tests};
   },
 });
 </script>
