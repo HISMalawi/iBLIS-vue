@@ -8,6 +8,7 @@ import SummaryPage from '../views/SummaryPage.vue'
 import ConfigurationsPage from '../views/ConfigurationsPage.vue'
 import LoginPage from '../views/LoginPage.vue'
 import PatientDashboardPage from '@/views/PatientDashboardPage.vue'
+import PressOrderPage from '@/views/PressOrderPage.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -48,6 +49,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/client_dashboard',
     name: 'PatientDashboard',
     component: PatientDashboardPage
+  },
+  {
+    path: '/press_order',
+    name: 'PressOrder',
+    component: PressOrderPage
   },
   {
     path: '/login',

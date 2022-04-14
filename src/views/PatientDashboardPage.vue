@@ -73,7 +73,7 @@
 <script lang="ts">
 import { IonContent, IonPage, IonCard, IonCardContent, IonCol, IonRow} from "@ionic/vue";
 import { defineComponent } from "vue";
-// import { useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import AppFooter from "@/components/AppFooter.vue";
@@ -106,10 +106,20 @@ export default defineComponent({
       
     }
 
-    // const router = useRouter();
+    const router = useRouter();
 
-    const Navigate = () => {
-      console.log("Navigate");
+    const Navigate = (viewName: string) => {
+      switch (viewName) {
+        
+        case "Press Order":
+          // code block
+
+          router.push("/press_order");
+          break;
+      
+        default:
+        // code block
+      }
     };
 
     return { Navigate, selectedPatientGender };
