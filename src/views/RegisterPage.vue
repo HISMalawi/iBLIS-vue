@@ -164,19 +164,19 @@
           </ion-item>
 
           <ion-item>
-            <ion-label v-if="selectedPatient.phone_number == null"
+            <ion-label v-if="selectedPatient.phone_number == ''"
               >Phone:{{ " " + "N/A" }}</ion-label
             >
-            <ion-label v-if="selectedPatient.phone_number !== null"
+            <ion-label v-if="selectedPatient.phone_number !== ''"
               >Phone:{{ " " + selectedPatient.phone_number }}</ion-label
             >
           </ion-item>
 
           <ion-item>
-            <ion-label v-if="selectedPatient.address == null"
+            <ion-label v-if="selectedPatient.address == ''"
               >Address:{{ " " + "N/A" }}</ion-label
             >
-            <ion-label v-if="selectedPatient.address !== null"
+            <ion-label v-if="selectedPatient.address !== ''"
               >Address:{{ " " + selectedPatient.address }}</ion-label
             >
           </ion-item>
