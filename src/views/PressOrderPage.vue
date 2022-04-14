@@ -13,18 +13,61 @@
           <ion-row>
             <ion-col size="3" class="custom-aside">
               <ion-list>
+                <ion-list-header class="card-3">
+                  <ion-label class="gender-label"> SELECT TEST</ion-label>
+                </ion-list-header>
+                <ion-item v-for="test in Tests" :key="test.id">
+                  <ion-label>{{ test.name }}</ion-label>
+                  <ion-checkbox
+                    slot="start"
+                    @update:modelValue="test.isChecked = $event"
+                    :modelValue="test.isChecked"
+                  >
+                  </ion-checkbox>
+                </ion-item>
+              </ion-list>
+            </ion-col>
+            <ion-col size="9">
+              <ion-list>
                 <ion-radio-group>
-                  <ion-list-header class="card-3">
-                    <ion-label class="gender-label"> SELECT TEST</ion-label>
+                  <ion-list-header class="card-1">
+                    <ion-label class="gender-label"> SELECT SPECIMEN</ion-label>
                   </ion-list-header>
-                  <ion-item v-for="test in Tests" :key="test.id">
-                    <ion-label>{{test.name}}</ion-label>
-                    <ion-radio :value="test"></ion-radio>
+                  <ion-item>
+                    <ion-label>Urine</ion-label>
+                    <ion-radio value="Urine"></ion-radio>
+                  </ion-item>
+                </ion-radio-group>
+              </ion-list>
+
+              <ion-list>
+                <ion-radio-group>
+                  <ion-list-header class="card-1">
+                    <ion-label class="gender-label"> MAIN TEST(S) REASON</ion-label>
+                  </ion-list-header>
+                  <ion-item>
+                    <ion-label>Routine</ion-label>
+                    <ion-radio value="Routine"></ion-radio>
+                  </ion-item>
+                  <ion-item>
+                    <ion-label>Targeted</ion-label>
+                    <ion-radio value="Targeted"></ion-radio>
+                  </ion-item>
+                  <ion-item>
+                    <ion-label>Confirmatory</ion-label>
+                    <ion-radio value="Confirmatory"></ion-radio>
+                  </ion-item>
+                  <ion-item>
+                    <ion-label>Start</ion-label>
+                    <ion-radio value="Start"></ion-radio>
+                  </ion-item>
+                  <ion-item>
+                    <ion-label>Repeat / Missing</ion-label>
+                    <ion-radio value="Repeat"></ion-radio>
                   </ion-item>
                 </ion-radio-group>
               </ion-list>
             </ion-col>
-            <ion-col size="6"></ion-col>
           </ion-row>
         </ion-grid>
       </div>
@@ -45,8 +88,8 @@ import {
   IonItem,
   IonRadioGroup,
   IonLabel,
-  IonRadio,
-  IonListHeader
+  IonListHeader,
+  IonCheckbox,
 } from "@ionic/vue";
 import { defineComponent } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
@@ -71,11 +114,10 @@ export default defineComponent({
     IonItem,
     IonRadioGroup,
     IonLabel,
-    IonRadio,
-    IonListHeader
+    IonListHeader,
+    IonCheckbox,
   },
   setup() {
-
     const store = useStore();
 
     let selectedPatient: Patient = store.getters.selectedPatient;
@@ -83,8 +125,8 @@ export default defineComponent({
     const { fetchTests, Tests } = GetTests();
 
     fetchTests();
-    
-    return {Tests};
+
+    return { Tests };
   },
 });
 </script>
