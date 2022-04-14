@@ -4,8 +4,10 @@
       <ion-title size="small" slot="start"
         ><ion-button color="danger" @click="NavigateToMainMenu"
           >Cancel</ion-button
-        ></ion-title
-      >
+        >
+      </ion-title>
+
+      <ion-title size="small" slot="end">v1.0</ion-title>
     </ion-toolbar>
   </ion-footer>
 </template>
@@ -24,16 +26,14 @@ export default defineComponent({
     IonButton,
   },
   setup() {
-
     const router = useRouter();
-
 
     const NavigateToMainMenu = () => {
       router.push({ name: "Home", replace: true });
     };
 
     return {
-      NavigateToMainMenu
+      NavigateToMainMenu,
     };
   },
 });
