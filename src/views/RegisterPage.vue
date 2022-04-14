@@ -147,32 +147,39 @@
         </ion-list>
 
         <ion-list v-if="currentPage == 8">
-            <ion-list-header class="card-3">
-              <ion-label class="gender-label"> Client Summary</ion-label>
-            </ion-list-header>
+          <ion-list-header class="card-3">
+            <ion-label class="gender-label"> Client Summary</ion-label>
+          </ion-list-header>
 
-            <ion-item>
-              <ion-label>Name:{{" "+ selectedPatient.name}}</ion-label>
-            </ion-item>
+          <ion-item>
+            <ion-label>Name:{{ " " + selectedPatient.name }}</ion-label>
+          </ion-item>
 
-            <ion-item>
-              <ion-label>Gender:{{" "+ selectedPatient.gender}}</ion-label>
-            </ion-item>
+          <ion-item>
+            <ion-label>Gender:{{ " " + selectedPatient.gender }}</ion-label>
+          </ion-item>
 
-            <ion-item>
-              <ion-label>DOB:{{" "+ selectedPatient.dob}}</ion-label>
-            </ion-item>
+          <ion-item>
+            <ion-label>DOB:{{ " " + selectedPatient.dob }}</ion-label>
+          </ion-item>
 
-            <ion-item>
-              <ion-label v-if="selectedPatient.phone_number == null">Phone:{{" "+ "N/A" }}</ion-label>
-              <ion-label v-if="selectedPatient.phone_number !== null">Phone:{{" "+ selectedPatient.phone_number }}</ion-label>
-            </ion-item>
+          <ion-item>
+            <ion-label v-if="selectedPatient.phone_number == null"
+              >Phone:{{ " " + "N/A" }}</ion-label
+            >
+            <ion-label v-if="selectedPatient.phone_number !== null"
+              >Phone:{{ " " + selectedPatient.phone_number }}</ion-label
+            >
+          </ion-item>
 
-            <ion-item>
-              <ion-label v-if="selectedPatient.address == null">Address:{{" "+ "N/A" }}</ion-label>
-              <ion-label v-if="selectedPatient.address !== null">Address:{{" "+ selectedPatient.address}}</ion-label>
-            </ion-item>
-
+          <ion-item>
+            <ion-label v-if="selectedPatient.address == null"
+              >Address:{{ " " + "N/A" }}</ion-label
+            >
+            <ion-label v-if="selectedPatient.address !== null"
+              >Address:{{ " " + selectedPatient.address }}</ion-label
+            >
+          </ion-item>
         </ion-list>
       </div>
     </ion-content>
@@ -262,7 +269,12 @@ export default defineComponent({
     if (store.getters.previousLink == "/search") {
       client.value.first_name = store.getters.searchClient.first_name;
       client.value.last_name = store.getters.searchClient.last_name;
-      client.value.gender = store.getters.searchClient.gender;
+
+      if (store.getters.searchClient.gender == "Female") {
+        client.value.gender = "1";
+      } else {
+        client.value.gender = "0";
+      }
     }
 
     const RegisterClient = () => {
@@ -335,7 +347,7 @@ export default defineComponent({
       dateOfBirth,
       patient,
       patients,
-      selectedPatient
+      selectedPatient,
     };
   },
 });
