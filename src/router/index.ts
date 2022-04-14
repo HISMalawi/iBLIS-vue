@@ -9,6 +9,7 @@ import ConfigurationsPage from '../views/ConfigurationsPage.vue'
 import LoginPage from '../views/LoginPage.vue'
 import PatientDashboardPage from '@/views/PatientDashboardPage.vue'
 import PressOrderPage from '@/views/PressOrderPage.vue'
+import ViewResultsPage from '@/views/ViewResultsPage.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -54,6 +55,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/press_order',
     name: 'PressOrder',
     component: PressOrderPage
+  },
+  {
+    path: '/view_results',
+    name: 'ViewResults',
+    component: ViewResultsPage
   },
   {
     path: '/login',

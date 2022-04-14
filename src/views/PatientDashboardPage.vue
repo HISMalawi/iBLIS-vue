@@ -116,6 +116,11 @@ export default defineComponent({
 
           router.push("/press_order");
           break;
+        case "View Results":
+          // code block
+
+          router.push("/view_results");
+          break;
       
         default:
         // code block
