@@ -7,8 +7,8 @@
         >
       </ion-title>
 
-      <ion-title size="small" slot="end"
-        ><ion-button>Place Order</ion-button>
+      <ion-title size="small" slot="end" @click="NavigateToPressOrder"
+        ><ion-button>Order</ion-button>
       </ion-title>
     </ion-toolbar>
   </ion-footer>
@@ -20,7 +20,7 @@ import { defineComponent } from "vue";
 import { useRouter } from "vue-router";
 
 export default defineComponent({
-  name: "PressOrderFooter",
+  name: "OrdersFooter",
   components: {
     IonFooter,
     IonTitle,
@@ -31,11 +31,15 @@ export default defineComponent({
     const router = useRouter();
 
     const NavigateToMainMenu = () => {
-      router.push({ name: "Orders", replace: true });
+      router.push({ name: "PatientDashboard", replace: true });
+    };
+
+    const NavigateToPressOrder = () => {
+      router.push({ name: "PressOrder", replace: true });
     };
 
     return {
-      NavigateToMainMenu,
+      NavigateToMainMenu, NavigateToPressOrder
     };
   },
 });

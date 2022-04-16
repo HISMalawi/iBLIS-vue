@@ -8,6 +8,7 @@ import SummaryPage from '../views/SummaryPage.vue'
 import ConfigurationsPage from '../views/ConfigurationsPage.vue'
 import LoginPage from '../views/LoginPage.vue'
 import PatientDashboardPage from '@/views/PatientDashboardPage.vue'
+import OrdersPage from '@/views/OrdersPage.vue'
 import PressOrderPage from '@/views/PressOrderPage.vue'
 import ViewResultsPage from '@/views/ViewResultsPage.vue'
 import UploadResultsPage from '@/views/UploadResultsPage.vue'
@@ -56,6 +57,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/press_order',
     name: 'PressOrder',
     component: PressOrderPage
+  },
+  {
+    path: '/orders',
+    name: 'Orders',
+    component: OrdersPage
   },
   {
     path: '/view_results',
