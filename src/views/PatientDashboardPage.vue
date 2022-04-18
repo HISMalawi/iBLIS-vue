@@ -92,8 +92,7 @@ export default defineComponent({
     OptionsCard, IonCard, IonCardContent, IonCol, IonRow
   },
   setup() {
-
-    const store = useStore();
+    const store = useStore();    
 
     let selectedPatientGender: string = store.getters.selectedPatient.gender;
 

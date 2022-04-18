@@ -1,9 +1,8 @@
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import { useStore } from "@/store";
 import { Specimen } from "@/interfaces/Specimen";
 import { TestResult } from "@/interfaces/TestResult";
 import TokenCheck from "@/composables/tokenCheck";
-import { PatientDash } from "@/interfaces/PatientDash";
 
 const { logout } = TokenCheck()
 
