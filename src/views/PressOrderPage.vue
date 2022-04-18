@@ -2,7 +2,7 @@
   <ion-page>
     <tool-bar
       pageTitle="iBLIS | Press Order"
-      defaltBackButtonLink="/client_dashboard"
+      defaltBackButtonLink="/orders"
     />
 
     <ion-content :fullscreen="true">
