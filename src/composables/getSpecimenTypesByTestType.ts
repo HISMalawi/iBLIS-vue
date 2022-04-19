@@ -9,7 +9,7 @@ const store = useStore();
 
 const specimenTypes = ref<SpecimenType[]>([]);
 
-const getSpecimenTypesByTestType = (test_id: number) => {
+const getSpecimenTypesByTestType = () => {
 
   const axios = ref(store.getters.axios)
 
@@ -18,7 +18,7 @@ const getSpecimenTypesByTestType = (test_id: number) => {
   const message = ref<string>("");
   const code = ref<string>("");
 
-  const fetchSpecimenTypes = () => {
+  const fetchSpecimenTypes = (test_id: number) => {
     axios.value
       .post("/specimen_types_by_test_type", {
         token: token.value,

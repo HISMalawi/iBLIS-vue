@@ -8,7 +8,15 @@
       </ion-title>
 
       <ion-title size="small" slot="end"
-        ><ion-button>Place Order</ion-button>
+        ><ion-button>New Test</ion-button>
+      </ion-title>
+
+      <ion-title size="small" slot="end"
+        ><ion-button :disabled="disableSave" @click="SAVE">Save</ion-button>
+      </ion-title>
+
+      <ion-title size="small" slot="end"
+        ><ion-button class="press-order">Place Order</ion-button>
       </ion-title>
     </ion-toolbar>
   </ion-footer>
@@ -16,7 +24,7 @@
 
 <script lang="ts">
 import { IonFooter, IonTitle, IonToolbar, IonButton } from "@ionic/vue";
-import { defineComponent } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 
 export default defineComponent({
@@ -27,16 +35,46 @@ export default defineComponent({
     IonToolbar,
     IonButton,
   },
-  setup() {
+  props: {
+    selectedTestReason: {
+      type: String,
+      required: true,
+    },
+  },
+  emits: ['PlaceOrder', 'SaveOrder'],
+  setup(props, { emit }) {
+
     const router = useRouter();
+
+    const disableSave = ref<boolean>(true);
 
     const NavigateToMainMenu = () => {
       router.push({ name: "Orders", replace: true });
     };
 
+    const SAVE = () => {
+      emit("SaveOrder");
+    };
+
+    watch(
+      () => [props.selectedTestReason],
+      () => {
+        if (props.selectedTestReason !== "") {
+          disableSave.value = false;
+        }
+      }
+    );
+
     return {
       NavigateToMainMenu,
+      SAVE,
+      disableSave,
     };
   },
 });
 </script>
+<style scoped>
+.press-order {
+  --background: green;
+}
+</style>

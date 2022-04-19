@@ -19,29 +19,31 @@
                 <ion-item v-for="test in Tests" :key="test.id">
                   <ion-label>{{ test.name }}</ion-label>
                   <ion-checkbox
+                    :disabled="disableTests"
                     slot="start"
                     @update:modelValue="test.isChecked = $event"
                     :modelValue="test.isChecked"
+                    @click="SelectTest(test)"
                   >
                   </ion-checkbox>
                 </ion-item>
               </ion-list>
             </ion-col>
             <ion-col size="9">
-              <ion-list>
-                <ion-radio-group>
+              <ion-list v-if="specimenTypes.length > 0">
+                <ion-radio-group v-model="selectedSpecimen">
                   <ion-list-header class="card-1">
                     <ion-label class="gender-label"> SELECT SPECIMEN</ion-label>
                   </ion-list-header>
-                  <ion-item>
-                    <ion-label>Urine</ion-label>
-                    <ion-radio value="Urine"></ion-radio>
+                  <ion-item v-for="specimen in specimenTypes" :key="specimen.id">
+                    <ion-label>{{specimen.name}}</ion-label>
+                    <ion-radio :value="specimen"></ion-radio>
                   </ion-item>
                 </ion-radio-group>
               </ion-list>
 
-              <ion-list>
-                <ion-radio-group>
+              <ion-list v-if="Object.keys(selectedSpecimen).length > 0">
+                <ion-radio-group v-model="selectedTestReason">
                   <ion-list-header class="card-1">
                     <ion-label class="gender-label">
                       MAIN TEST(S) REASON</ion-label
@@ -70,7 +72,7 @@
                 </ion-radio-group>
               </ion-list>
 
-              <ion-grid>
+              <ion-grid v-if="selectedTestReason != ''">
                 <ion-row>
                   <ion-col class="head-col"> Test </ion-col>
                   <ion-col class="head-col"> Specimen </ion-col>
@@ -84,7 +86,10 @@
       </div>
     </ion-content>
 
-    <press-order-footer/>
+    <press-order-footer
+    @SaveOrder="SaveOrder" 
+    :selectedTestReason="selectedTestReason"/>
+
   </ion-page>
 </template>
 
@@ -102,14 +107,18 @@ import {
   IonListHeader,
   IonCheckbox,
   IonRadio,
+  onIonViewDidLeave,
 } from "@ionic/vue";
-import { defineComponent } from "vue";
+import { defineComponent, reactive, ref } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import PressOrderFooter from "@/components/PressOrderFooter.vue";
 import { useStore } from "@/store";
 import { Patient } from "@/interfaces/Patient";
 import GetTests from "@/composables/getTests";
+import GetSpecimenTypesByTestType from "@/composables/getSpecimenTypesByTestType";
+import { Test } from "@/interfaces/Test";
+import { SpecimenType } from "@/interfaces/SpecimenType";
 
 export default defineComponent({
   name: "PressOrderPage",
@@ -131,15 +140,48 @@ export default defineComponent({
     IonCheckbox,
   },
   setup() {
+
     const store = useStore();
 
+    const disableTests = ref<boolean>(false);
+
+    const { fetchSpecimenTypes, specimenTypes } = GetSpecimenTypesByTestType();
+
     let selectedPatient: Patient = store.getters.selectedPatient;
+
+    let selectedTest :Test = reactive({} as Test);
+
+    const selectedSpecimen = ref<SpecimenType>({} as SpecimenType);
+
+    const selectedTestReason = ref<string>("");
 
     const { fetchTests, Tests } = GetTests();
 
     fetchTests();
 
-    return { Tests };
+    const SelectTest = (obj : Test) => {
+      
+      selectedTest = obj;
+
+      disableTests.value = true;
+
+      specimenTypes.value.length = 0;
+
+      fetchSpecimenTypes(selectedTest.id);
+
+    }
+
+    const SaveOrder = () => {
+      console.log("sdhcjd");
+    }
+
+    onIonViewDidLeave(() => {
+      specimenTypes.value.length = 0;
+      selectedTestReason.value = "";
+    });
+
+
+    return { Tests, SelectTest, disableTests , specimenTypes, selectedSpecimen, selectedTestReason, SaveOrder };
   },
 });
 </script>
