@@ -7,12 +7,15 @@
 
       <div id="container">
         <ion-grid>
-          <ion-row>
+          <ion-row class="flex-container">
             <ion-col size="3" class="custom-aside">
-              <ion-list>
-                <ion-list-header class="card-3">
+
+              <ion-list-header class="card-3">
                   <ion-label class="gender-label"> SELECT TEST</ion-label>
                 </ion-list-header>
+
+              <ion-list class="custom-aside-list">
+                
                 <ion-item v-for="test in Tests" :key="test.id">
                   <ion-label>{{ test.name }}</ion-label>
                   <ion-checkbox
@@ -26,12 +29,16 @@
                 </ion-item>
               </ion-list>
             </ion-col>
-            <ion-col size="9">
-              <ion-list v-if="specimenTypes.length > 0">
+            <ion-col class="custom-content" size="9">
+              <ion-list-header class="card-1" v-if="specimenTypes.length > 0">
+                <ion-label class="gender-label"> SELECT SPECIMEN</ion-label>
+              </ion-list-header>
+
+              <ion-list
+                class="content-specimen-sec"
+                v-if="specimenTypes.length > 0"
+              >
                 <ion-radio-group v-model="selectedSpecimen">
-                  <ion-list-header class="card-1">
-                    <ion-label class="gender-label"> SELECT SPECIMEN</ion-label>
-                  </ion-list-header>
                   <ion-item
                     v-for="specimen in specimenTypes"
                     :key="specimen.id"
@@ -45,18 +52,24 @@
                 </ion-radio-group>
               </ion-list>
 
+              <ion-list-header
+                class="card-1"
+                v-if="
+                  Object.keys(selectedSpecimen).length > 0 &&
+                  specimenTypes.length != 0
+                "
+              >
+                <ion-label class="gender-label"> MAIN TEST(S) REASON</ion-label>
+              </ion-list-header>
+
               <ion-list
+                class="content-reason-sec"
                 v-if="
                   Object.keys(selectedSpecimen).length > 0 &&
                   specimenTypes.length != 0
                 "
               >
                 <ion-radio-group v-model="selectedTestReason">
-                  <ion-list-header class="card-1">
-                    <ion-label class="gender-label">
-                      MAIN TEST(S) REASON</ion-label
-                    >
-                  </ion-list-header>
                   <ion-item>
                     <ion-label>Routine</ion-label>
                     <ion-radio
@@ -371,9 +384,43 @@ ion-content {
   --ion-background-color: #eee;
 }
 
+#container{
+  overflow: hidden;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+}
+
 .custom-aside {
   border-right: solid 1px rgb(202, 201, 201);
+  flex: 1;
+  
 }
+
+.custom-content {
+  flex: 1;
+}
+
+.custom-aside-list{
+
+  height: 100vh;
+  padding-bottom: 120px;
+  overflow-y: scroll;
+
+}
+
+.content-specimen-sec {
+  max-height: 150px;
+  overflow-y: scroll;
+}
+
+.content-reason-sec {
+  max-height: 150px;
+  overflow-y: scroll;
+}
+
 .head-col {
   text-align: center;
   background: #ffffe2;
