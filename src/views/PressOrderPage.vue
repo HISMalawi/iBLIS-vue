@@ -9,13 +9,11 @@
         <ion-grid>
           <ion-row class="flex-container">
             <ion-col size="3" class="custom-aside">
-
               <ion-list-header class="card-3">
-                  <ion-label class="gender-label"> SELECT TEST</ion-label>
-                </ion-list-header>
+                <ion-label class="gender-label"> SELECT TEST</ion-label>
+              </ion-list-header>
 
               <ion-list class="custom-aside-list">
-                
                 <ion-item v-for="test in Tests" :key="test.id">
                   <ion-label>{{ test.name }}</ion-label>
                   <ion-checkbox
@@ -267,25 +265,7 @@ export default defineComponent({
     );
 
     const SaveOrder = () => {
-      if (preparedOrderTests.value.length > 0) {
-        preparedOrderTests.value.forEach((preTest) => {
-          if (preTest.specimen.id !== selectedSpecimen.value.id) {
-            let tests: Test[] = [];
-
-            tests.push(selectedTest);
-
-            let testDetails: PreparedOrderTests = {
-              tests: tests,
-              specimen: selectedSpecimen.value,
-              reason: selectedTestReason.value,
-            };
-
-            preparedOrderTests.value.push(testDetails);
-          } else {
-            preTest.tests.push(selectedTest);
-          }
-        });
-      } else {
+      if (preparedOrderTests.value.length == 0) {
         let tests: Test[] = [];
 
         tests.push(selectedTest);
@@ -297,7 +277,87 @@ export default defineComponent({
         };
 
         preparedOrderTests.value.push(testDetails);
+      } else {
+
+        let testAvailable = false;
+
+        preparedOrderTests.value.forEach((preTest) => {
+          if (preTest.specimen.id == selectedSpecimen.value.id) {
+            if (!preTest.tests.includes(selectedTest)) {
+              
+              preTest.tests.push(selectedTest);
+              testAvailable = true;
+
+              return false;
+            }
+          } else {
+            if (preTest.tests.includes(selectedTest)) {
+              testAvailable = true;
+            }
+          }
+        });
+
+        if (!testAvailable) {
+          
+          let tests: Test[] = [];
+
+          tests.push(selectedTest);
+
+          let testDetails: PreparedOrderTests = {
+            tests: tests,
+            specimen: selectedSpecimen.value,
+            reason: selectedTestReason.value,
+          };
+
+          preparedOrderTests.value.push(testDetails);
+        }
+
       }
+
+      // if (preparedOrderTests.value.length > 0) {
+      //   for (let index = 0; index < preparedOrderTests.value.length; index++) {
+
+      //     let preTest = preparedOrderTests.value[index];
+
+      //     if (preTest.specimen.id == selectedSpecimen.value.id) {
+
+      //       preTest.tests.forEach((test) => {
+      //         if (test !== selectedTest) {
+      //           preTest.tests.push(selectedTest);
+
+      //         }
+
+      //       });
+
+      //     } else {
+      //       let tests: Test[] = [];
+
+      //       tests.push(selectedTest);
+
+      //       let testDetails: PreparedOrderTests = {
+      //         tests: tests,
+      //         specimen: selectedSpecimen.value,
+      //         reason: selectedTestReason.value,
+      //       };
+
+      //       preparedOrderTests.value.push(testDetails);
+      //     }
+      //   }
+
+      // } else {
+
+      //   let tests: Test[] = [];
+
+      //   tests.push(selectedTest);
+
+      //   let testDetails: PreparedOrderTests = {
+      //     tests: tests,
+      //     specimen: selectedSpecimen.value,
+      //     reason: selectedTestReason.value,
+      //   };
+
+      //   preparedOrderTests.value.push(testDetails);
+      // }
 
       disableSpecimen.value = true;
       disableReason.value = true;
@@ -384,7 +444,7 @@ ion-content {
   --ion-background-color: #eee;
 }
 
-#container{
+#container {
   overflow: hidden;
 }
 
@@ -396,19 +456,16 @@ ion-content {
 .custom-aside {
   border-right: solid 1px rgb(202, 201, 201);
   flex: 1;
-  
 }
 
 .custom-content {
   flex: 1;
 }
 
-.custom-aside-list{
-
+.custom-aside-list {
   height: 100vh;
   padding-bottom: 120px;
   overflow-y: scroll;
-
 }
 
 .content-specimen-sec {
