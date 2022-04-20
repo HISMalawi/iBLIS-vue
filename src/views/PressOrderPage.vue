@@ -105,7 +105,8 @@
                   <ion-col class="head-col"> Action </ion-col>
                 </ion-row>
 
-                <ion-row class="cus-row"
+                <ion-row
+                  class="cus-row"
                   v-for="(testPre, index) in preparedOrderTests"
                   :key="testPre.specimen.id"
                 >
@@ -291,11 +292,19 @@ export default defineComponent({
     };
 
     const NewOrder = () => {
+      let inc = false;
+
       preparedOrderTests.value.forEach((element) => {
-        if (!element.tests.includes(selectedTest)) {
-          selectedTest.isChecked = false;
+        if (element.tests.includes(selectedTest)) {
+          inc = true;
         }
       });
+
+      if (inc) {
+        selectedTest.isChecked = true;
+      } else {
+        selectedTest.isChecked = false;
+      }
 
       specimenTypes.value.length = 0;
       selectedTestReason.value = "";
@@ -374,7 +383,7 @@ ion-content {
   text-align: center;
 }
 
-.cus-row{
+.cus-row {
   border-bottom: solid 1px rgb(202, 201, 201);
 }
 </style>
