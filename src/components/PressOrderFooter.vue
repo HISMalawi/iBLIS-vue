@@ -8,7 +8,7 @@
       </ion-title>
 
       <ion-title size="small" slot="end"
-        ><ion-button>New Test</ion-button>
+        ><ion-button @click="NewOrder">New Order</ion-button>
       </ion-title>
 
       <ion-title size="small" slot="end"
@@ -16,15 +16,16 @@
       </ion-title>
 
       <ion-title size="small" slot="end"
-        ><ion-button class="press-order">Place Order</ion-button>
+        ><ion-button :disabled="preparedOrderTests.length < 1" class="press-order">Place Order</ion-button>
       </ion-title>
     </ion-toolbar>
   </ion-footer>
 </template>
 
 <script lang="ts">
+import { PreparedOrderTests } from "@/interfaces/PreparedOrderTests";
 import { IonFooter, IonTitle, IonToolbar, IonButton } from "@ionic/vue";
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, PropType } from "vue";
 import { useRouter } from "vue-router";
 
 export default defineComponent({
@@ -40,13 +41,20 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    disableSave: {
+      type: Boolean,
+      required: true,
+    },
+    preparedOrderTests: {
+      type: Object as PropType<PreparedOrderTests>,
+      required: true,
+    }
   },
-  emits: ['PlaceOrder', 'SaveOrder'],
+  emits: ['NewOrder', 'SaveOrder'],
   setup(props, { emit }) {
 
     const router = useRouter();
 
-    const disableSave = ref<boolean>(true);
 
     const NavigateToMainMenu = () => {
       router.push({ name: "Orders", replace: true });
@@ -56,19 +64,14 @@ export default defineComponent({
       emit("SaveOrder");
     };
 
-    watch(
-      () => [props.selectedTestReason],
-      () => {
-        if (props.selectedTestReason !== "") {
-          disableSave.value = false;
-        }
-      }
-    );
+    const NewOrder = () => {
+      emit("NewOrder");
+    };
 
     return {
       NavigateToMainMenu,
       SAVE,
-      disableSave,
+      NewOrder
     };
   },
 });

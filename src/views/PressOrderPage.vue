@@ -19,7 +19,7 @@
                 <ion-item v-for="test in Tests" :key="test.id">
                   <ion-label>{{ test.name }}</ion-label>
                   <ion-checkbox
-                    :disabled="disableTests"
+                    :disabled="disableTests || test.isChecked"
                     slot="start"
                     @update:modelValue="test.isChecked = $event"
                     :modelValue="test.isChecked"
@@ -37,12 +37,12 @@
                   </ion-list-header>
                   <ion-item v-for="specimen in specimenTypes" :key="specimen.id">
                     <ion-label>{{specimen.name}}</ion-label>
-                    <ion-radio :value="specimen"></ion-radio>
+                    <ion-radio :value="specimen" :disabled="disableSpecimen"></ion-radio>
                   </ion-item>
                 </ion-radio-group>
               </ion-list>
 
-              <ion-list v-if="Object.keys(selectedSpecimen).length > 0">
+              <ion-list v-if="Object.keys(selectedSpecimen).length > 0 && specimenTypes.length != 0">
                 <ion-radio-group v-model="selectedTestReason">
                   <ion-list-header class="card-1">
                     <ion-label class="gender-label">
@@ -51,33 +51,39 @@
                   </ion-list-header>
                   <ion-item>
                     <ion-label>Routine</ion-label>
-                    <ion-radio value="Routine"></ion-radio>
+                    <ion-radio value="Routine" :disabled="disableReason"></ion-radio>
                   </ion-item>
                   <ion-item>
                     <ion-label>Targeted</ion-label>
-                    <ion-radio value="Targeted"></ion-radio>
+                    <ion-radio value="Targeted" :disabled="disableReason"></ion-radio>
                   </ion-item>
                   <ion-item>
                     <ion-label>Confirmatory</ion-label>
-                    <ion-radio value="Confirmatory"></ion-radio>
+                    <ion-radio value="Confirmatory" :disabled="disableReason"></ion-radio>
                   </ion-item>
                   <ion-item>
                     <ion-label>Start</ion-label>
-                    <ion-radio value="Start"></ion-radio>
+                    <ion-radio value="Start" :disabled="disableReason"></ion-radio>
                   </ion-item>
                   <ion-item>
                     <ion-label>Repeat / Missing</ion-label>
-                    <ion-radio value="Repeat"></ion-radio>
+                    <ion-radio value="Repeat" :disabled="disableReason"></ion-radio>
                   </ion-item>
                 </ion-radio-group>
               </ion-list>
 
-              <ion-grid v-if="selectedTestReason != ''">
+              <ion-grid v-if="selectedTestReason != '' || preparedOrderTests.length > 0">
                 <ion-row>
                   <ion-col class="head-col"> Test </ion-col>
                   <ion-col class="head-col"> Specimen </ion-col>
                   <ion-col class="head-col"> Reason </ion-col>
                   <ion-col class="head-col"> Action </ion-col>
+                </ion-row>
+                <ion-row v-for="(testPre, index) in preparedOrderTests" :key="testPre.test.id">
+                  <ion-col class="body-col"> {{testPre.test.name}} </ion-col>
+                  <ion-col class="body-col"> {{testPre.specimen.name}} </ion-col>
+                  <ion-col class="body-col"> {{testPre.reason}} </ion-col>
+                  <ion-col class="body-col action-btn"> <ion-button @click="DeleteOrder(index, testPre.test)" color="danger" size="small">X</ion-button> </ion-col>
                 </ion-row>
               </ion-grid>
             </ion-col>
@@ -88,7 +94,10 @@
 
     <press-order-footer
     @SaveOrder="SaveOrder" 
-    :selectedTestReason="selectedTestReason"/>
+    @NewOrder="NewOrder"
+    :disableSave="disableSave"
+    :selectedTestReason="selectedTestReason"
+    :preparedOrderTests="preparedOrderTests"/>
 
   </ion-page>
 </template>
@@ -108,8 +117,9 @@ import {
   IonCheckbox,
   IonRadio,
   onIonViewDidLeave,
+  IonButton
 } from "@ionic/vue";
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, reactive, ref, watch } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import PressOrderFooter from "@/components/PressOrderFooter.vue";
@@ -119,6 +129,7 @@ import GetTests from "@/composables/getTests";
 import GetSpecimenTypesByTestType from "@/composables/getSpecimenTypesByTestType";
 import { Test } from "@/interfaces/Test";
 import { SpecimenType } from "@/interfaces/SpecimenType";
+import { PreparedOrderTests } from "@/interfaces/PreparedOrderTests";
 
 export default defineComponent({
   name: "PressOrderPage",
@@ -138,18 +149,27 @@ export default defineComponent({
     IonLabel,
     IonListHeader,
     IonCheckbox,
+    IonButton
   },
   setup() {
 
     const store = useStore();
 
+    const disableSave = ref<boolean>(true);
+
     const disableTests = ref<boolean>(false);
+
+    const disableSpecimen = ref<boolean>(false);
+
+    const disableReason = ref<boolean>(false);
 
     const { fetchSpecimenTypes, specimenTypes } = GetSpecimenTypesByTestType();
 
     let selectedPatient: Patient = store.getters.selectedPatient;
 
     let selectedTest :Test = reactive({} as Test);
+
+    const preparedOrderTests = ref<any[]>([]);
 
     const selectedSpecimen = ref<SpecimenType>({} as SpecimenType);
 
@@ -171,9 +191,57 @@ export default defineComponent({
 
     }
 
+    watch(
+      () => [selectedTestReason.value],
+      () => {
+        if (selectedTestReason.value !== "") {
+          disableSave.value = false;
+        }
+      }
+    );
+
     const SaveOrder = () => {
-      console.log("sdhcjd");
+
+      let testDetails : PreparedOrderTests = {
+        test: selectedTest,
+        specimen: selectedSpecimen.value,
+        reason: selectedTestReason.value
+      }
+
+      preparedOrderTests.value.push(testDetails);
+      disableSpecimen.value = true;
+      disableReason.value = true;
+      disableSave.value = true;
     }
+
+    const NewOrder = () => {
+
+      specimenTypes.value.length = 0;
+      selectedTestReason.value = ""
+
+      disableTests.value = false;
+      disableSpecimen.value = false;
+      disableReason.value = false;
+
+    };
+
+    const DeleteOrder = (index: number, test: Test) => {
+
+   
+      for (let index = 0; index < Tests.value.length; index++) {
+          const element = Tests.value[index];
+
+          if (element.id == test.id) {
+              element.isChecked = false;
+          }
+          
+        }
+
+      preparedOrderTests.value.splice(index, 1);
+
+    }
+
+
 
     onIonViewDidLeave(() => {
       specimenTypes.value.length = 0;
@@ -181,7 +249,7 @@ export default defineComponent({
     });
 
 
-    return { Tests, SelectTest, disableTests , specimenTypes, selectedSpecimen, selectedTestReason, SaveOrder };
+    return { Tests, NewOrder, disableSpecimen, DeleteOrder, disableReason, SelectTest, disableTests, disableSave, specimenTypes, selectedSpecimen, selectedTestReason, SaveOrder, preparedOrderTests };
   },
 });
 </script>
@@ -198,5 +266,8 @@ ion-content {
   text-align: center;
   background: #ffffe2;
   border-left: solid 1px rgb(202, 201, 201);
+}
+.action-btn{
+  text-align:center;
 }
 </style>

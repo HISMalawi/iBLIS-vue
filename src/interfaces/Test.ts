@@ -9,4 +9,5 @@ export interface Test {
     prevalence_threshold: string;
     accredited: number;
     print_device: string;
+    isChecked: boolean;
   }
