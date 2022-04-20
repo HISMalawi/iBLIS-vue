@@ -16,7 +16,7 @@
       </ion-title>
 
       <ion-title size="small" slot="end"
-        ><ion-button :disabled="preparedOrderTests.length < 1" class="press-order">Place Order</ion-button>
+        ><ion-button :disabled="preparedOrderTests.length < 1" @click="PlaceOrder" class="press-order">Place Order</ion-button>
       </ion-title>
     </ion-toolbar>
   </ion-footer>
@@ -50,7 +50,7 @@ export default defineComponent({
       required: true,
     }
   },
-  emits: ['NewOrder', 'SaveOrder'],
+  emits: ['NewOrder', 'SaveOrder', 'PlaceOrder'],
   setup(props, { emit }) {
 
     const router = useRouter();
@@ -68,10 +68,15 @@ export default defineComponent({
       emit("NewOrder");
     };
 
+    const PlaceOrder = () => {
+      emit("PlaceOrder");
+    };
+
     return {
       NavigateToMainMenu,
       SAVE,
-      NewOrder
+      NewOrder,
+      PlaceOrder
     };
   },
 });

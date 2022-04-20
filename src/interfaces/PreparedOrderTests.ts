@@ -2,7 +2,7 @@ import { SpecimenType } from "./SpecimenType";
 import { Test } from "./Test";
 
 export interface PreparedOrderTests {
-    test: Test;
+    tests: Test[];
     specimen: SpecimenType;
     reason:string;
   }

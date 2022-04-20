@@ -15,7 +15,7 @@ const createOrder = () => {
 
   const message = ref<string>("");
   const code = ref<string>("");
-  let zpl = ref<string>("");
+  const zpl = ref<string>("");
 
   const accessionNumber = ref<string>("");
 
@@ -58,10 +58,10 @@ const createOrder = () => {
 };
 
 function zplGenerate(zpl:any, zplTestNames: any, store: any, accessionNumber: any){
-  let gender = store.getters.selectedPatient.gender == 0 ? "M":"F";
-  let patientName = store.getters.selectedPatient.name;
-  let patientDOB = store.getters.selectedPatient.dob
-  let ward = store.getters.selectedWard.name
+  const gender = store.getters.selectedPatient.gender == 0 ? "M":"F";
+  const patientName = store.getters.selectedPatient.name;
+  const patientDOB = store.getters.selectedPatient.dob
+  const ward = store.getters.selectedWard.name
   zpl.value = `^XA;
   ^FO50,60^ADN,16,10^FD${patientName}(${gender})^FS;
   ^FO50,90^ADN,16,10^FD${patientDOB}^FS;
@@ -84,7 +84,7 @@ function zplGenerate(zpl:any, zplTestNames: any, store: any, accessionNumber: an
     }
   })
   zpl.value += "^XZ"
-};
+}
 
 
 export default createOrder;
