@@ -15,6 +15,7 @@ import { TestResult } from "@/interfaces/TestResult";
 import { Ward } from "@/interfaces/Ward";
 import { reactive } from "vue";
 import { SearchClient } from "@/interfaces/SearchClient";
+import { Specimen } from "@/interfaces/Specimen";
 
 const axios = require("axios").create({
   baseURL: process.env.VUE_APP_SERVICE_BASE_URL,
@@ -28,6 +29,8 @@ const test: TestResult = reactive({} as TestResult);
 const searchClient: SearchClient = reactive({} as SearchClient);
 
 const selectedWard: Ward = reactive({} as Ward);
+
+const selectedSpecimen: Specimen = reactive({} as Specimen);
 
 const createdOrdersTrackingNum: string[] = [];
 
@@ -59,6 +62,7 @@ export type State = {
   searchClient: SearchClient;
   previousLink: string;
   createdOrdersTrackingNum: string[];
+  selectedSpecimen: Specimen;
 };
 
 const state: State = {
@@ -87,6 +91,7 @@ const state: State = {
   searchClient: searchClient,
   previousLink: "#",
   createdOrdersTrackingNum: createdOrdersTrackingNum,
+  selectedSpecimen: selectedSpecimen,
 };
 
 export enum MutationTypes {
@@ -114,6 +119,7 @@ export enum MutationTypes {
   SET_SEARCH_CLIENT = "SETTING_SEARCH_CLIENT",
   SET_PREVIOUS_LINK = "SETTING_PREVIOUS_LINK",
   ADD_ORDER = "ADDING_ORDER",
+  SET_SELECTED_SPECIMEN = "SETTING_SELECTED_SPECIMEN"
 }
 
 export enum ActionTypes {
@@ -141,6 +147,7 @@ export enum ActionTypes {
   SET_SEARCH_CLIENT = "SETTING_SEARCH_CLIENT",
   SET_PREVIOUS_LINK = "SETTING_PREVIOUS_LINK",
   ADD_ORDER = "ADDING_ORDER",
+  SET_SELECTED_SPECIMEN = "SETTING_SELECTED_SPECIMEN"
 }
 
 export type Mutations<S = State> = {
@@ -168,6 +175,7 @@ export type Mutations<S = State> = {
   [MutationTypes.SET_SEARCH_CLIENT](state: S, payload: SearchClient): void;
   [MutationTypes.SET_PREVIOUS_LINK](state: S, payload: string): void;
   [MutationTypes.ADD_ORDER](state: S, payload: string): void;
+  [MutationTypes.SET_SELECTED_SPECIMEN](state: S, payload: Specimen): void;
 };
 
 const mutations: MutationTree<State> & Mutations = {
@@ -245,6 +253,9 @@ const mutations: MutationTree<State> & Mutations = {
   [MutationTypes.ADD_ORDER](state: State, payload: string) {
     state.createdOrdersTrackingNum.push(payload);
   },
+  [MutationTypes.SET_SELECTED_SPECIMEN](state: State, payload: Specimen) {
+    state.selectedSpecimen = payload;
+  },
 };
 
 type AugmentedActionContext = {
@@ -282,6 +293,8 @@ export interface Actions {
   [ActionTypes.SET_PREVIOUS_LINK]({ commit }: AugmentedActionContext, payload: string): void;
 
   [ActionTypes.ADD_ORDER]({ commit }: AugmentedActionContext, payload: string): void;
+
+  [ActionTypes.SET_SELECTED_SPECIMEN]({ commit }: AugmentedActionContext, payload: Specimen): void;
 }
 
 export const actions: ActionTree<State, State> & Actions = {
@@ -327,6 +340,9 @@ export const actions: ActionTree<State, State> & Actions = {
   [ActionTypes.ADD_ORDER]({ commit }, payload: string) {
     commit(MutationTypes.ADD_ORDER, payload);
   },
+  [ActionTypes.SET_SELECTED_SPECIMEN]({ commit }, payload: Specimen) {
+    commit(MutationTypes.SET_SELECTED_SPECIMEN, payload);
+  },
 };
 
 export type Getters = {
@@ -346,6 +362,7 @@ export type Getters = {
   searchClient(state: State): SearchClient;
   previousLink(state: State): string;
   createdOrders(state: State): string[];
+  selectedSpecimen(state: State): Specimen;
 };
 
 export const getters: GetterTree<State, State> & Getters = {
@@ -397,6 +414,9 @@ export const getters: GetterTree<State, State> & Getters = {
   },
   createdOrders: (state) => {
     return state.createdOrdersTrackingNum;
+  },
+  selectedSpecimen: (state) => {
+    return state.selectedSpecimen;
   }
 };
 

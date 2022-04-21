@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <tool-bar
-      pageTitle="iBLIS | Order :"
+      :pageTitle="'iBLIS | Order : ' + Specimen.accession_number"
       defaltBackButtonLink="/orders"
     />
 
@@ -19,11 +19,12 @@
 
 <script lang="ts">
 import { IonContent, IonPage } from "@ionic/vue";
-import { defineComponent } from "vue";
+import { defineComponent, reactive } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import ViewOrderFooter from "@/components/ViewOrderFooter.vue";
 import { useStore } from "@/store";
+import { Specimen } from "@/interfaces/Specimen";
 export default defineComponent({
   name: "ViewOrderPage",
   components: {
@@ -36,8 +37,10 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
+    const Specimen :Specimen = store.getters.selectedSpecimen;
 
-    return { };
+
+    return { Specimen };
   },
 });
 </script>
