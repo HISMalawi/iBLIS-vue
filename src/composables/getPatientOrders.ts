@@ -10,6 +10,7 @@ const store = useStore();
 
 const Specimens = ref<Specimen[]>([]);
 const TestWithResults = ref<TestResult[]>([]);
+const Tests = ref<TestResult[]>([]);
 const SpecimensWithResults = ref<number[]>([]);
 
 
@@ -40,6 +41,8 @@ const getPatientOrders = () => {
 
 
           if (code.value == "200") {
+
+            Tests.value = responseData.tests
 
             TestWithResults.value = responseData.tests_with_results
 
@@ -81,7 +84,7 @@ const getPatientOrders = () => {
       });
   };
  
-  return { fetchOrders, Specimens };
+  return { fetchOrders, Specimens, Tests };
 };
 
 export default getPatientOrders;

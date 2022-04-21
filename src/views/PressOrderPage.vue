@@ -314,51 +314,6 @@ export default defineComponent({
 
       }
 
-      // if (preparedOrderTests.value.length > 0) {
-      //   for (let index = 0; index < preparedOrderTests.value.length; index++) {
-
-      //     let preTest = preparedOrderTests.value[index];
-
-      //     if (preTest.specimen.id == selectedSpecimen.value.id) {
-
-      //       preTest.tests.forEach((test) => {
-      //         if (test !== selectedTest) {
-      //           preTest.tests.push(selectedTest);
-
-      //         }
-
-      //       });
-
-      //     } else {
-      //       let tests: Test[] = [];
-
-      //       tests.push(selectedTest);
-
-      //       let testDetails: PreparedOrderTests = {
-      //         tests: tests,
-      //         specimen: selectedSpecimen.value,
-      //         reason: selectedTestReason.value,
-      //       };
-
-      //       preparedOrderTests.value.push(testDetails);
-      //     }
-      //   }
-
-      // } else {
-
-      //   let tests: Test[] = [];
-
-      //   tests.push(selectedTest);
-
-      //   let testDetails: PreparedOrderTests = {
-      //     tests: tests,
-      //     specimen: selectedSpecimen.value,
-      //     reason: selectedTestReason.value,
-      //   };
-
-      //   preparedOrderTests.value.push(testDetails);
-      // }
-
       disableSpecimen.value = true;
       disableReason.value = true;
       disableSave.value = true;
@@ -442,10 +397,6 @@ export default defineComponent({
 <style scoped>
 ion-content {
   --ion-background-color: #eee;
-}
-
-#container {
-  overflow: hidden;
 }
 
 .flex-container {
