@@ -22,6 +22,7 @@
             class="cus-row"
             v-for="Specimen in Specimens"
             :key="Specimen.id"
+            @click="ViewOrder(Specimen)"
           >
             <ion-col>
               <ion-row
@@ -70,6 +71,7 @@ import OrdersFooter from "@/components/OrdersFooter.vue";
 import GetPatientOrders from "@/composables/getPatientOrders";
 import { useStore } from "@/store";
 import { Specimen } from "@/interfaces/Specimen";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "OrdersPage",
@@ -85,6 +87,8 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
+
+    const router = useRouter();
 
     const { fetchOrders, Specimens, Tests } = GetPatientOrders();
 
@@ -102,7 +106,13 @@ export default defineComponent({
       return date_time.substring(0, 10);
     };
 
-    return { Specimens, getDateCollected, getDateAccepted, Tests };
+    const ViewOrder = (Specimen: Specimen) => {
+
+      router.push({ name: "ViewOrder", replace: true });
+
+    }
+
+    return { Specimens, getDateCollected, getDateAccepted, Tests, ViewOrder };
   },
 });
 </script>
