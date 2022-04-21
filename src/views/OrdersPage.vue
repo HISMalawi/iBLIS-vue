@@ -69,7 +69,7 @@ import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import OrdersFooter from "@/components/OrdersFooter.vue";
 import GetPatientOrders from "@/composables/getPatientOrders";
-import { MutationTypes, useStore } from "@/store";
+import { ActionTypes, useStore } from "@/store";
 import { Specimen } from "@/interfaces/Specimen";
 import { useRouter } from "vue-router";
 
@@ -108,7 +108,7 @@ export default defineComponent({
 
     const ViewOrder = (Specimen: Specimen) => {
 
-      store.commit(MutationTypes.SET_SELECTED_SPECIMEN, Specimen);
+      store.dispatch(ActionTypes.SET_SELECTED_SPECIMEN, Specimen);
 
       router.push({ name: "ViewOrder", replace: true });
 
