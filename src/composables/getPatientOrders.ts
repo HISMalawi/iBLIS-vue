@@ -84,7 +84,7 @@ const getPatientOrders = () => {
       });
   };
  
-  return { fetchOrders, Specimens, Tests };
+  return { fetchOrders, Specimens, Tests, TestWithResults};
 };
 
 export default getPatientOrders;

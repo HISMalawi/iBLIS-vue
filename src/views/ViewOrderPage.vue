@@ -21,7 +21,16 @@
                   <ion-col size="12">
                     <div class="bolder">
                       <h2>
-                        <span class="light-text">Name : {{Patient.name}} ({{patientGender}}) </span>
+                        <span class="light-text">Name : {{Patient.name}}</span>
+                      </h2>
+                    </div>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col size="12">
+                    <div class="bolder">
+                      <h2>
+                        <span class="light-text">Gender : {{Patient.gender}}</span>
                       </h2>
                     </div>
                   </ion-col>
@@ -54,7 +63,16 @@
                   <ion-col size="12">
                     <div class="bolder">
                       <h2>
-                        <span class="light-text">Date Collected : {{getDateCollected(Specimen)}}</span>
+                        <span class="light-text">Reason : {{Specimen.priority}}</span>
+                      </h2>
+                    </div>
+                  </ion-col>
+                </ion-row>
+                <ion-row>
+                  <ion-col size="12">
+                    <div class="bolder">
+                      <h2>
+                        <span class="light-text">Date Collected : {{getDate(Specimen.date_of_collection)}}</span>
                       </h2>
                     </div>
                   </ion-col>
@@ -65,12 +83,22 @@
           </ion-card-content>
         </ion-card>
 
-        <ion-grid>
+        <ion-grid class="body-grid">
           <ion-row>
-
-            <ion-col></ion-col>
-
+            <ion-col class="head-title-col card-3">Lab Results</ion-col>
           </ion-row>
+          <ion-row>
+            <ion-col class="head-col"> Test </ion-col>
+            <ion-col class="head-col"> Result </ion-col>
+            <ion-col class="head-col"> Date </ion-col>
+          </ion-row>
+
+          <ion-row v-for="Test in Tests" :key="Test.id">
+            <ion-col class="cus-row" v-if="Test.specimen_id == Specimen.id"> {{Test.name}} </ion-col>
+            <ion-col class="cus-row" v-if="Test.specimen_id == Specimen.id"> Result </ion-col>
+            <ion-col class="cus-row" v-if="Test.specimen_id == Specimen.id"> {{getDate(Test.time_created)}} </ion-col>
+          </ion-row>
+
         </ion-grid>
         
       </div>
@@ -89,6 +117,7 @@ import ViewOrderFooter from "@/components/ViewOrderFooter.vue";
 import { useStore } from "@/store";
 import { Specimen } from "@/interfaces/Specimen";
 import { Patient } from "@/interfaces/Patient";
+import GetPatientOrders from "@/composables/getPatientOrders";
 export default defineComponent({
   name: "ViewOrderPage",
   components: {
@@ -105,17 +134,21 @@ export default defineComponent({
 
     const Patient: Patient = store.getters.selectedPatient;
 
-    const patientGender = ref<string>(Patient.gender.substring(0,1));
-
     const Specimen :Specimen = store.getters.selectedSpecimen;
 
-    const getDateCollected = (Specimen: Specimen) => {
-      let date_time: string = Specimen.date_of_collection;
+    const { fetchOrders, Tests } = GetPatientOrders();
+
+    fetchOrders(parseInt(store.getters.selectedPatient.patient_number));
+
+    const getDate = (date_string: string) => {
+      let date_time: string = date_string;
 
       return date_time.substring(0, 10);
     };
 
-    return { Specimen, Patient, patientGender, getDateCollected };
+    console.log(Tests);
+
+    return { Specimen, Patient, Tests, getDate };
   },
 });
 </script>
@@ -131,9 +164,13 @@ ion-content {
   border-left: solid 1px rgb(202, 201, 201);
 }
 
-/* ion-col {
-  --ion-grid-column-padding: 10px;
-} */
+.head-title-col {
+  text-align: center;
+}
+
+.body-grid{
+  padding: 0 10px;
+}
 
 .cus-row {
   border-bottom: solid 1px rgb(202, 201, 201);
