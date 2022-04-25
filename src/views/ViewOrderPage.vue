@@ -9,7 +9,6 @@
       <collapse-tool-bar pageTitle="iBLIS | Orders" />
 
       <div id="container">
-
         <ion-card class="card-3 client-info-card">
           <ion-card-content>
             <ion-row>
@@ -21,7 +20,9 @@
                   <ion-col size="12">
                     <div class="bolder">
                       <h2>
-                        <span class="light-text">Name : {{Patient.name}}</span>
+                        <span class="light-text"
+                          >Name : {{ Patient.name }}</span
+                        >
                       </h2>
                     </div>
                   </ion-col>
@@ -30,7 +31,9 @@
                   <ion-col size="12">
                     <div class="bolder">
                       <h2>
-                        <span class="light-text">Gender : {{Patient.gender}}</span>
+                        <span class="light-text"
+                          >Gender : {{ Patient.gender }}</span
+                        >
                       </h2>
                     </div>
                   </ion-col>
@@ -39,7 +42,7 @@
                   <ion-col size="12">
                     <div class="bolder">
                       <h2>
-                        <span class="light-text">Age : {{Patient.age}}</span>
+                        <span class="light-text">Age : {{ Patient.age }}</span>
                       </h2>
                     </div>
                   </ion-col>
@@ -54,7 +57,9 @@
                   <ion-col size="12">
                     <div class="bolder">
                       <h2>
-                        <span class="light-text">Sample : {{Specimen.specimen_type}}  </span>
+                        <span class="light-text"
+                          >Sample : {{ Specimen.specimen_type }}
+                        </span>
                       </h2>
                     </div>
                   </ion-col>
@@ -63,7 +68,9 @@
                   <ion-col size="12">
                     <div class="bolder">
                       <h2>
-                        <span class="light-text">Reason : {{Specimen.priority}}</span>
+                        <span class="light-text"
+                          >Reason : {{ Specimen.priority }}</span
+                        >
                       </h2>
                     </div>
                   </ion-col>
@@ -72,13 +79,15 @@
                   <ion-col size="12">
                     <div class="bolder">
                       <h2>
-                        <span class="light-text">Date Collected : {{getDate(Specimen.date_of_collection)}}</span>
+                        <span class="light-text"
+                          >Date Collected :
+                          {{ getDate(Specimen.date_of_collection) }}</span
+                        >
                       </h2>
                     </div>
                   </ion-col>
                 </ion-row>
               </ion-col>
-              
             </ion-row>
           </ion-card-content>
         </ion-card>
@@ -94,22 +103,42 @@
           </ion-row>
 
           <ion-row v-for="Test in Tests" :key="Test.id">
-            <ion-col class="cus-row" v-if="Test.specimen_id == Specimen.id"> {{Test.name}} </ion-col>
-            <ion-col class="cus-row" v-if="Test.specimen_id == Specimen.id"> Result </ion-col>
-            <ion-col class="cus-row" v-if="Test.specimen_id == Specimen.id"> {{getDate(Test.time_created)}} </ion-col>
+            <ion-col class="cus-row" v-if="Test.specimen_id == Specimen.id">
+              <ion-row>
+                <ion-col>{{ Test.name }}</ion-col>
+              </ion-row>
+            </ion-col>
+            <ion-col class="cus-row" v-if="Test.specimen_id == Specimen.id">
+              <ion-row v-for="Result in Results" :key="Result.id">
+                <ion-col v-if="Result.test_id == Test.id">{{
+                  Result.measure_name + " : " + Result.result
+                }}</ion-col>
+              </ion-row>
+            </ion-col>
+            <ion-col class="cus-row" v-if="Test.specimen_id == Specimen.id">
+              <ion-row>
+                <ion-col> {{ getDate(Test.time_created) }} </ion-col>
+              </ion-row>
+            </ion-col>
           </ion-row>
-
         </ion-grid>
-        
       </div>
     </ion-content>
 
-    <view-order-footer/>
+    <view-order-footer />
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage, IonGrid, IonRow, IonCol, IonCard, IonCardContent, } from "@ionic/vue";
+import {
+  IonContent,
+  IonPage,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonCard,
+  IonCardContent,
+} from "@ionic/vue";
 import { defineComponent, ref } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
@@ -118,6 +147,7 @@ import { useStore } from "@/store";
 import { Specimen } from "@/interfaces/Specimen";
 import { Patient } from "@/interfaces/Patient";
 import GetPatientOrders from "@/composables/getPatientOrders";
+import GetTestsResults from "@/composables/getTestsResults";
 export default defineComponent({
   name: "ViewOrderPage",
   components: {
@@ -126,19 +156,26 @@ export default defineComponent({
     ToolBar,
     CollapseToolBar,
     ViewOrderFooter,
-    IonGrid, IonRow, IonCol,
-    IonCard, IonCardContent, 
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonCard,
+    IonCardContent,
   },
   setup() {
     const store = useStore();
 
     const Patient: Patient = store.getters.selectedPatient;
 
-    const Specimen :Specimen = store.getters.selectedSpecimen;
+    const Specimen: Specimen = store.getters.selectedSpecimen;
 
-    const { fetchOrders, Tests } = GetPatientOrders();
+    const { fetchOrders, Tests, TestWithResults } = GetPatientOrders();
+
+    const { Results, fetchTestResults } = GetTestsResults();
 
     fetchOrders(parseInt(store.getters.selectedPatient.patient_number));
+
+    fetchTestResults(TestWithResults.value);
 
     const getDate = (date_string: string) => {
       let date_time: string = date_string;
@@ -146,9 +183,7 @@ export default defineComponent({
       return date_time.substring(0, 10);
     };
 
-    console.log(Tests);
-
-    return { Specimen, Patient, Tests, getDate };
+    return { Specimen, Patient, Tests, getDate, Results };
   },
 });
 </script>
@@ -168,12 +203,11 @@ ion-content {
   text-align: center;
 }
 
-.body-grid{
+.body-grid {
   padding: 0 10px;
 }
 
 .cus-row {
   border-bottom: solid 1px rgb(202, 201, 201);
 }
-
 </style>
