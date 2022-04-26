@@ -111,7 +111,7 @@ const store = useStore();
 
       store.dispatch(ActionTypes.SET_SELECTED_SPECIMEN, Specimen);
 
-      router.push({ name: "ViewOrder", replace: true });
+      router.push({ name: "ViewResultsViewOrder", replace: true });
 
     }
 

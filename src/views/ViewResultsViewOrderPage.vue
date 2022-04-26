@@ -2,11 +2,11 @@
   <ion-page>
     <tool-bar
       :pageTitle="'iBLIS | Order : ' + Specimen.accession_number"
-      defaltBackButtonLink="/orders"
+      defaltBackButtonLink="/view_results"
     />
 
     <ion-content :fullscreen="true">
-      <collapse-tool-bar :pageTitle="'iBLIS | Order : ' + Specimen.accession_number"/>
+      <collapse-tool-bar :pageTitle="'iBLIS | Order : ' + Specimen.accession_number" />
 
       <div id="container">
         <ion-card class="card-3 client-info-card">
@@ -125,7 +125,7 @@
       </div>
     </ion-content>
 
-    <view-order-footer />
+    <view-results-view-order-footer />
   </ion-page>
 </template>
 
@@ -142,20 +142,20 @@ import {
 import { defineComponent, ref } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
-import ViewOrderFooter from "@/components/ViewOrderFooter.vue";
+import ViewResultsViewOrderFooter from "@/components/ViewResultsViewOrderFooter.vue";
 import { useStore } from "@/store";
 import { Specimen } from "@/interfaces/Specimen";
 import { Patient } from "@/interfaces/Patient";
 import GetPatientOrders from "@/composables/getPatientOrders";
 import GetTestsResults from "@/composables/getTestsResults";
 export default defineComponent({
-  name: "ViewOrderPage",
+  name: "ViewResultsViewOrderPage",
   components: {
     IonContent,
     IonPage,
     ToolBar,
     CollapseToolBar,
-    ViewOrderFooter,
+    ViewResultsViewOrderFooter,
     IonGrid,
     IonRow,
     IonCol,
