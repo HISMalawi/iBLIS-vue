@@ -184,7 +184,7 @@ import {
   onIonViewDidLeave,
   IonButton,
 } from "@ionic/vue";
-import { defineComponent, reactive, ref, watch } from "vue";
+import { defineComponent, reactive, ref, watch, watchEffect } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import PressOrderFooter from "@/components/PressOrderFooter.vue";
@@ -221,7 +221,7 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
-    const { save } = CreateOrder();
+    const { save, accessionNumber } = CreateOrder();
 
     const disableSave = ref<boolean>(true);
 
@@ -282,13 +282,11 @@ export default defineComponent({
 
         preparedOrderTests.value.push(testDetails);
       } else {
-
         let testAvailable = false;
 
         preparedOrderTests.value.forEach((preTest) => {
           if (preTest.specimen.id == selectedSpecimen.value.id) {
             if (!preTest.tests.includes(selectedTest)) {
-              
               preTest.tests.push(selectedTest);
               testAvailable = true;
 
@@ -302,7 +300,6 @@ export default defineComponent({
         });
 
         if (!testAvailable) {
-          
           let tests: Test[] = [];
 
           tests.push(selectedTest);
@@ -315,7 +312,6 @@ export default defineComponent({
 
           preparedOrderTests.value.push(testDetails);
         }
-
       }
 
       disableSpecimen.value = true;
@@ -347,10 +343,10 @@ export default defineComponent({
     };
 
     const PlaceOrder = () => {
+      const orders: Order[] = [];
 
-      let orders: Order[] = [];
-
-      preparedOrderTests.value.forEach(preOrder=> {
+      for (let index = 0; index < preparedOrderTests.value.length; index++) {
+        const preOrder = preparedOrderTests.value[index];
 
         let order: Order = {
           visit_type: visitTypes.value[0],
@@ -363,12 +359,34 @@ export default defineComponent({
         };
 
         orders.push(order);
-        
-      });
 
-      
-      save(orders);
-      
+        if (index + 1 == preparedOrderTests.value.length) {
+          Upload(orders);
+        }
+      }
+    };
+
+    const Upload = (orders: Order[]) => {
+      let index = 0;
+
+      save(orders[index]);
+
+      index = index + 1;
+
+      watch(
+        () => [accessionNumber.value],
+        () => {
+
+          if (index !== orders.length) {
+
+            save(orders[index]);
+
+            index = index + 1;
+            
+          }
+          
+        }
+      );
     };
 
     const DeleteOrder = (index: number, tests: Test[]) => {
