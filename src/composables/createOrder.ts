@@ -19,11 +19,11 @@ const createOrder = () => {
 
   const accessionNumber = ref<string>("");
 
-  const save = (order: Order) => {
+  const save = (orders: Order[]) => {
     axios.value
       .put("/orders/create", {
         token: token.value,
-        order:order,
+        orders:orders,
       })
       .then(function (response: any) {
         if (response.statusText === "OK") {

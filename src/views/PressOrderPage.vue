@@ -196,7 +196,7 @@ import { SpecimenType } from "@/interfaces/SpecimenType";
 import { PreparedOrderTests } from "@/interfaces/PreparedOrderTests";
 import CreateOrder from "@/composables/createOrder";
 import { Order } from "@/interfaces/Order";
-import { VisitType } from "@/interfaces/VisitType";
+import GetVisitTypes from "@/composables/getVisitTypes";
 
 export default defineComponent({
   name: "PressOrderPage",
@@ -230,6 +230,10 @@ export default defineComponent({
     const disableSpecimen = ref<boolean>(false);
 
     const disableReason = ref<boolean>(false);
+
+    const { visitTypes, fetchVisitTypes } = GetVisitTypes();
+
+    fetchVisitTypes();
 
     const { fetchSpecimenTypes, specimenTypes } = GetSpecimenTypesByTestType();
 
@@ -343,16 +347,28 @@ export default defineComponent({
     };
 
     const PlaceOrder = () => {
-      // let order: Order = {
-      //     visit_type: selectedVisitType.value,
-      //     requesting_location: store.getters.selectedWard,
-      //     requesting_physician: "Test",
-      //     specimen_type_id: selectedSpecimenType.value,
-      //     tests: checkedTests.value,
-      //     patient: store.getters.selectedPatient,
-      //     user: store.getters.user,
-      // };
-      //   save(order);
+
+      let orders: Order[] = [];
+
+      preparedOrderTests.value.forEach(preOrder=> {
+
+        let order: Order = {
+          visit_type: visitTypes.value[0],
+          requesting_location: store.getters.selectedWard,
+          requesting_physician: "Requesting Physician",
+          specimen_type_id: preOrder.specimen.id,
+          tests: preOrder.tests,
+          patient: store.getters.selectedPatient,
+          user: store.getters.user,
+        };
+
+        orders.push(order);
+        
+      });
+
+      
+      save(orders);
+      
     };
 
     const DeleteOrder = (index: number, tests: Test[]) => {
