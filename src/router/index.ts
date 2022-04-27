@@ -13,6 +13,7 @@ import ViewOrderPage from '@/views/ViewOrderPage.vue'
 import PressOrderPage from '@/views/PressOrderPage.vue'
 import ViewResultsPage from '@/views/ViewResultsPage.vue'
 import ViewResultsViewOrderPage from '@/views/ViewResultsViewOrderPage.vue'
+import UploadResultsViewOrderPage from '@/views/UploadResultsViewOrderPage.vue'
 import UploadResultsPage from '@/views/UploadResultsPage.vue'
 
 const routes: Array<RouteRecordRaw> = [
@@ -79,6 +80,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/view_results_view_order',
     name: 'ViewResultsViewOrder',
     component: ViewResultsViewOrderPage
+  },
+  {
+    path: '/upload_results_view_order',
+    name: 'UploadResultsViewOrder',
+    component: UploadResultsViewOrderPage
   },
   {
     path: '/upload_results',

@@ -87,7 +87,8 @@ export default defineComponent({
     IonCol,
   },
   setup(){
-const store = useStore();
+    
+    const store = useStore();
 
     const router = useRouter();
 
