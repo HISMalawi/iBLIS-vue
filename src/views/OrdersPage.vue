@@ -15,7 +15,6 @@
             <ion-col class="head-col"> Test(s) </ion-col>
             <ion-col class="head-col"> Specimen </ion-col>
             <ion-col class="head-col"> Date Ordered </ion-col>
-            <ion-col class="head-col"> Date Accepted </ion-col>
           </ion-row>
 
           <ion-row
@@ -47,13 +46,10 @@
                 </ion-row
               >
             </ion-col>
-            <ion-col>
-              <ion-row
-                ><ion-col>{{ getDateAccepted(Specimen) }}</ion-col>
-                </ion-row
-              >
-            </ion-col>
+           
           </ion-row>
+
+          
         </ion-grid>
       </div>
 
@@ -97,13 +93,8 @@ export default defineComponent({
     fetchOrders(parseInt(store.getters.selectedPatient.patient_number));
 
     const getDateCollected = (Specimen: Specimen) => {
+
       let date_time: string = Specimen.date_of_collection;
-
-      return date_time.substring(0, 10);
-    };
-
-    const getDateAccepted = (Specimen: Specimen) => {
-      let date_time: string = Specimen.time_accepted;
 
       return date_time.substring(0, 10);
     };
@@ -116,7 +107,7 @@ export default defineComponent({
 
     }
 
-    return { Specimens, getDateCollected, getDateAccepted, Tests, ViewOrder };
+    return { Specimens, getDateCollected, Tests, ViewOrder };
   },
 });
 </script>
