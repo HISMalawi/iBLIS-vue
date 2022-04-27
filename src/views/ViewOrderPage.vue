@@ -139,7 +139,7 @@ import {
   IonCard,
   IonCardContent,
 } from "@ionic/vue";
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import ViewOrderFooter from "@/components/ViewOrderFooter.vue";
