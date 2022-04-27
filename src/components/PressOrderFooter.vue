@@ -16,7 +16,13 @@
       </ion-title>
 
       <ion-title size="small" slot="end"
-        ><ion-button :disabled="preparedOrderTests.length < 1" @click="PlaceOrder" class="press-order">Place Order</ion-button>
+        ><ion-button
+          :disabled="preparedOrderTests.length < 1 || uploadingOrders"
+          @click="PlaceOrder"
+          class="press-order"
+          >Place Order
+          <ion-spinner v-if="uploadingOrders" class="sp" name="circles"></ion-spinner>
+        </ion-button>
       </ion-title>
     </ion-toolbar>
   </ion-footer>
@@ -24,7 +30,13 @@
 
 <script lang="ts">
 import { PreparedOrderTests } from "@/interfaces/PreparedOrderTests";
-import { IonFooter, IonTitle, IonToolbar, IonButton } from "@ionic/vue";
+import {
+  IonFooter,
+  IonTitle,
+  IonToolbar,
+  IonButton,
+  IonSpinner,
+} from "@ionic/vue";
 import { defineComponent, PropType } from "vue";
 import { useRouter } from "vue-router";
 
@@ -35,10 +47,15 @@ export default defineComponent({
     IonTitle,
     IonToolbar,
     IonButton,
+    IonSpinner,
   },
   props: {
     selectedTestReason: {
       type: String,
+      required: true,
+    },
+    uploadingOrders:{
+      type: Boolean,
       required: true,
     },
     disableSave: {
@@ -48,13 +65,11 @@ export default defineComponent({
     preparedOrderTests: {
       type: Object as PropType<PreparedOrderTests>,
       required: true,
-    }
+    },
   },
-  emits: ['NewOrder', 'SaveOrder', 'PlaceOrder'],
+  emits: ["NewOrder", "SaveOrder", "PlaceOrder"],
   setup(props, { emit }) {
-
     const router = useRouter();
-
 
     const NavigateToMainMenu = () => {
       router.push({ name: "Orders", replace: true });
@@ -76,7 +91,7 @@ export default defineComponent({
       NavigateToMainMenu,
       SAVE,
       NewOrder,
-      PlaceOrder
+      PlaceOrder,
     };
   },
 });
@@ -84,5 +99,8 @@ export default defineComponent({
 <style scoped>
 .press-order {
   --background: green;
+}
+.sp {
+  margin-left: 5px;
 }
 </style>

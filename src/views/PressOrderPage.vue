@@ -163,6 +163,7 @@
       :disableSave="disableSave"
       :selectedTestReason="selectedTestReason"
       :preparedOrderTests="preparedOrderTests"
+      :uploadingOrders="uploadingOrders"
     />
   </ion-page>
 </template>
@@ -197,6 +198,7 @@ import { PreparedOrderTests } from "@/interfaces/PreparedOrderTests";
 import CreateOrder from "@/composables/createOrder";
 import { Order } from "@/interfaces/Order";
 import GetVisitTypes from "@/composables/getVisitTypes";
+import router from "@/router";
 
 export default defineComponent({
   name: "PressOrderPage",
@@ -224,6 +226,8 @@ export default defineComponent({
     const { save, accessionNumber } = CreateOrder();
 
     const disableSave = ref<boolean>(true);
+
+    const uploadingOrders = ref<boolean>(false);
 
     const disableTests = ref<boolean>(false);
 
@@ -367,11 +371,20 @@ export default defineComponent({
     };
 
     const Upload = (orders: Order[]) => {
+
+      uploadingOrders.value = true;
+
       let index = 0;
 
-      save(orders[index]);
+      setTimeout(() => {
 
-      index = index + 1;
+        save(orders[index]);
+
+        index = index + 1;
+        
+      }, 1000);
+
+      
 
       watch(
         () => [accessionNumber.value],
@@ -382,6 +395,12 @@ export default defineComponent({
             save(orders[index]);
 
             index = index + 1;
+            
+          }
+
+          if (index == orders.length) {
+
+            router.push({ name: "Orders", replace: true });
             
           }
           
@@ -423,6 +442,7 @@ export default defineComponent({
       selectedTestReason,
       SaveOrder,
       preparedOrderTests,
+      uploadingOrders
     };
   },
 });
