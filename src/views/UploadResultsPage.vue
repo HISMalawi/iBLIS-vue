@@ -46,12 +46,7 @@
                 </ion-row
               >
             </ion-col>
-            <ion-col>
-              <ion-row
-                ><ion-col>{{ getDateAccepted(Specimen) }}</ion-col>
-                </ion-row
-              >
-            </ion-col>
+           
           </ion-row>
         </ion-grid>
       </div>
@@ -100,13 +95,7 @@ const store = useStore();
 
       return date_time.substring(0, 10);
     };
-
-    const getDateAccepted = (Specimen: Specimen) => {
-      let date_time: string = Specimen.time_accepted;
-
-      return date_time.substring(0, 10);
-    };
-
+  
     const ViewOrder = (Specimen: Specimen) => {
 
       store.dispatch(ActionTypes.SET_SELECTED_SPECIMEN, Specimen);
@@ -115,7 +104,7 @@ const store = useStore();
 
     }
 
-    return { Specimens, getDateCollected, getDateAccepted, Tests, ViewOrder };
+    return { Specimens, getDateCollected, Tests, ViewOrder };
   }
 });
 </script>
