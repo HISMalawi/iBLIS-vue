@@ -119,6 +119,7 @@ export enum MutationTypes {
   SET_SEARCH_CLIENT = "SETTING_SEARCH_CLIENT",
   SET_PREVIOUS_LINK = "SETTING_PREVIOUS_LINK",
   ADD_ORDER = "ADDING_ORDER",
+  CLEAR_ORDER = "CLEARING_ORDERS",
   SET_SELECTED_SPECIMEN = "SETTING_SELECTED_SPECIMEN"
 }
 
@@ -147,6 +148,7 @@ export enum ActionTypes {
   SET_SEARCH_CLIENT = "SETTING_SEARCH_CLIENT",
   SET_PREVIOUS_LINK = "SETTING_PREVIOUS_LINK",
   ADD_ORDER = "ADDING_ORDER",
+  CLEAR_ORDER = "CLEARING_ORDERS",
   SET_SELECTED_SPECIMEN = "SETTING_SELECTED_SPECIMEN"
 }
 
@@ -175,6 +177,7 @@ export type Mutations<S = State> = {
   [MutationTypes.SET_SEARCH_CLIENT](state: S, payload: SearchClient): void;
   [MutationTypes.SET_PREVIOUS_LINK](state: S, payload: string): void;
   [MutationTypes.ADD_ORDER](state: S, payload: string): void;
+  [MutationTypes.CLEAR_ORDER](state: S, payload: string): void;
   [MutationTypes.SET_SELECTED_SPECIMEN](state: S, payload: Specimen): void;
 };
 
@@ -252,6 +255,15 @@ const mutations: MutationTree<State> & Mutations = {
   },
   [MutationTypes.ADD_ORDER](state: State, payload: string) {
     state.createdOrdersTrackingNum.push(payload);
+  },
+  [MutationTypes.CLEAR_ORDER](state: State, payload: string) {
+
+    if (payload) {
+
+      state.createdOrdersTrackingNum.length = 0;
+      
+    }
+    
   },
   [MutationTypes.SET_SELECTED_SPECIMEN](state: State, payload: Specimen) {
     state.selectedSpecimen = payload;

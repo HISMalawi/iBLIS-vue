@@ -21,6 +21,7 @@
             class="cus-row"
             v-for="Specimen in Specimens"
             :key="Specimen.id"
+            :class="Specimen.class"
             @click="ViewOrder(Specimen)"
           >
             <ion-col>
@@ -61,13 +62,13 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage, IonGrid, IonRow, IonCol } from "@ionic/vue";
+import { IonContent, IonPage, IonGrid, IonRow, IonCol, onIonViewDidLeave } from "@ionic/vue";
 import { defineComponent } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import OrdersFooter from "@/components/OrdersFooter.vue";
 import GetPatientOrders from "@/composables/getPatientOrders";
-import { ActionTypes, useStore } from "@/store";
+import { ActionTypes, MutationTypes, useStore } from "@/store";
 import { Specimen } from "@/interfaces/Specimen";
 import { useRouter } from "vue-router";
 
@@ -107,6 +108,12 @@ export default defineComponent({
 
     }
 
+    onIonViewDidLeave(() => {
+
+      store.commit(MutationTypes.CLEAR_ORDER, "CLEAR");
+
+    });
+
     return { Specimens, getDateCollected, Tests, ViewOrder };
   },
 });
@@ -123,9 +130,9 @@ ion-content {
   border-left: solid 1px rgb(202, 201, 201);
 }
 
-/* ion-col {
-  --ion-grid-column-padding: 10px;
-} */
+.is-new{
+  background-color: rgba(61, 231, 146, 0.281) !important;
+}
 
 .cus-row {
   border-bottom: solid 1px rgb(202, 201, 201);

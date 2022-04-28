@@ -54,20 +54,20 @@ const getPatientOrders = () => {
 
             Specimens.value = responseData.specimens
 
-            for (let index = 0; index < Specimens.value.length; index++) {
+            Specimens.value.forEach(Specimen => {
 
-              if (SpecimensWithResults.value.includes(Specimens.value[index].id)) {
-
-                  Specimens.value[index] = Object.assign(Specimens.value[index], { class:"results-ready"})
-              
+              if (store.getters.createdOrders.includes(Specimen.accession_number)) {
+        
+                Specimen = Object.assign(Specimen, { class:"is-new"});
+        
+                
               } else {
 
-                Specimens.value[index] = Object.assign(Specimens.value[index], { class:"from-db"})
-                
+                Specimen = Object.assign(Specimen, { class:"is-old"});
+
               }
               
-              
-            }
+            });
 
             message.value = response.data.message;
 

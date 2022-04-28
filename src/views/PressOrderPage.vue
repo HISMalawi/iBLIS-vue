@@ -185,7 +185,7 @@ import {
   onIonViewDidLeave,
   IonButton,
 } from "@ionic/vue";
-import { defineComponent, reactive, ref, watch, watchEffect } from "vue";
+import { defineComponent, reactive, ref, watch } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import PressOrderFooter from "@/components/PressOrderFooter.vue";
