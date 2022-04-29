@@ -155,6 +155,7 @@
                 <ion-input
                       placeholder="Results"
                       :value="Measure.result"
+                      disabled="true"
                     ></ion-input> 
               </ion-col>
             </ion-row>
@@ -190,7 +191,7 @@ import { Patient } from "@/interfaces/Patient";
 import GetPatientOrders from "@/composables/getPatientOrders";
 import GetTestsResults from "@/composables/getTestsResults";
 import { TestResult } from "@/interfaces/TestResult";
-import GetTestMeasure from "@/composables/getTestMeasure";
+import GetTestMeasures from "@/composables/getTestMeasures";
 export default defineComponent({
   name: "UploadResultsViewOrderPage",
   components: {
@@ -218,7 +219,7 @@ export default defineComponent({
 
     const Specimen: Specimen = store.getters.selectedSpecimen;
 
-    const { fetchMeasures, Measures } = GetTestMeasure();
+    const { fetchMeasures, Measures } = GetTestMeasures();
 
     const { fetchOrders, Tests, TestWithResults } = GetPatientOrders();
 

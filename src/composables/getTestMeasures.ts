@@ -9,7 +9,7 @@ const store = useStore();
 
 const Measures = ref<Measure[]>([]);
 
-const getTestMeasure = () => {
+const getTestMeasures = () => {
 
   const axios = ref(store.getters.axios)
 
@@ -31,12 +31,12 @@ const getTestMeasure = () => {
 
           code.value = response.data.code;
 
-          const responseData = response.data.data;
+          const responseData = response.data.data[0];
 
 
           if (code.value == "200") {
 
-            Measures.value = responseData[0];
+            Measures.value = responseData;
 
             message.value = response.data.message;
           } else {
@@ -53,4 +53,4 @@ const getTestMeasure = () => {
   return { fetchMeasures, message , Measures};
 };
 
-export default getTestMeasure;
+export default getTestMeasures;
