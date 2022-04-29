@@ -169,6 +169,7 @@ import { Patient } from "@/interfaces/Patient";
 import GetPatientOrders from "@/composables/getPatientOrders";
 import GetTestsResults from "@/composables/getTestsResults";
 import { TestResult } from "@/interfaces/TestResult";
+import GetTestMeasure from "@/composables/getTestMeasure";
 export default defineComponent({
   name: "UploadResultsViewOrderPage",
   components: {
@@ -195,6 +196,8 @@ export default defineComponent({
 
     const Specimen: Specimen = store.getters.selectedSpecimen;
 
+    const { fetchMeasures } = GetTestMeasure();
+
     const { fetchOrders, Tests, TestWithResults } = GetPatientOrders();
 
     const { Results, fetchTestResults } = GetTestsResults();
@@ -204,6 +207,9 @@ export default defineComponent({
     fetchTestResults(TestWithResults.value);
 
     const OpenUploadResultsModal = (Test : TestResult, TestName : string) => {
+
+      fetchMeasures(Test.id);
+      
       modalTitleTestName.value = TestName;
       showModal.value = true;
     };
