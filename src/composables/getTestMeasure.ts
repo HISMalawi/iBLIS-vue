@@ -1,10 +1,13 @@
 import { ref } from "vue";
 import { useStore } from "@/store";
 import TokenCheck from "@/composables/tokenCheck";
+import { Measure } from "@/interfaces/Measure";
 
 const { logout } = TokenCheck()
 
 const store = useStore();
+
+const Measures = ref<Measure[]>([]);
 
 const getTestMeasure = () => {
 
@@ -33,7 +36,7 @@ const getTestMeasure = () => {
 
           if (code.value == "200") {
 
-            console.log(responseData);
+            Measures.value = responseData[0];
 
             message.value = response.data.message;
           } else {
@@ -47,7 +50,7 @@ const getTestMeasure = () => {
       });
   };
 
-  return { fetchMeasures, message };
+  return { fetchMeasures, message , Measures};
 };
 
 export default getTestMeasure;

@@ -138,7 +138,27 @@
         @didDismiss="setModalOpen(false)"
       >
         <ion-content>
-          <modal-tool-bar :pageTitle="'Test | ' + modalTitleTestName" @CloseModal="setModalOpen(false)"/>
+          <modal-tool-bar
+            :pageTitle="'Test | ' + modalTitleTestName"
+            @CloseModal="setModalOpen(false)"
+          />
+
+          <ion-grid>
+            <ion-row class="cus-row" v-for="Measure in Measures" :key="Measure.id">
+              <ion-col>
+                <ion-row
+                  ><ion-col class="title-col">{{ Measure.name }}</ion-col>
+                </ion-row
+                >
+              </ion-col>
+              <ion-col>
+                <ion-input
+                      placeholder="Results"
+                      :value="Measure.result"
+                    ></ion-input> 
+              </ion-col>
+            </ion-row>
+          </ion-grid>
         </ion-content>
       </ion-modal>
     </ion-content>
@@ -157,6 +177,7 @@ import {
   IonCard,
   IonCardContent,
   IonModal,
+  IonInput,
 } from "@ionic/vue";
 import { defineComponent, ref } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
@@ -185,6 +206,7 @@ export default defineComponent({
     IonCard,
     IonCardContent,
     IonModal,
+    IonInput,
   },
   setup() {
     const store = useStore();
@@ -196,7 +218,7 @@ export default defineComponent({
 
     const Specimen: Specimen = store.getters.selectedSpecimen;
 
-    const { fetchMeasures } = GetTestMeasure();
+    const { fetchMeasures, Measures } = GetTestMeasure();
 
     const { fetchOrders, Tests, TestWithResults } = GetPatientOrders();
 
@@ -206,10 +228,10 @@ export default defineComponent({
 
     fetchTestResults(TestWithResults.value);
 
-    const OpenUploadResultsModal = (Test : TestResult, TestName : string) => {
+    const OpenUploadResultsModal = (Test: TestResult, TestName: string) => {
+      Measures.value.length = 0;
 
       fetchMeasures(Test.id);
-      
       modalTitleTestName.value = TestName;
       showModal.value = true;
     };
@@ -234,6 +256,7 @@ export default defineComponent({
       modalTitleTestName,
       OpenUploadResultsModal,
       setModalOpen,
+      Measures,
     };
   },
 });
@@ -260,5 +283,16 @@ ion-content {
 
 .cus-row {
   border-bottom: solid 1px rgb(202, 201, 201);
+}
+
+.title-col{
+  padding-top: 15px;
+}
+
+ion-input {
+  border: solid 2px rgb(202, 201, 201);
+  border-radius: 8px;
+  background-color: white;
+  font-size: 20px;
 }
 </style>
