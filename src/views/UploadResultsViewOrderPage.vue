@@ -6,7 +6,9 @@
     />
 
     <ion-content :fullscreen="true">
-      <collapse-tool-bar :pageTitle="'iBLIS | Order : ' + Specimen.accession_number" />
+      <collapse-tool-bar
+        :pageTitle="'iBLIS | Order : ' + Specimen.accession_number"
+      />
 
       <div id="container">
         <ion-card class="card-3 client-info-card">
@@ -102,7 +104,11 @@
             <ion-col class="head-col"> Date </ion-col>
           </ion-row>
 
-          <ion-row v-for="Test in Tests" :key="Test.id" @click="OpenUploadResultsModal">
+          <ion-row
+            v-for="Test in Tests"
+            :key="Test.id"
+            @click="OpenUploadResultsModal(Test, Test.name)"
+          >
             <ion-col class="cus-row" v-if="Test.specimen_id == Specimen.id">
               <ion-row>
                 <ion-col>{{ Test.name }}</ion-col>
@@ -131,9 +137,10 @@
         :presenting-element="$parent.$refs.ionRouterOutlet"
         @didDismiss="setModalOpen(false)"
       >
-        <ion-content>Modal Content</ion-content>
+        <ion-content>
+          <modal-tool-bar :pageTitle="'iBLIS | Test : ' + modalTitleTestName"/>
+        </ion-content>
       </ion-modal>
-
     </ion-content>
 
     <upload-results-view-order-footer />
@@ -154,18 +161,21 @@ import {
 import { defineComponent, ref } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
+import ModalToolBar from "@/components/ModalToolBar.vue";
 import UploadResultsViewOrderFooter from "@/components/UploadResultsViewOrderFooter.vue";
 import { useStore } from "@/store";
 import { Specimen } from "@/interfaces/Specimen";
 import { Patient } from "@/interfaces/Patient";
 import GetPatientOrders from "@/composables/getPatientOrders";
 import GetTestsResults from "@/composables/getTestsResults";
+import { TestResult } from "@/interfaces/TestResult";
 export default defineComponent({
   name: "UploadResultsViewOrderPage",
   components: {
     IonContent,
     IonPage,
     ToolBar,
+    ModalToolBar,
     CollapseToolBar,
     UploadResultsViewOrderFooter,
     IonGrid,
@@ -179,6 +189,7 @@ export default defineComponent({
     const store = useStore();
 
     const showModal = ref<boolean>(false);
+    const modalTitleTestName = ref<string>("");
 
     const Patient: Patient = store.getters.selectedPatient;
 
@@ -192,15 +203,14 @@ export default defineComponent({
 
     fetchTestResults(TestWithResults.value);
 
-    const OpenUploadResultsModal = () => {
+    const OpenUploadResultsModal = (Test : TestResult, TestName : string) => {
+      modalTitleTestName.value = TestName;
       showModal.value = true;
-    }
+    };
 
     const setModalOpen = (b: boolean) => {
-
       showModal.value = b;
-
-    }
+    };
 
     const getDate = (date_string: string) => {
       let date_time: string = date_string;
@@ -208,7 +218,17 @@ export default defineComponent({
       return date_time.substring(0, 10);
     };
 
-    return { Specimen, Patient, Tests, getDate, Results, showModal, OpenUploadResultsModal, setModalOpen};
+    return {
+      Specimen,
+      Patient,
+      Tests,
+      getDate,
+      Results,
+      showModal,
+      modalTitleTestName,
+      OpenUploadResultsModal,
+      setModalOpen,
+    };
   },
 });
 </script>
