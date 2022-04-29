@@ -1,12 +1,13 @@
 <template>
   <ion-page>
-    
-    <tool-bar pageTitle="iBLIS | Upload Results" defaltBackButtonLink="/client_dashboard"/>
-    
-    <ion-content :fullscreen="true">
+    <tool-bar
+      pageTitle="iBLIS | Upload Results"
+      defaltBackButtonLink="/client_dashboard"
+    />
 
-      <collapse-tool-bar pageTitle="iBLIS | Upload Results"/>
-    
+    <ion-content :fullscreen="true">
+      <collapse-tool-bar pageTitle="iBLIS | Upload Results" />
+
       <div id="container">
         <ion-grid>
           <ion-row>
@@ -14,7 +15,6 @@
             <ion-col class="head-col"> Test(s) </ion-col>
             <ion-col class="head-col"> Specimen </ion-col>
             <ion-col class="head-col"> Date Ordered </ion-col>
-            <ion-col class="head-col"> Date Accepted </ion-col>
           </ion-row>
 
           <ion-row
@@ -43,23 +43,27 @@
             <ion-col>
               <ion-row
                 ><ion-col>{{ getDateCollected(Specimen) }}</ion-col>
-                </ion-row
-              >
+              </ion-row>
             </ion-col>
-           
           </ion-row>
         </ion-grid>
       </div>
 
+
     </ion-content>
 
     <view-results-footer />
-
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage, IonGrid, IonRow, IonCol } from "@ionic/vue";
+import {
+  IonContent,
+  IonPage,
+  IonGrid,
+  IonRow,
+  IonCol,
+} from "@ionic/vue";
 import { defineComponent } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
@@ -70,7 +74,7 @@ import { Specimen } from "@/interfaces/Specimen";
 import { useRouter } from "vue-router";
 
 export default defineComponent({
-  name: 'UploadResultsPage',
+  name: "UploadResultsPage",
   components: {
     IonContent,
     IonPage,
@@ -81,8 +85,8 @@ export default defineComponent({
     IonRow,
     IonCol,
   },
-  setup(){
-const store = useStore();
+  setup() {
+    const store = useStore();
 
     const router = useRouter();
 
@@ -95,22 +99,19 @@ const store = useStore();
 
       return date_time.substring(0, 10);
     };
-  
-    const ViewOrder = (Specimen: Specimen) => {
 
+    const ViewOrder = (Specimen: Specimen) => {
       store.dispatch(ActionTypes.SET_SELECTED_SPECIMEN, Specimen);
 
       router.push({ name: "UploadResultsViewOrder", replace: true });
-
-    }
+    };
 
     return { Specimens, getDateCollected, Tests, ViewOrder };
-  }
+  },
 });
 </script>
 
 <style scoped>
-
 ion-content {
   --ion-background-color: #eee;
 }
@@ -128,5 +129,4 @@ ion-content {
 .cus-row {
   border-bottom: solid 1px rgb(202, 201, 201);
 }
-
 </style>

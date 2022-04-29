@@ -123,6 +123,16 @@
           </ion-row>
         </ion-grid>
       </div>
+
+      <!-- Card Modal -->
+      <ion-modal
+        :is-open="showModal"
+        :swipe-to-close="true"
+        :presenting-element="$parent.$refs.ionRouterOutlet"
+      >
+        <ion-content>Modal Content</ion-content>
+      </ion-modal>
+
     </ion-content>
 
     <upload-results-view-order-footer />
@@ -138,8 +148,9 @@ import {
   IonCol,
   IonCard,
   IonCardContent,
+  IonModal,
 } from "@ionic/vue";
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import UploadResultsViewOrderFooter from "@/components/UploadResultsViewOrderFooter.vue";
@@ -161,9 +172,12 @@ export default defineComponent({
     IonCol,
     IonCard,
     IonCardContent,
+    IonModal,
   },
   setup() {
     const store = useStore();
+
+    const showModal = ref<boolean>(false);
 
     const Patient: Patient = store.getters.selectedPatient;
 
@@ -183,7 +197,7 @@ export default defineComponent({
       return date_time.substring(0, 10);
     };
 
-    return { Specimen, Patient, Tests, getDate, Results };
+    return { Specimen, Patient, Tests, getDate, Results, showModal};
   },
 });
 </script>

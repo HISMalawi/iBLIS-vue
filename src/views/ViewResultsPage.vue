@@ -89,7 +89,7 @@ export default defineComponent({
     const { fetchOrders, Specimens, Tests } = GetPatientOrders();
 
     fetchOrders(parseInt(store.getters.selectedPatient.patient_number));
-
+     
     const getDateCollected = (Specimen: Specimen) => {
       let date_time: string = Specimen.date_of_collection;
 
