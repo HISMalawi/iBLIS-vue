@@ -102,7 +102,7 @@
             <ion-col class="head-col"> Date </ion-col>
           </ion-row>
 
-          <ion-row v-for="Test in Tests" :key="Test.id">
+          <ion-row v-for="Test in Tests" :key="Test.id" @click="OpenUploadResultsModal">
             <ion-col class="cus-row" v-if="Test.specimen_id == Specimen.id">
               <ion-row>
                 <ion-col>{{ Test.name }}</ion-col>
@@ -129,6 +129,7 @@
         :is-open="showModal"
         :swipe-to-close="true"
         :presenting-element="$parent.$refs.ionRouterOutlet"
+        @didDismiss="setModalOpen(false)"
       >
         <ion-content>Modal Content</ion-content>
       </ion-modal>
@@ -191,13 +192,23 @@ export default defineComponent({
 
     fetchTestResults(TestWithResults.value);
 
+    const OpenUploadResultsModal = () => {
+      showModal.value = true;
+    }
+
+    const setModalOpen = (b: boolean) => {
+
+      showModal.value = b;
+
+    }
+
     const getDate = (date_string: string) => {
       let date_time: string = date_string;
 
       return date_time.substring(0, 10);
     };
 
-    return { Specimen, Patient, Tests, getDate, Results, showModal};
+    return { Specimen, Patient, Tests, getDate, Results, showModal, OpenUploadResultsModal, setModalOpen};
   },
 });
 </script>
