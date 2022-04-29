@@ -138,7 +138,7 @@
         @didDismiss="setModalOpen(false)"
       >
         <ion-content>
-          <modal-tool-bar :pageTitle="'iBLIS | Test : ' + modalTitleTestName"/>
+          <modal-tool-bar :pageTitle="'Test | ' + modalTitleTestName" @CloseModal="setModalOpen(false)"/>
         </ion-content>
       </ion-modal>
     </ion-content>
