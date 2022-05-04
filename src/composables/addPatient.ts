@@ -1,11 +1,14 @@
 import { ref } from "vue";
-import { useStore } from "@/store";
+import { MutationTypes, useStore } from "@/store";
 import { PatientReg } from "@/interfaces/PatientReg";
 import TokenCheck from "@/composables/tokenCheck";
+import { Patient } from "@/interfaces/Patient";
 
 const { logout } = TokenCheck()
 
 const store = useStore();
+
+const addedPatient = ref<Patient>({} as Patient);
 
 const addPatient = () => {
 
@@ -29,8 +32,14 @@ const addPatient = () => {
 
           code.value = response.data.code;
 
+          const responseData = response.data.data;
+
 
           if (code.value == "200") {
+
+            addedPatient.value = responseData;
+
+            store.commit(MutationTypes.SET_SELECTED_PATIENT, addedPatient.value);
 
             message.value = response.data.message;
 
@@ -47,7 +56,7 @@ const addPatient = () => {
       });
   };
 
-  return { save, code, message};
+  return { save, code, message, addedPatient};
 };
 
 export default addPatient;

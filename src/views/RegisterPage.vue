@@ -221,8 +221,8 @@ import RegisterPatientFooter from "@/components/RegisterPatientFooter.vue";
 import { PatientReg } from "@/interfaces/PatientReg";
 import { SearchClient } from "@/interfaces/SearchClient";
 import AddPatient from "@/composables/addPatient";
-import SearchPatient from "@/composables/searchPatient";
 import { Patient } from "@/interfaces/Patient";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "RegisterPage",
@@ -244,11 +244,9 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
-    // const router = useRouter();
+    const router = useRouter();
 
     const { save } = AddPatient();
-
-    const { search, patients } = SearchPatient();
 
     const numberOfPages = ref<number>(4);
     const currentPage = ref<number>(1);
@@ -279,11 +277,12 @@ export default defineComponent({
 
     const RegisterClient = () => {
       save(patient);
-      search(
-        client.value.first_name + " " + client.value.last_name,
-        client.value.gender
-      );
-      MoveNextField();
+      // search(
+      //   client.value.first_name + " " + client.value.last_name,
+      //   client.value.gender
+      // );
+      // MoveNextField();
+
     };
 
     const MoveNextField = () => {
@@ -335,6 +334,13 @@ export default defineComponent({
       }
     );
 
+    watch(
+      () => [store.getters.selectedPatient],
+      () => {
+        router.push({ name: "PatientDashboard", replace: true });
+      }
+    );
+
     return {
       numberOfPages,
       currentPage,
@@ -346,7 +352,6 @@ export default defineComponent({
       RegisterClient,
       dateOfBirth,
       patient,
-      patients,
       selectedPatient,
     };
   },

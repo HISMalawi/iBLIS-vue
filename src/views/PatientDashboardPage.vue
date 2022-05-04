@@ -21,7 +21,7 @@
                   <ion-col size="12">
                     <div class="bolder">
                       <h2>
-                        <span class="light-text">Name : {{$store.state.selectedPatient.name + " (" + selectedPatientGender + ")"}}</span>
+                        <span class="light-text">Name : {{selectedPatient.name + " (" + selectedPatient.gender + ")"}}</span>
                       </h2>
                     </div>
                   </ion-col>
@@ -30,7 +30,7 @@
                   <ion-col size="12">
                     <div class="bolder">
                       <h2>
-                        <span class="light-text">Age : {{$store.state.selectedPatient.age}}</span>
+                        <span class="light-text">Age : {{selectedPatient.age}}</span>
                       </h2>
                     </div>
                   </ion-col>
@@ -73,13 +73,14 @@
 
 <script lang="ts">
 import { IonContent, IonPage, IonCard, IonCardContent, IonCol, IonRow} from "@ionic/vue";
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import PatientDashboardFooter from "@/components/PatientDashboardFooter.vue";
 import OptionsCard from "@/components/OptionsCard.vue";
 import { useStore } from "@/store";
+import { Patient } from "@/interfaces/Patient";
 
 export default defineComponent({
   name: "PatientDashboardPage",
@@ -92,19 +93,11 @@ export default defineComponent({
     OptionsCard, IonCard, IonCardContent, IonCol, IonRow
   },
   setup() {
-    const store = useStore();    
+    const store = useStore();
+    
+    const selectedPatient = ref<Patient>(store.getters.selectedPatient);
 
-    let selectedPatientGender: string = store.getters.selectedPatient.gender;
-
-    if (selectedPatientGender == "Female") {
-
-      selectedPatientGender = "F";
-      
-    } else {
-
-      selectedPatientGender = "M";
-      
-    }
+    console.log(selectedPatient);
 
     const router = useRouter();
 
@@ -134,7 +127,7 @@ export default defineComponent({
       }
     };
 
-    return { Navigate, selectedPatientGender };
+    return { Navigate, selectedPatient};
   },
 });
 </script>
