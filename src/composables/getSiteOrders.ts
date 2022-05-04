@@ -30,7 +30,7 @@ const getSiteOrders = () => {
   const fetchOrders = () => {
 
     axios.value
-      .post("/ward/orders", {
+      .post("/ward/pending/orders", {
         token: token.value,
         ward:ward.value
       })

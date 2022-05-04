@@ -359,6 +359,7 @@ export default defineComponent({
           specimen_type_id: preOrder.specimen.id,
           tests: preOrder.tests,
           patient: store.getters.selectedPatient,
+          reason: preOrder.reason,
           user: store.getters.user,
         };
 

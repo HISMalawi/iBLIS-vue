@@ -11,6 +11,7 @@ export interface Order {
     specimen_type_id: number,
     tests: Array<Test>,
     patient:Patient,
+    reason: string,
     user: User,
 }
 
