@@ -37,7 +37,6 @@ import {
 } from "ionicons/icons";
 import { popoverController } from "@ionic/vue";
 import { defineComponent } from "vue";
-import TokenCheck from "@/composables/tokenCheck";
 import ToolBarOptions from "@/components/ToolBarOptions.vue";
 
 export default defineComponent({
@@ -65,19 +64,15 @@ export default defineComponent({
   },
   setup() {
 
-    const { logout } = TokenCheck()
-
-    const LogOut = () => {
-      logout();
-    }
-
     const openPopover =  async  (ev: Event) => {
       const popover = await popoverController
         .create({
           component: ToolBarOptions,
           cssClass: 'my-custom-class',
           event: ev,
-          translucent: true
+          translucent: true,
+          backdropDismiss: true,
+          dismissOnSelect: true,
         })
       await popover.present();
     }
