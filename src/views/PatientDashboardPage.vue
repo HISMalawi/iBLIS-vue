@@ -97,8 +97,6 @@ export default defineComponent({
     
     const selectedPatient = ref<Patient>(store.getters.selectedPatient);
 
-    console.log(selectedPatient);
-
     const router = useRouter();
 
     const Navigate = (viewName: string) => {
