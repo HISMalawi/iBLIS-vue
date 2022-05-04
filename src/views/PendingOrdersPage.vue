@@ -55,7 +55,7 @@
 
     </ion-content>
 
-    <app-footer />
+    <pending-orders-footer />
 
   </ion-page>
 </template>
@@ -65,7 +65,7 @@ import { IonContent, IonPage, IonGrid, IonRow, IonCol, alertController } from '@
 import { defineComponent } from 'vue';
 import CollapseToolBar from "@/components/CollapseToolBar.vue"
 import ToolBar from "@/components/ToolBar.vue"
-import AppFooter from "@/components/AppFooter.vue"
+import PendingOrdersFooter from "@/components/PendingOrdersFooter.vue"
 import GetSiteOrders from "@/composables/getSiteOrders";
 import { Specimen } from "@/interfaces/Specimen";
 import SetOrderStatus from "@/composables/setOrderStatus";
@@ -77,7 +77,7 @@ export default defineComponent({
     IonPage,
     ToolBar,
     CollapseToolBar,
-    AppFooter,
+    PendingOrdersFooter,
     IonGrid, IonRow, IonCol,
   },
   setup(){
