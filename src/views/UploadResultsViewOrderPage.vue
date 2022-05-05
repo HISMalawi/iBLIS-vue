@@ -141,6 +141,7 @@
           <modal-tool-bar
             :pageTitle="'Test | ' + modalTitleTestName"
             @CloseModal="setModalOpen(false)"
+            :editingResults="editingResults"
           />
 
           <ion-grid>
@@ -153,10 +154,9 @@
               </ion-col>
               <ion-col>
                 <ion-input
-                      placeholder="Results"
+                      placeholder="Result"
                       :value="Measure.result"
-                      :disabled="Measure.disabled"
-                      @click="enableMeasure(Measure)"
+                      @keyup="resultChange($event.target.value)"
                     ></ion-input> 
               </ion-col>
             </ion-row>
@@ -213,10 +213,14 @@ export default defineComponent({
     IonInput,
   },
   setup() {
+
+
     const store = useStore();
 
     const showModal = ref<boolean>(false);
     const modalTitleTestName = ref<string>("");
+
+    const editingResults = ref<boolean>(false);
 
     const Patient: Patient = store.getters.selectedPatient;
 
@@ -242,6 +246,11 @@ export default defineComponent({
 
     const setModalOpen = (b: boolean) => {
       showModal.value = b;
+
+      if (!b) {
+        editingResults.value = false;
+      }
+      
     };
 
     const getDate = (date_string: string) => {
@@ -250,10 +259,10 @@ export default defineComponent({
       return date_time.substring(0, 10);
     };
 
-    const enableMeasure = (measure : any) => {
+    const resultChange = (result : string) => {
 
-      measure.disabled = false;
-
+      editingResults.value = true;
+      console.log(result);
     }
 
     return {
@@ -267,7 +276,8 @@ export default defineComponent({
       OpenUploadResultsModal,
       setModalOpen,
       Measures,
-      enableMeasure,
+      editingResults,
+      resultChange
     };
   },
 });

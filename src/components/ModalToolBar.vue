@@ -4,7 +4,7 @@
       <ion-title>{{ pageTitle }}</ion-title>
 
       <ion-title size="small" slot="end">
-        <ion-button class="cus-btn" @click="SaveChanges">Save</ion-button>
+        <ion-button class="cus-btn" :disabled="!editingResults" @click="SaveChanges">Save</ion-button>
         <ion-button color="danger" @click="CloseModal">Close</ion-button>
       </ion-title>
 
@@ -34,6 +34,10 @@ export default defineComponent({
       type: String,
       required: false,
       default: "iBLIS",
+    },
+    editingResults: {
+      type: Boolean,
+      required: true,
     },
   },
   emits: ["CloseModal", "SaveChanges"],
