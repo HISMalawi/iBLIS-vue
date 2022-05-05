@@ -38,6 +38,12 @@ const getTestMeasures = () => {
 
             Measures.value = responseData;
 
+            Measures.value.forEach( measure => {
+
+              measure = Object.assign(measure, { disabled: true});
+              
+            });
+
             message.value = response.data.message;
           } else {
             message.value = response.data.message;

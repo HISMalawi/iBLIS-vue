@@ -4,9 +4,10 @@
       <ion-title>{{ pageTitle }}</ion-title>
 
       <ion-title size="small" slot="end">
+        <ion-button class="cus-btn" @click="SaveChanges">Save</ion-button>
         <ion-button color="danger" @click="CloseModal">Close</ion-button>
-      </ion-title
-      >
+      </ion-title>
+
     </ion-toolbar>
   </ion-header>
 </template>
@@ -35,7 +36,7 @@ export default defineComponent({
       default: "iBLIS",
     },
   },
-  emits: ["CloseModal"],
+  emits: ["CloseModal", "SaveChanges"],
   setup(props, { emit }) {
 
     const CloseModal = () => {
@@ -43,9 +44,19 @@ export default defineComponent({
       emit("CloseModal");
       
     }
-    return { CloseModal };
+
+    const SaveChanges = () => {
+
+      emit("SaveChanges");
+      
+    }
+    return { CloseModal, SaveChanges };
   },
 });
 </script>
 
-<style></style>
+<style>
+.cus-btn{
+  margin-right: 10px;
+}
+</style>

@@ -155,12 +155,15 @@
                 <ion-input
                       placeholder="Results"
                       :value="Measure.result"
-                      disabled="true"
+                      :disabled="Measure.disabled"
+                      @click="enableMeasure(Measure)"
                     ></ion-input> 
               </ion-col>
             </ion-row>
           </ion-grid>
+          
         </ion-content>
+        
       </ion-modal>
     </ion-content>
 
@@ -247,6 +250,12 @@ export default defineComponent({
       return date_time.substring(0, 10);
     };
 
+    const enableMeasure = (measure : any) => {
+
+      measure.disabled = false;
+
+    }
+
     return {
       Specimen,
       Patient,
@@ -258,6 +267,7 @@ export default defineComponent({
       OpenUploadResultsModal,
       setModalOpen,
       Measures,
+      enableMeasure,
     };
   },
 });
