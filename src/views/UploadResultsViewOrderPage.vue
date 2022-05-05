@@ -141,7 +141,7 @@
           <modal-tool-bar
             :pageTitle="'Test | ' + modalTitleTestName"
             @CloseModal="setModalOpen(false)"
-            :editingResults="editingResults"
+            @SaveChanges="SaveChanges"
           />
 
           <ion-grid>
@@ -156,7 +156,7 @@
                 <ion-input
                       placeholder="Result"
                       :value="Measure.result"
-                      @keyup="resultChange($event.target.value)"
+                      @change="resultChange(Measure, $event.target.value)"
                     ></ion-input> 
               </ion-col>
             </ion-row>
@@ -195,6 +195,7 @@ import GetPatientOrders from "@/composables/getPatientOrders";
 import GetTestsResults from "@/composables/getTestsResults";
 import { TestResult } from "@/interfaces/TestResult";
 import GetTestMeasures from "@/composables/getTestMeasures";
+import { Measure } from "@/interfaces/Measure";
 export default defineComponent({
   name: "UploadResultsViewOrderPage",
   components: {
@@ -217,10 +218,10 @@ export default defineComponent({
 
     const store = useStore();
 
+    const MeasuresToUpdate = ref<Measure[]>([]);
+
     const showModal = ref<boolean>(false);
     const modalTitleTestName = ref<string>("");
-
-    const editingResults = ref<boolean>(false);
 
     const Patient: Patient = store.getters.selectedPatient;
 
@@ -247,8 +248,10 @@ export default defineComponent({
     const setModalOpen = (b: boolean) => {
       showModal.value = b;
 
-      if (!b) {
-        editingResults.value = false;
+      if (b) {
+
+        MeasuresToUpdate.value.length = 0;
+        
       }
       
     };
@@ -259,10 +262,33 @@ export default defineComponent({
       return date_time.substring(0, 10);
     };
 
-    const resultChange = (result : string) => {
+    const resultChange = (measure : Measure, update : string) => {
 
-      editingResults.value = true;
-      console.log(result);
+      if (measure.result !== update) {
+
+        for (let index = 0; index < MeasuresToUpdate.value.length; index++) {
+          const element = MeasuresToUpdate.value[index];
+
+          if (element.id == measure.id) {
+            MeasuresToUpdate.value.splice(index, 1);
+          } 
+        }
+
+         measure.result = update;
+
+         MeasuresToUpdate.value.push(measure);
+          
+      }
+    }
+
+    const SaveChanges = () => {
+
+      if (MeasuresToUpdate.value.length > 0) {
+        console.log(MeasuresToUpdate.value);
+      }
+
+      showModal.value = false;
+      
     }
 
     return {
@@ -276,8 +302,8 @@ export default defineComponent({
       OpenUploadResultsModal,
       setModalOpen,
       Measures,
-      editingResults,
-      resultChange
+      resultChange,
+      SaveChanges
     };
   },
 });
