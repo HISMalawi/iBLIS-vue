@@ -196,6 +196,7 @@ import GetTestsResults from "@/composables/getTestsResults";
 import { TestResult } from "@/interfaces/TestResult";
 import GetTestMeasures from "@/composables/getTestMeasures";
 import { Measure } from "@/interfaces/Measure";
+import UploadResults from "@/composables/uploadResults";
 export default defineComponent({
   name: "UploadResultsViewOrderPage",
   components: {
@@ -219,6 +220,8 @@ export default defineComponent({
     const store = useStore();
 
     const MeasuresToUpdate = ref<Measure[]>([]);
+
+    const { upload } = UploadResults();
 
     const showModal = ref<boolean>(false);
     const modalTitleTestName = ref<string>("");
@@ -284,7 +287,13 @@ export default defineComponent({
     const SaveChanges = () => {
 
       if (MeasuresToUpdate.value.length > 0) {
-        console.log(MeasuresToUpdate.value);
+
+        upload(MeasuresToUpdate.value);
+
+        fetchOrders(parseInt(store.getters.selectedPatient.patient_number));
+
+        fetchTestResults(TestWithResults.value);
+
       }
 
       showModal.value = false;
