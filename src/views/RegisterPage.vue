@@ -1,24 +1,29 @@
 <template>
   <ion-page>
-    <tool-bar pageTitle="iBLIS | Register" defaltBackButtonLink="/home" />
+    <tool-bar
+      pageTitle="iBLIS | Register Client"
+      defaltBackButtonLink="/home"
+    />
 
     <ion-content :fullscreen="true">
-      <collapse-tool-bar pageTitle="iBLIS | Register" />
+      <collapse-tool-bar pageTitle="iBLIS | Register Client" />
 
       <div id="container">
-        <ion-input
-          v-if="currentPage == 1"
-          v-model="client.first_name"
-          placeholder="First Name"
-          @keyup="CapitalizeFirst(client.first_name, 'first_name')"
-        ></ion-input>
+        <ion-item v-if="currentPage == 1">
+          <ion-label position="floating"> First Name </ion-label>
+          <ion-input
+            v-model="client.first_name"
+            placeholder="First Name"
+          ></ion-input>
+        </ion-item>
 
-        <ion-input
-          v-if="currentPage == 2"
-          v-model="client.last_name"
-          placeholder="Last Name"
-          @keyup="CapitalizeFirst(client.last_name, 'last_name')"
-        ></ion-input>
+        <ion-item v-if="currentPage == 2">
+          <ion-label position="floating"> Last Name </ion-label>
+          <ion-input
+            v-model="client.last_name"
+            placeholder="Last Name"
+          ></ion-input>
+        </ion-item>
 
         <ion-list v-if="currentPage == 3">
           <ion-radio-group v-model="client.gender">
@@ -55,23 +60,29 @@
             <ion-label class="gender-label"> Other Info </ion-label>
           </ion-list-header>
 
-          <ion-input
-            class="ext-pat-num-field"
-            v-model="patient.externalPatientNumber"
-            placeholder="External Patient Number"
-          ></ion-input>
+          <ion-item>
+            <ion-label position="floating"> External Patient Number </ion-label>
+            <ion-input
+              v-model="patient.externalPatientNumber"
+              placeholder="External Patient Number"
+            ></ion-input>
+          </ion-item>
 
-          <ion-input
-            v-model="patient.phoneNumber"
-            placeholder="Phone Number"
-          ></ion-input>
+          <ion-item>
+            <ion-label position="floating"> Phone Number </ion-label>
+            <ion-input
+              v-model="patient.phoneNumber"
+              placeholder="Phone Number"
+            ></ion-input>
+          </ion-item>
 
-          <ion-textarea
-            v-model="patient.physicalAddress"
-            rows="3"
-            cols="20"
-            placeholder="Address"
-          ></ion-textarea>
+          <ion-item>
+            <ion-label position="floating"> Address </ion-label>
+            <ion-input
+              v-model="patient.physicalAddress"
+              placeholder="Address"
+            ></ion-input>
+          </ion-item>
         </ion-list>
 
         <ion-list v-if="currentPage == 6">
@@ -209,7 +220,6 @@ import {
   IonLabel,
   IonListHeader,
   IonDatetime,
-  IonTextarea,
 } from "@ionic/vue";
 import { defineComponent, reactive, ref, watch } from "vue";
 import { useStore } from "@/store";
@@ -240,7 +250,6 @@ export default defineComponent({
     IonListHeader,
     IonDatetime,
     RegisterPatientFooter,
-    IonTextarea,
   },
   setup() {
     const store = useStore();
@@ -282,13 +291,12 @@ export default defineComponent({
       //   client.value.gender
       // );
       // MoveNextField();
-
     };
 
     const MoveNextField = () => {
       if (currentPage.value == 5) {
-        patient.firstname = client.value.first_name;
-        patient.lastname = client.value.last_name;
+        patient.firstname = client.value.first_name.trim();
+        patient.lastname = client.value.last_name.trim();
         patient.gender = client.value.gender;
       }
       currentPage.value = currentPage.value + 1;
@@ -300,31 +308,6 @@ export default defineComponent({
 
     const formatDate = (value: string) => {
       return format(parseISO(value), "yyyy-MM-dd");
-    };
-
-    const CapitalizeFirst = (input: string, field: string) => {
-      let userInput = input;
-      let firstChar = userInput.charAt(0);
-      userInput = userInput.slice(1);
-
-      let output = firstChar.toUpperCase() + userInput.toLowerCase();
-
-      switch (field) {
-        case "first_name":
-          // code block
-
-          client.value.first_name = output;
-
-          break;
-        case "last_name":
-          // code block
-
-          client.value.last_name = output;
-
-          break;
-        default:
-        // code block
-      }
     };
 
     watch(
@@ -348,7 +331,6 @@ export default defineComponent({
       MoveNextField,
       MovePreviousField,
       formatDate,
-      CapitalizeFirst,
       RegisterClient,
       dateOfBirth,
       patient,
@@ -368,10 +350,11 @@ ion-content {
 }
 
 ion-input {
-  border: solid 2px rgb(202, 201, 201);
+  /* border: solid 2px rgb(202, 201, 201);
   border-radius: 8px;
   background-color: white;
   font-size: 23px;
+  color: black; */
 }
 
 ion-textarea {
@@ -395,5 +378,9 @@ ion-textarea {
 }
 .other-info-head {
   margin-bottom: 20px;
+}
+
+.cus-label {
+  margin-bottom: 15px !important;
 }
 </style>

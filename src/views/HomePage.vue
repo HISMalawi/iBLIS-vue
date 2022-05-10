@@ -10,14 +10,14 @@
          
             <options-card
               @OpenView="Navigate"
-              btnTitle="Search"
+              btnTitle="Search Client"
               icon="search"
               CusClass="card-3"
             />
 
             <options-card
               @OpenView="Navigate"
-              btnTitle="Register"
+              btnTitle="Register Client"
               icon="register"
               CusClass="card-2"
             />
@@ -78,12 +78,12 @@ export default defineComponent({
     const Navigate = (viewName: string) => {
       switch (viewName) {
         
-        case "Search":
+        case "Search Client":
           // code block
 
           router.push("/search");
           break;
-        case "Register":
+        case "Register Client":
           // code block
 
           router.push("/register");

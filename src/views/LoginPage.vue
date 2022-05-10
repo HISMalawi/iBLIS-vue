@@ -15,9 +15,9 @@
               </ion-row>
               <ion-row>
                 <ion-col>
-                  <ion-item >
+                  <ion-item class="custom-item">
                     <ion-label position="floating">Username</ion-label>
-                    <ion-input class="custom-item" v-model="authCred.username"></ion-input>
+                    <ion-input v-model="authCred.username"></ion-input>
                   </ion-item>
 
                 </ion-col>
@@ -201,5 +201,6 @@ ion-content {
 .error-msgs-label {
   color: rgb(201, 19, 19);
 }
+
 
 </style>

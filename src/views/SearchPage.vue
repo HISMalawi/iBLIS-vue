@@ -1,24 +1,26 @@
 <template>
   <ion-page>
-    <tool-bar pageTitle="iBLIS | Search" defaltBackButtonLink="/home" />
+    <tool-bar pageTitle="iBLIS | Search Client" defaltBackButtonLink="/home" />
 
     <ion-content :fullscreen="true">
-      <collapse-tool-bar pageTitle="iBLIS | Search" />
+      <collapse-tool-bar pageTitle="iBLIS | Search Client" />
 
       <div id="container">
-        <ion-input
-          v-if="currentPage == 1"
-          v-model="searchClient.first_name"
-          placeholder="First Name"
-          @keyup="CapitalizeFirst(searchClient.first_name, 'first_name')"
-        ></ion-input>
+        <ion-item v-if="currentPage == 1">
+          <ion-label position="floating"> First Name </ion-label>
+          <ion-input
+            v-model="searchClient.first_name"
+            placeholder="First Name"
+          ></ion-input>
+        </ion-item>
 
-        <ion-input
-          v-if="currentPage == 2"
-          v-model="searchClient.last_name"
-          placeholder="Last Name"
-          @keyup="CapitalizeFirst(searchClient.last_name, 'last_name')"
-        ></ion-input>
+        <ion-item v-if="currentPage == 2">
+        <ion-label position="floating"> Last Name </ion-label>
+          <ion-input
+            v-model="searchClient.last_name"
+            placeholder="Last Name"
+          ></ion-input>
+        </ion-item>
 
         <ion-list v-if="currentPage == 3">
           <ion-radio-group v-model="searchClient.gender">
@@ -225,36 +227,6 @@ export default defineComponent({
       router.push({ name: "Register", replace: true });
     };
 
-    const CapitalizeFirst = (input: string, field: string) => {
-      
-      try {
-        let userInput = input;
-        let firstChar = userInput.charAt(0);
-        userInput = userInput.slice(1);
-
-        let output = firstChar.toUpperCase() + userInput.toLowerCase();
-
-        switch (field) {
-          case "first_name":
-            // code block
-
-            searchClient.value.first_name = output;
-
-            break;
-          case "last_name":
-            // code block
-
-            searchClient.value.last_name = output;
-
-            break;
-          default:
-          // code block
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
     watch(
       () => [currentPage.value],
       () => {
@@ -262,7 +234,9 @@ export default defineComponent({
           patients.value.length = 0;
 
           search(
-            searchClient.value.first_name + " " + searchClient.value.last_name,
+            searchClient.value.first_name.trim() +
+              " " +
+              searchClient.value.last_name.trim(),
             searchClient.value.gender
           );
         }
@@ -284,7 +258,6 @@ export default defineComponent({
       NavigateToRegisterClient,
       patients,
       selectedPatient,
-      CapitalizeFirst,
     };
   },
 });
@@ -300,10 +273,11 @@ ion-content {
 }
 
 ion-input {
-  border: solid 2px rgb(202, 201, 201);
+  /* border: solid 2px rgb(202, 201, 201);
   border-radius: 8px;
   background-color: white;
   font-size: 23px;
+  color: black; */
 }
 .gender-label {
   font-size: 23px;

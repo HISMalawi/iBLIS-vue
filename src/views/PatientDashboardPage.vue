@@ -13,7 +13,14 @@
         <ion-card class="card-4-orange client-info-card">
           <ion-card-content>
             <ion-row>
-              <ion-col size="10">
+              <ion-col size="1">
+                <ion-row>
+                  <ion-col size="12">
+                    <h1>Client Details</h1>
+                  </ion-col>
+                </ion-row>
+              </ion-col>
+              <ion-col size="9">
                 <ion-row>
                   <ion-col size="12">
                     <h1>Client Details</h1>
@@ -152,10 +159,6 @@ export default defineComponent({
     min-width: 300px;
     order: 3;
   }
-}
-
-#container {
-  padding-top: 15px;
 }
 
 ion-content {
