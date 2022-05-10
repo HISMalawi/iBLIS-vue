@@ -7,7 +7,7 @@
         >
       </ion-title>
 
-      <ion-title v-if="currentPage == 2" size="small" slot="start"
+      <ion-title v-if="currentPage > 1" size="small" slot="start"
         ><ion-button color="medium" @click="NavigateBack"
           >Back</ion-button
         ></ion-title

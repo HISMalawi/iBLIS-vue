@@ -10,6 +10,37 @@
 
           <ion-row v-if="currentPage == 1">
             <ion-col>
+
+              <ion-searchbar
+                class="cus-search"
+                placeholder="Search Specimen"
+                v-model="searchSpecimen"
+              ></ion-searchbar>
+
+              <ion-list-header class="card-1">
+                <ion-label class="gender-label"> SELECT SPECIMEN</ion-label>
+              </ion-list-header>
+
+              <ion-list>
+
+                <ion-radio-group v-model="selectedSpecimen">
+                  <ion-item
+                    v-for="specimen in filteredSpecimenTypes"
+                    :key="specimen.id"
+                  >
+                    <ion-label>{{ specimen.name }}</ion-label>
+                    <ion-radio
+                      :value="specimen"
+                    ></ion-radio>
+                  </ion-item>
+                </ion-radio-group>
+              </ion-list>
+
+            </ion-col>  
+          </ion-row>
+
+          <ion-row v-if="currentPage == 2">
+            <ion-col>
               <ion-searchbar
                 class="cus-search"
                 placeholder="Search Test"
@@ -38,7 +69,13 @@
               </ion-list>
             </ion-col>
           </ion-row>
-          <ion-row class="flex-container" v-if="currentPage == 2">
+
+
+
+
+
+
+          <ion-row class="flex-container" v-if="currentPage == 3">
             <ion-col size="3" class="custom-aside">
               <ion-list-header class="card-3">
                 <ion-label class="gender-label"> SELECT TEST</ion-label>
@@ -227,7 +264,7 @@ import ToolBar from "@/components/ToolBar.vue";
 import PressOrderFooter from "@/components/PressOrderFooter.vue";
 import { useStore } from "@/store";
 import GetTests from "@/composables/getTests";
-import GetSpecimenTypesByTestType from "@/composables/getSpecimenTypesByTestType";
+import GetSpecimenTypes from "@/composables/getSpecimenTypes";
 import { Test } from "@/interfaces/Test";
 import { SpecimenType } from "@/interfaces/SpecimenType";
 import { PreparedOrderTests } from "@/interfaces/PreparedOrderTests";
@@ -267,6 +304,8 @@ export default defineComponent({
 
     const searchString = ref<string>("");
 
+    const searchSpecimen = ref<string>("");
+
     const { save, accessionNumber } = CreateOrder();
 
     const disableNext = ref<boolean>(true);
@@ -279,11 +318,13 @@ export default defineComponent({
 
     const disableReason = ref<boolean>(false);
 
+    const { fetchSpecimenTypes, specimenTypes } = GetSpecimenTypes();
+
+    fetchSpecimenTypes();
+
     const { visitTypes, fetchVisitTypes } = GetVisitTypes();
 
     fetchVisitTypes();
-
-    const { fetchSpecimenTypes, specimenTypes } = GetSpecimenTypesByTestType();
 
     const selectedTests = ref<Test[]>([]);
 
@@ -339,15 +380,30 @@ export default defineComponent({
       return Tests.value.filter((test) => test.name.toLowerCase().includes(searchString.value.toLowerCase()))
     });
 
+    const filteredSpecimenTypes = computed(() => {
+      return specimenTypes.value.filter((specimen) => specimen.name.toLowerCase().includes(searchSpecimen.value.toLowerCase()))
+    });
+
     watch(
       () => [selectedTests.value.length],
       () => {
         
-        if (selectedTests.value.length > 0) {
+        if (selectedTests.value.length > 0 && currentPage.value == 2) {
           disableNext.value = false;
-        } else {
+        } else if (selectedTests.value.length < 1 && currentPage.value == 2) {
           disableNext.value = true;
         }
+      }
+    );
+
+    watch(
+      () => [selectedSpecimen.value],
+      () => {
+
+          if (Object.keys(selectedSpecimen.value).length > 0 && currentPage.value == 1 ) {
+            disableNext.value = false;
+          }
+        
       }
     );
 
@@ -516,7 +572,9 @@ export default defineComponent({
       MoveNextField,
       MovePreviousField,
       searchString,
-      filterTests
+      searchSpecimen,
+      filterTests,
+      filteredSpecimenTypes
     };
   },
 });
