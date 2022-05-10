@@ -1,9 +1,9 @@
 <template>
   <ion-page>
-    <tool-bar pageTitle="iBLIS | Press Order" defaltBackButtonLink="/orders" />
+    <tool-bar pageTitle="iBLIS | Place Order" defaltBackButtonLink="/orders" />
 
     <ion-content :fullscreen="true">
-      <collapse-tool-bar pageTitle="iBLIS | Press Order" />
+      <collapse-tool-bar pageTitle="iBLIS | Place Order" />
 
       <div id="container">
         <ion-grid>

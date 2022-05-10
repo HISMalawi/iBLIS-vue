@@ -50,9 +50,16 @@
         <div id="flex-container" v-if="$store.state.loggedIn">
           <options-card
             @OpenView="Navigate"
-            btnTitle="Orders"
+            btnTitle="Place Order"
             icon="order"
             CusClass="card-3"
+          />
+
+          <options-card
+            @OpenView="Navigate"
+            btnTitle="View Orders"
+            icon="results"
+            CusClass="card-2"
           />
 
           <options-card
@@ -109,7 +116,13 @@ export default defineComponent({
     const Navigate = (viewName: string) => {
       switch (viewName) {
         
-        case "Orders":
+        case "Place Order":
+          // code block
+
+          router.push("/press_order");
+          break;
+
+        case "View Orders":
           // code block
 
           router.push("/orders");
