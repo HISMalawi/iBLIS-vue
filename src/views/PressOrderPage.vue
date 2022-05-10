@@ -7,11 +7,13 @@
 
       <div id="container">
         <ion-grid>
+
           <ion-row v-if="currentPage == 1">
             <ion-col>
               <ion-searchbar
                 class="cus-search"
                 placeholder="Search Test"
+                v-model="searchString"
               ></ion-searchbar>
 
               <ion-chip v-for="test in selectedTests" :key="test.id">
@@ -23,7 +25,7 @@
               </ion-list-header>
 
               <ion-list class="custom-aside-list">
-                <ion-item v-for="test in Tests" :key="test.id">
+                <ion-item v-for="test in filterTests" :key="test.id">
                   <ion-label>{{ test.name }}</ion-label>
                   <ion-checkbox
                     slot="start"
@@ -219,7 +221,7 @@ import {
   IonSearchbar,
   IonChip,
 } from "@ionic/vue";
-import { defineComponent, reactive, ref, watch } from "vue";
+import { computed, defineComponent, reactive, ref, watch } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import PressOrderFooter from "@/components/PressOrderFooter.vue";
@@ -262,6 +264,8 @@ export default defineComponent({
 
     const numberOfPages = ref<number>(2);
     const currentPage = ref<number>(1);
+
+    const searchString = ref<string>("");
 
     const { save, accessionNumber } = CreateOrder();
 
@@ -330,6 +334,10 @@ export default defineComponent({
 
       // fetchSpecimenTypes(selectedTest.id);
     };
+
+    const filterTests = computed(() => {
+      return Tests.value.filter((test) => test.name.toLowerCase().includes(searchString.value.toLowerCase()))
+    });
 
     watch(
       () => [selectedTests.value.length],
@@ -506,7 +514,9 @@ export default defineComponent({
       uploadingOrders,
       currentPage,
       MoveNextField,
-      MovePreviousField
+      MovePreviousField,
+      searchString,
+      filterTests
     };
   },
 });
