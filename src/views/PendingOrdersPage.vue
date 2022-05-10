@@ -21,7 +21,6 @@
             v-for="Specimen in Specimens"
             :key="Specimen.id"
             :class="Specimen.class"
-            @click="ChangeStatus(Specimen)"
           >
             <ion-col>
               <ion-row
@@ -61,14 +60,14 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage, IonGrid, IonRow, IonCol, alertController } from '@ionic/vue';
+import { IonContent, IonPage, IonGrid, IonRow, IonCol } from '@ionic/vue';
 import { defineComponent } from 'vue';
 import CollapseToolBar from "@/components/CollapseToolBar.vue"
 import ToolBar from "@/components/ToolBar.vue"
 import PendingOrdersFooter from "@/components/PendingOrdersFooter.vue"
 import GetSiteOrders from "@/composables/getSiteOrders";
 import { Specimen } from "@/interfaces/Specimen";
-import SetOrderStatus from "@/composables/setOrderStatus";
+// import SetOrderStatus from "@/composables/setOrderStatus";
 
 export default defineComponent({
   name: 'PendingOrdersPage',
@@ -82,7 +81,7 @@ export default defineComponent({
   },
   setup(){
 
-    const { set } = SetOrderStatus();
+    // const { set } = SetOrderStatus();
 
     const getDateCollected = (Specimen: Specimen) => {
 
@@ -95,50 +94,50 @@ export default defineComponent({
 
     fetchOrders();
 
-    const ChangeStatus = (Specimen: Specimen) => {
+    // const ChangeStatus = (Specimen: Specimen) => {
 
-      const presentAlert  = async () => {
-      const alert = await alertController
-        .create({
-          cssClass: 'order-status-alert',
-          header: 'Update Order Status',
-          subHeader: Specimen.accession_number,
-          message: 'This is an alert message.',
-          buttons: [
-            {
-              text: 'CANCEL',
-              role: 'cancel',
-              cssClass: 'secondary',
-            },
-            {
-              text: 'REJECT',
-              role: 'reject',
-              cssClass: 'secondary',
-              handler: () => {
-                set(Specimen.accession_number, 3);
-                fetchOrders();
-              },
-            },
-            {
-              text: 'ACCEPT',
-              role: 'accept',
-              cssClass: 'secondary',
-              handler: () => {
-                set(Specimen.accession_number, 2);
-                fetchOrders();
-              },
-            },
-          ],
-        });
-      await alert.present();
+    //   const presentAlert  = async () => {
+    //   const alert = await alertController
+    //     .create({
+    //       cssClass: 'order-status-alert',
+    //       header: 'Update Order Status',
+    //       subHeader: Specimen.accession_number,
+    //       message: 'This is an alert message.',
+    //       buttons: [
+    //         {
+    //           text: 'CANCEL',
+    //           role: 'cancel',
+    //           cssClass: 'secondary',
+    //         },
+    //         {
+    //           text: 'REJECT',
+    //           role: 'reject',
+    //           cssClass: 'secondary',
+    //           handler: () => {
+    //             set(Specimen.accession_number, 3);
+    //             fetchOrders();
+    //           },
+    //         },
+    //         {
+    //           text: 'ACCEPT',
+    //           role: 'accept',
+    //           cssClass: 'secondary',
+    //           handler: () => {
+    //             set(Specimen.accession_number, 2);
+    //             fetchOrders();
+    //           },
+    //         },
+    //       ],
+    //     });
+    //   await alert.present();
 
-    }
+    // }
 
-      presentAlert();
+    //   presentAlert();
 
-    }
+    // }
    
-    return { Specimens, Tests, getDateCollected, ChangeStatus}
+    return { Specimens, Tests, getDateCollected }
   }
 });
 </script>

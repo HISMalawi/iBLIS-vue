@@ -7,7 +7,36 @@
 
       <div id="container">
         <ion-grid>
-          <ion-row class="flex-container">
+          <ion-row v-if="currentPage == 1">
+            <ion-col>
+              <ion-searchbar
+                class="cus-search"
+                placeholder="Search Test"
+              ></ion-searchbar>
+
+              <ion-chip v-for="test in selectedTests" :key="test.id">
+                <ion-label> {{ test.name }} </ion-label>
+              </ion-chip>
+
+              <ion-list-header class="card-3">
+                <ion-label class="gender-label"> SELECT TEST</ion-label>
+              </ion-list-header>
+
+              <ion-list class="custom-aside-list">
+                <ion-item v-for="test in Tests" :key="test.id">
+                  <ion-label>{{ test.name }}</ion-label>
+                  <ion-checkbox
+                    slot="start"
+                    @update:modelValue="test.isChecked = $event"
+                    :modelValue="test.isChecked"
+                    @click="SelectTest(test)"
+                  >
+                  </ion-checkbox>
+                </ion-item>
+              </ion-list>
+            </ion-col>
+          </ion-row>
+          <ion-row class="flex-container" v-if="currentPage == 2">
             <ion-col size="3" class="custom-aside">
               <ion-list-header class="card-3">
                 <ion-label class="gender-label"> SELECT TEST</ion-label>
@@ -160,7 +189,10 @@
       @SaveOrder="SaveOrder"
       @NewOrder="NewOrder"
       @PlaceOrder="PlaceOrder"
-      :disableSave="disableSave"
+      @NavigateNext="MoveNextField"
+      @NavigateBack="MovePreviousField"
+      :currentPage="currentPage"
+      :disableNext="disableNext"
       :selectedTestReason="selectedTestReason"
       :preparedOrderTests="preparedOrderTests"
       :uploadingOrders="uploadingOrders"
@@ -184,6 +216,8 @@ import {
   IonRadio,
   onIonViewDidLeave,
   IonButton,
+  IonSearchbar,
+  IonChip,
 } from "@ionic/vue";
 import { defineComponent, reactive, ref, watch } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
@@ -199,6 +233,7 @@ import CreateOrder from "@/composables/createOrder";
 import { Order } from "@/interfaces/Order";
 import GetVisitTypes from "@/composables/getVisitTypes";
 import router from "@/router";
+import { el } from "date-fns/locale";
 
 export default defineComponent({
   name: "PressOrderPage",
@@ -219,13 +254,18 @@ export default defineComponent({
     IonListHeader,
     IonCheckbox,
     IonButton,
+    IonSearchbar,
+    IonChip,
   },
   setup() {
     const store = useStore();
 
+    const numberOfPages = ref<number>(2);
+    const currentPage = ref<number>(1);
+
     const { save, accessionNumber } = CreateOrder();
 
-    const disableSave = ref<boolean>(true);
+    const disableNext = ref<boolean>(true);
 
     const uploadingOrders = ref<boolean>(false);
 
@@ -241,6 +281,8 @@ export default defineComponent({
 
     const { fetchSpecimenTypes, specimenTypes } = GetSpecimenTypesByTestType();
 
+    const selectedTests = ref<Test[]>([]);
+
     let selectedTest: Test = reactive({} as Test);
 
     const preparedOrderTests = ref<PreparedOrderTests[]>([]);
@@ -253,21 +295,50 @@ export default defineComponent({
 
     fetchTests();
 
+    const MoveNextField = () => {
+      currentPage.value = currentPage.value + 1;
+    };
+
+    const MovePreviousField = () => {
+      currentPage.value = currentPage.value - 1;
+    };
+
     const SelectTest = (obj: Test) => {
       selectedTest = obj;
 
-      disableTests.value = true;
+      if (!selectedTest.isChecked) {
 
-      specimenTypes.value.length = 0;
+        selectedTests.value.push(selectedTest);
+        
+      } else {
 
-      fetchSpecimenTypes(selectedTest.id);
+        selectedTests.value.forEach(test => {
+
+          let index = selectedTests.value.indexOf(test);
+
+          if (selectedTest == test) {
+
+             selectedTests.value.splice(index, 1);
+          }
+          
+        });
+      }
+
+      // disableTests.value = true;
+
+      // specimenTypes.value.length = 0;
+
+      // fetchSpecimenTypes(selectedTest.id);
     };
 
     watch(
-      () => [selectedTestReason.value],
+      () => [selectedTests.value.length],
       () => {
-        if (selectedTestReason.value !== "") {
-          disableSave.value = false;
+        
+        if (selectedTests.value.length > 0) {
+          disableNext.value = false;
+        } else {
+          disableNext.value = true;
         }
       }
     );
@@ -320,7 +391,6 @@ export default defineComponent({
 
       disableSpecimen.value = true;
       disableReason.value = true;
-      disableSave.value = true;
     };
 
     const NewOrder = () => {
@@ -372,39 +442,28 @@ export default defineComponent({
     };
 
     const Upload = (orders: Order[]) => {
-
       uploadingOrders.value = true;
 
       let index = 0;
 
       setTimeout(() => {
-
         save(orders[index]);
 
         index = index + 1;
-        
       }, 1000);
-
-      
 
       watch(
         () => [accessionNumber.value],
         () => {
-
           if (index !== orders.length) {
-
             save(orders[index]);
 
             index = index + 1;
-            
           }
 
           if (index == orders.length) {
-
             router.push({ name: "Orders", replace: true });
-            
           }
-          
         }
       );
     };
@@ -430,6 +489,7 @@ export default defineComponent({
 
     return {
       Tests,
+      selectedTests,
       NewOrder,
       PlaceOrder,
       disableSpecimen,
@@ -437,13 +497,16 @@ export default defineComponent({
       disableReason,
       SelectTest,
       disableTests,
-      disableSave,
+      disableNext,
       specimenTypes,
       selectedSpecimen,
       selectedTestReason,
       SaveOrder,
       preparedOrderTests,
-      uploadingOrders
+      uploadingOrders,
+      currentPage,
+      MoveNextField,
+      MovePreviousField
     };
   },
 });
@@ -452,6 +515,15 @@ export default defineComponent({
 <style scoped>
 ion-content {
   --ion-background-color: #eee;
+}
+
+ion-chip{
+  margin-bottom: 10px;
+}
+
+.cus-search {
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 .flex-container {

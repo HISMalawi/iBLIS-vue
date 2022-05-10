@@ -6,10 +6,6 @@
           >Cancel</ion-button
         >
       </ion-title>
-
-      <ion-title size="small" slot="end" @click="NavigateToPressOrder"
-        ><ion-button>Order</ion-button>
-      </ion-title>
     </ion-toolbar>
   </ion-footer>
 </template>
@@ -34,12 +30,8 @@ export default defineComponent({
       router.push({ name: "PatientDashboard", replace: true });
     };
 
-    const NavigateToPressOrder = () => {
-      router.push({ name: "PressOrder", replace: true });
-    };
-
     return {
-      NavigateToMainMenu, NavigateToPressOrder
+      NavigateToMainMenu
     };
   },
 });

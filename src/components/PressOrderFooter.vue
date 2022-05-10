@@ -1,21 +1,23 @@
 <template>
   <ion-footer collapse="fade">
     <ion-toolbar>
-      <ion-title size="small" slot="start"
+      <ion-title size="small" slot="start" v-if="currentPage == 1"
         ><ion-button color="danger" @click="NavigateToMainMenu"
           >Cancel</ion-button
         >
       </ion-title>
 
-      <ion-title size="small" slot="end"
-        ><ion-button @click="NewOrder">New Order</ion-button>
-      </ion-title>
+      <ion-title v-if="currentPage == 2" size="small" slot="start"
+        ><ion-button color="medium" @click="NavigateBack"
+          >Back</ion-button
+        ></ion-title
+      >
 
       <ion-title size="small" slot="end"
-        ><ion-button :disabled="disableSave" @click="SAVE">Save</ion-button>
+        ><ion-button :disabled="disableNext" v-if="currentPage == 1" @click="NavigateNext">Next</ion-button>
       </ion-title>
 
-      <ion-title size="small" slot="end"
+      <ion-title size="small" slot="end" v-if="currentPage == 2"
         ><ion-button
           :disabled="preparedOrderTests.length < 1 || uploadingOrders"
           @click="PlaceOrder"
@@ -54,11 +56,15 @@ export default defineComponent({
       type: String,
       required: true,
     },
+    currentPage: {
+      type: Number,
+      required: true,
+    },
     uploadingOrders:{
       type: Boolean,
       required: true,
     },
-    disableSave: {
+    disableNext: {
       type: Boolean,
       required: true,
     },
@@ -67,12 +73,12 @@ export default defineComponent({
       required: true,
     },
   },
-  emits: ["NewOrder", "SaveOrder", "PlaceOrder"],
+  emits: ["NewOrder", "SaveOrder", "PlaceOrder", "NavigateNext", "NavigateBack"],
   setup(props, { emit }) {
     const router = useRouter();
 
     const NavigateToMainMenu = () => {
-      router.push({ name: "Orders", replace: true });
+      router.push({ name: "PatientDashboard", replace: true });
     };
 
     const SAVE = () => {
@@ -87,11 +93,25 @@ export default defineComponent({
       emit("PlaceOrder");
     };
 
+    const NavigateNext = () => {
+
+      emit("NavigateNext");
+     
+    };
+
+    const NavigateBack = () => {
+
+      emit("NavigateBack");
+     
+    };
+
     return {
       NavigateToMainMenu,
       SAVE,
       NewOrder,
       PlaceOrder,
+      NavigateNext,
+      NavigateBack
     };
   },
 });
