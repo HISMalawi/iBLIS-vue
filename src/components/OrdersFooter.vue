@@ -3,7 +3,12 @@
     <ion-toolbar>
       <ion-title size="small" slot="start"
         ><ion-button color="danger" @click="NavigateToMainMenu"
-          >Cancel</ion-button
+          >Finish</ion-button
+        >
+      </ion-title>
+      <ion-title size="small" slot="end" v-if="enableNewOrder"
+        ><ion-button  @click="NavigateToPlaceOrder"
+          >New Order</ion-button
         >
       </ion-title>
     </ion-toolbar>
@@ -12,8 +17,9 @@
 
 <script lang="ts">
 import { IonFooter, IonTitle, IonToolbar, IonButton } from "@ionic/vue";
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
+import { useStore } from "@/store";
 
 export default defineComponent({
   name: "OrdersFooter",
@@ -24,14 +30,27 @@ export default defineComponent({
     IonButton,
   },
   setup() {
+    const store = useStore();
     const router = useRouter();
+
+    const enableNewOrder = ref<boolean>(false);
+
+    if (store.getters.createdOrders.length > 0) {
+
+        enableNewOrder.value = true;
+        
+    }
 
     const NavigateToMainMenu = () => {
       router.push({ name: "PatientDashboard", replace: true });
     };
 
+    const NavigateToPlaceOrder = () => {
+      router.push({ name: "PressOrder", replace: true });
+    };
+
     return {
-      NavigateToMainMenu
+      NavigateToMainMenu, NavigateToPlaceOrder, enableNewOrder
     };
   },
 });

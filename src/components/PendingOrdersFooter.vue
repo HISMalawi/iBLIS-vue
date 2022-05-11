@@ -3,7 +3,7 @@
     <ion-toolbar>
       <ion-title size="small" slot="start"
         ><ion-button color="danger" @click="NavigateToMainMenu"
-          >Cancel</ion-button
+          >Finish</ion-button
         >
       </ion-title>
 
