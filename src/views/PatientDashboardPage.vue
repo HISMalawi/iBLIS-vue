@@ -9,18 +9,17 @@
       <collapse-tool-bar pageTitle="iBLIS | Client Dashboard" />
 
       <div id="container">
-
         <ion-card class="card-4-orange client-info-card">
           <ion-card-content>
             <ion-row>
-              <ion-col size="1">
+              <ion-col size="2">
                 <ion-row>
                   <ion-col size="12">
-                    <h1>Client Details</h1>
+                    <img class="client-ava" src="../assets/client-icon.png" />
                   </ion-col>
                 </ion-row>
               </ion-col>
-              <ion-col size="9">
+              <ion-col size="8">
                 <ion-row>
                   <ion-col size="12">
                     <h1>Client Details</h1>
@@ -28,7 +27,15 @@
                   <ion-col size="12">
                     <div class="bolder">
                       <h2>
-                        <span class="light-text">Name : {{selectedPatient.name + " (" + selectedPatient.gender + ")"}}</span>
+                        <span class="light-text"
+                          >Name :
+                          {{
+                            selectedPatient.name +
+                            " (" +
+                            selectedPatient.gender +
+                            ")"
+                          }}</span
+                        >
                       </h2>
                     </div>
                   </ion-col>
@@ -37,7 +44,9 @@
                   <ion-col size="12">
                     <div class="bolder">
                       <h2>
-                        <span class="light-text">Age : {{selectedPatient.age}}</span>
+                        <span class="light-text"
+                          >Age : {{ selectedPatient.age }}</span
+                        >
                       </h2>
                     </div>
                   </ion-col>
@@ -80,13 +89,19 @@
       </div>
     </ion-content>
 
-    <patient-dashboard-footer/>
-    
+    <patient-dashboard-footer />
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage, IonCard, IonCardContent, IonCol, IonRow} from "@ionic/vue";
+import {
+  IonContent,
+  IonPage,
+  IonCard,
+  IonCardContent,
+  IonCol,
+  IonRow,
+} from "@ionic/vue";
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
@@ -104,18 +119,21 @@ export default defineComponent({
     ToolBar,
     CollapseToolBar,
     PatientDashboardFooter,
-    OptionsCard, IonCard, IonCardContent, IonCol, IonRow
+    OptionsCard,
+    IonCard,
+    IonCardContent,
+    IonCol,
+    IonRow,
   },
   setup() {
     const store = useStore();
-    
+
     const selectedPatient = ref<Patient>(store.getters.selectedPatient);
 
     const router = useRouter();
 
     const Navigate = (viewName: string) => {
       switch (viewName) {
-        
         case "Place Order":
           // code block
 
@@ -139,13 +157,13 @@ export default defineComponent({
 
           router.push("/upload_results");
           break;
-      
+
         default:
         // code block
       }
     };
 
-    return { Navigate, selectedPatient};
+    return { Navigate, selectedPatient };
   },
 });
 </script>
@@ -178,7 +196,14 @@ ion-content {
   --ion-background-color: #eee;
 }
 
-.client-info-card{
+.client-info-card {
   margin-bottom: 20px;
+}
+
+.client-ava{
+  width: 110px;
+  height:110px;
+  float: right;
+  margin-right: 15px;
 }
 </style>
