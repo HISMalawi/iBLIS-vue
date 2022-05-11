@@ -7,10 +7,8 @@
 
       <div id="container">
         <ion-grid>
-
           <ion-row v-if="currentPage == 1">
             <ion-col>
-
               <ion-searchbar
                 class="cus-search"
                 placeholder="Search Specimen"
@@ -22,119 +20,63 @@
               </ion-list-header>
 
               <ion-list>
-
                 <ion-radio-group v-model="selectedSpecimen">
                   <ion-item
                     v-for="specimen in filteredSpecimenTypes"
                     :key="specimen.id"
                   >
                     <ion-label>{{ specimen.name }}</ion-label>
-                    <ion-radio
-                      :value="specimen"
-                    ></ion-radio>
+                    <ion-radio :value="specimen"></ion-radio>
                   </ion-item>
                 </ion-radio-group>
               </ion-list>
-
-            </ion-col>  
+            </ion-col>
           </ion-row>
 
           <ion-row v-if="currentPage == 2">
             <ion-col>
-              <ion-searchbar
-                class="cus-search"
-                placeholder="Search Test"
-                v-model="searchString"
-              ></ion-searchbar>
+              <ion-row>
+                <ion-chip v-for="test in selectedTests" :key="test.id">
+                  <ion-label> {{ test.name }} </ion-label>
+                </ion-chip>
+              </ion-row>
 
-              <ion-chip v-for="test in selectedTests" :key="test.id">
-                <ion-label> {{ test.name }} </ion-label>
-              </ion-chip>
+              <ion-row>
+                <ion-searchbar
+                  class="cus-search"
+                  placeholder="Search Test"
+                  v-model="searchString"
+                ></ion-searchbar>
+              </ion-row>
 
-              <ion-list-header class="card-3">
-                <ion-label class="gender-label"> SELECT TEST</ion-label>
-              </ion-list-header>
+              <ion-row>
+                <ion-col size="4">
+                  <ion-list-header class="card-3">
+                    <ion-label class="gender-label"> SELECT TEST</ion-label>
+                  </ion-list-header>
 
-              <ion-list class="custom-aside-list">
-                <ion-item v-for="test in filterTests" :key="test.id">
-                  <ion-label>{{ test.name }}</ion-label>
-                  <ion-checkbox
-                    slot="start"
-                    @update:modelValue="test.isChecked = $event"
-                    :modelValue="test.isChecked"
-                    @click="SelectTest(test)"
-                  >
-                  </ion-checkbox>
-                </ion-item>
-              </ion-list>
-            </ion-col>
-          </ion-row>
+                  <ion-list class="custom-aside-list">
+                    <ion-item v-for="test in filterTests" :key="test.id">
+                      <ion-label>{{ test.name }}</ion-label>
+                      <ion-checkbox
+                        slot="start"
+                        @update:modelValue="test.isChecked = $event"
+                        :modelValue="test.isChecked"
+                        @click="SelectTest(test)"
+                      >
+                      </ion-checkbox>
+                    </ion-item>
+                  </ion-list>
+                </ion-col>
 
+                <ion-col size="8">
+                  <ion-list-header class="card-1">
+                    <ion-label class="gender-label">
+                      MAIN TEST(S) REASON</ion-label
+                    >
+                  </ion-list-header>
 
-
-
-
-
-          <ion-row class="flex-container" v-if="currentPage == 3">
-            <ion-col size="3" class="custom-aside">
-              <ion-list-header class="card-3">
-                <ion-label class="gender-label"> SELECT TEST</ion-label>
-              </ion-list-header>
-
-              <ion-list class="custom-aside-list">
-                <ion-item v-for="test in Tests" :key="test.id">
-                  <ion-label>{{ test.name }}</ion-label>
-                  <ion-checkbox
-                    :disabled="disableTests || test.isChecked"
-                    slot="start"
-                    @update:modelValue="test.isChecked = $event"
-                    :modelValue="test.isChecked"
-                    @click="SelectTest(test)"
-                  >
-                  </ion-checkbox>
-                </ion-item>
-              </ion-list>
-            </ion-col>
-            <ion-col class="custom-content" size="9">
-              <ion-list-header class="card-1" v-if="specimenTypes.length > 0">
-                <ion-label class="gender-label"> SELECT SPECIMEN</ion-label>
-              </ion-list-header>
-
-              <ion-list
-                class="content-specimen-sec"
-                v-if="specimenTypes.length > 0"
-              >
-                <ion-radio-group v-model="selectedSpecimen">
-                  <ion-item
-                    v-for="specimen in specimenTypes"
-                    :key="specimen.id"
-                  >
-                    <ion-label>{{ specimen.name }}</ion-label>
-                    <ion-radio
-                      :value="specimen"
-                      :disabled="disableSpecimen"
-                    ></ion-radio>
-                  </ion-item>
-                </ion-radio-group>
-              </ion-list>
-
-              <ion-list-header
-                class="card-1"
-                v-if="
-                  Object.keys(selectedSpecimen).length > 0 &&
-                  specimenTypes.length != 0
-                "
-              >
-                <ion-label class="gender-label"> MAIN TEST(S) REASON</ion-label>
-              </ion-list-header>
-
-              <ion-list
-                class="content-reason-sec"
-                v-if="
-                  Object.keys(selectedSpecimen).length > 0 &&
-                  specimenTypes.length != 0
-                "
-              >
+                  <ion-list>
                 <ion-radio-group v-model="selectedTestReason">
                   <ion-item>
                     <ion-label>Routine</ion-label>
@@ -173,68 +115,25 @@
                   </ion-item>
                 </ion-radio-group>
               </ion-list>
-
-              <ion-grid
-                v-if="selectedTestReason != '' || preparedOrderTests.length > 0"
-              >
-                <ion-row>
-                  <ion-col class="head-col"> Test </ion-col>
-                  <ion-col class="head-col"> Specimen </ion-col>
-                  <ion-col class="head-col"> Reason </ion-col>
-                  <ion-col class="head-col"> Action </ion-col>
-                </ion-row>
-
-                <ion-row
-                  class="cus-row"
-                  v-for="(testPre, index) in preparedOrderTests"
-                  :key="testPre.specimen.id"
-                >
-                  <ion-col class="body-col">
-                    <ion-row v-for="test in testPre.tests" :key="test.id">
-                      <ion-col>{{ test.name }}</ion-col>
-                    </ion-row>
-                  </ion-col>
-                  <ion-col class="body-col">
-                    <ion-row
-                      ><ion-col>{{ testPre.specimen.name }}</ion-col></ion-row
-                    >
-                  </ion-col>
-                  <ion-col class="body-col">
-                    <ion-row
-                      ><ion-col>{{ testPre.reason }}</ion-col></ion-row
-                    >
-                  </ion-col>
-                  <ion-col class="body-col action-btn">
-                    <ion-row
-                      ><ion-col
-                        ><ion-button
-                          @click="DeleteOrder(index, testPre.tests)"
-                          color="danger"
-                          size="small"
-                          >X</ion-button
-                        ></ion-col
-                      ></ion-row
-                    >
-                  </ion-col>
-                </ion-row>
-              </ion-grid>
+                </ion-col>
+              </ion-row>
             </ion-col>
           </ion-row>
+
         </ion-grid>
       </div>
     </ion-content>
 
     <press-order-footer
-      @SaveOrder="SaveOrder"
-      @NewOrder="NewOrder"
       @PlaceOrder="PlaceOrder"
       @NavigateNext="MoveNextField"
       @NavigateBack="MovePreviousField"
       :currentPage="currentPage"
       :disableNext="disableNext"
+      :disablePlaceOrder="disablePlaceOrder"
       :selectedTestReason="selectedTestReason"
-      :preparedOrderTests="preparedOrderTests"
       :uploadingOrders="uploadingOrders"
+      :selectedTests="selectedTests"
     />
   </ion-page>
 </template>
@@ -254,7 +153,6 @@ import {
   IonCheckbox,
   IonRadio,
   onIonViewDidLeave,
-  IonButton,
   IonSearchbar,
   IonChip,
 } from "@ionic/vue";
@@ -292,14 +190,12 @@ export default defineComponent({
     IonLabel,
     IonListHeader,
     IonCheckbox,
-    IonButton,
     IonSearchbar,
     IonChip,
   },
   setup() {
     const store = useStore();
 
-    const numberOfPages = ref<number>(2);
     const currentPage = ref<number>(1);
 
     const searchString = ref<string>("");
@@ -312,11 +208,9 @@ export default defineComponent({
 
     const uploadingOrders = ref<boolean>(false);
 
-    const disableTests = ref<boolean>(false);
+    const disablePlaceOrder = ref<boolean>(true);
 
-    const disableSpecimen = ref<boolean>(false);
-
-    const disableReason = ref<boolean>(false);
+    const disableReason = ref<boolean>(true);
 
     const { fetchSpecimenTypes, specimenTypes } = GetSpecimenTypes();
 
@@ -350,20 +244,14 @@ export default defineComponent({
       selectedTest = obj;
 
       if (!selectedTest.isChecked) {
-
         selectedTests.value.push(selectedTest);
-        
       } else {
-
-        selectedTests.value.forEach(test => {
-
+        selectedTests.value.forEach((test) => {
           let index = selectedTests.value.indexOf(test);
 
           if (selectedTest == test) {
-
-             selectedTests.value.splice(index, 1);
+            selectedTests.value.splice(index, 1);
           }
-          
         });
       }
 
@@ -375,21 +263,54 @@ export default defineComponent({
     };
 
     const filterTests = computed(() => {
-      return Tests.value.filter((test) => test.name.toLowerCase().includes(searchString.value.toLowerCase()))
+      return Tests.value.filter((test) =>
+        test.name.toLowerCase().includes(searchString.value.toLowerCase())
+      );
     });
 
     const filteredSpecimenTypes = computed(() => {
-      return specimenTypes.value.filter((specimen) => specimen.name.toLowerCase().includes(searchSpecimen.value.toLowerCase()))
+      return specimenTypes.value.filter((specimen) =>
+        specimen.name.toLowerCase().includes(searchSpecimen.value.toLowerCase())
+      );
     });
+
+    watch(
+      () => [currentPage.value],
+      () => {
+        if (currentPage.value == 1) {
+
+          selectedTests.value.length = 0;
+          selectedTestReason.value = "";
+          disableReason.value = true;
+
+          Tests.value.forEach(test => {
+            test.isChecked = false;
+          });
+
+        } 
+      }
+    );
+
+    watch(
+      () => [selectedTestReason.value, selectedTests.value.length],
+      () => {
+        if (selectedTests.value.length > 0 && selectedTestReason.value !== "") {
+          disablePlaceOrder.value = false;
+        } else {
+          disablePlaceOrder.value = true;
+        }
+      }
+    );
 
     watch(
       () => [selectedTests.value.length],
       () => {
-        
         if (selectedTests.value.length > 0 && currentPage.value == 2) {
           disableNext.value = false;
+          disableReason.value = false;
         } else if (selectedTests.value.length < 1 && currentPage.value == 2) {
           disableNext.value = true;
+          disableReason.value = true;
         }
       }
     );
@@ -397,113 +318,36 @@ export default defineComponent({
     watch(
       () => [selectedSpecimen.value],
       () => {
-
-          if (Object.keys(selectedSpecimen.value).length > 0 && currentPage.value == 1 ) {
-
-            Tests.value.length = 0;
-            fetchTests(selectedSpecimen.value.id);
-            disableNext.value = false;
-          }
-        
+        if (
+          Object.keys(selectedSpecimen.value).length > 0 &&
+          currentPage.value == 1
+        ) {
+          Tests.value.length = 0;
+          fetchTests(selectedSpecimen.value.id);
+          disableNext.value = false;
+        }
       }
     );
 
-    const SaveOrder = () => {
-      if (preparedOrderTests.value.length == 0) {
-        let tests: Test[] = [];
-
-        tests.push(selectedTest);
-
-        let testDetails: PreparedOrderTests = {
-          tests: tests,
-          specimen: selectedSpecimen.value,
-          reason: selectedTestReason.value,
-        };
-
-        preparedOrderTests.value.push(testDetails);
-      } else {
-        let testAvailable = false;
-
-        preparedOrderTests.value.forEach((preTest) => {
-          if (preTest.specimen.id == selectedSpecimen.value.id) {
-            if (!preTest.tests.includes(selectedTest)) {
-              preTest.tests.push(selectedTest);
-              testAvailable = true;
-
-              return false;
-            }
-          } else {
-            if (preTest.tests.includes(selectedTest)) {
-              testAvailable = true;
-            }
-          }
-        });
-
-        if (!testAvailable) {
-          let tests: Test[] = [];
-
-          tests.push(selectedTest);
-
-          let testDetails: PreparedOrderTests = {
-            tests: tests,
-            specimen: selectedSpecimen.value,
-            reason: selectedTestReason.value,
-          };
-
-          preparedOrderTests.value.push(testDetails);
-        }
-      }
-
-      disableSpecimen.value = true;
-      disableReason.value = true;
-    };
-
-    const NewOrder = () => {
-      let inc = false;
-
-      preparedOrderTests.value.forEach((element) => {
-        if (element.tests.includes(selectedTest)) {
-          inc = true;
-        }
-      });
-
-      if (inc) {
-        selectedTest.isChecked = true;
-      } else {
-        selectedTest.isChecked = false;
-      }
-
-      specimenTypes.value.length = 0;
-      selectedTestReason.value = "";
-
-      disableTests.value = false;
-      disableSpecimen.value = false;
-      disableReason.value = false;
-    };
 
     const PlaceOrder = () => {
       const orders: Order[] = [];
 
-      for (let index = 0; index < preparedOrderTests.value.length; index++) {
-        const preOrder = preparedOrderTests.value[index];
-
-        let order: Order = {
+      let order: Order = {
           visit_type: visitTypes.value[0],
           requesting_location: store.getters.selectedWard,
           requesting_physician: "Requesting Physician",
-          specimen_type_id: preOrder.specimen.id,
-          tests: preOrder.tests,
+          specimen_type_id: selectedSpecimen.value.id,
+          tests: selectedTests.value,
           patient: store.getters.selectedPatient,
-          reason: preOrder.reason,
+          reason: selectedTestReason.value,
           user: store.getters.user,
         };
 
-        orders.push(order);
+      orders.push(order);
 
-        if (index + 1 == preparedOrderTests.value.length) {
-          Upload(orders);
-        }
-      }
+      Upload(orders);
+
     };
 
     const Upload = (orders: Order[]) => {
@@ -533,40 +377,21 @@ export default defineComponent({
       );
     };
 
-    const DeleteOrder = (index: number, tests: Test[]) => {
-      tests.forEach((test) => {
-        for (let index = 0; index < Tests.value.length; index++) {
-          const element = Tests.value[index];
-
-          if (element.id == test.id) {
-            element.isChecked = false;
-          }
-        }
-      });
-
-      preparedOrderTests.value.splice(index, 1);
-    };
-
     onIonViewDidLeave(() => {
       specimenTypes.value.length = 0;
       selectedTestReason.value = "";
     });
 
     return {
-      Tests,
       selectedTests,
-      NewOrder,
       PlaceOrder,
-      disableSpecimen,
-      DeleteOrder,
+      disablePlaceOrder,
       disableReason,
       SelectTest,
-      disableTests,
       disableNext,
       specimenTypes,
       selectedSpecimen,
       selectedTestReason,
-      SaveOrder,
       preparedOrderTests,
       uploadingOrders,
       currentPage,
@@ -575,7 +400,7 @@ export default defineComponent({
       searchString,
       searchSpecimen,
       filterTests,
-      filteredSpecimenTypes
+      filteredSpecimenTypes,
     };
   },
 });
@@ -586,8 +411,8 @@ ion-content {
   --ion-background-color: #eee;
 }
 
-ion-chip{
-  margin-bottom: 10px;
+ion-chip {
+  margin-bottom: 3px;
 }
 
 .cus-search {
@@ -595,19 +420,6 @@ ion-chip{
   padding-right: 0px;
 }
 
-.flex-container {
-  display: flex;
-  flex-direction: row;
-}
-
-.custom-aside {
-  border-right: solid 1px rgb(202, 201, 201);
-  flex: 1;
-}
-
-.custom-content {
-  flex: 1;
-}
 
 .custom-aside-list {
   height: 100vh;
@@ -615,26 +427,5 @@ ion-chip{
   overflow-y: scroll;
 }
 
-.content-specimen-sec {
-  max-height: 150px;
-  overflow-y: scroll;
-}
 
-.content-reason-sec {
-  max-height: 150px;
-  overflow-y: scroll;
-}
-
-.head-col {
-  text-align: center;
-  background: #ffffe2;
-  border-left: solid 1px rgb(202, 201, 201);
-}
-.action-btn {
-  text-align: center;
-}
-
-.cus-row {
-  border-bottom: solid 1px rgb(202, 201, 201);
-}
 </style>

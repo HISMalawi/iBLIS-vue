@@ -19,7 +19,7 @@
 
       <ion-title size="small" slot="end" v-if="currentPage == 2"
         ><ion-button
-          :disabled="preparedOrderTests.length < 1 || uploadingOrders"
+          :disabled="disablePlaceOrder"
           @click="PlaceOrder"
           class="press-order"
           >Place Order
@@ -39,7 +39,7 @@ import {
   IonButton,
   IonSpinner,
 } from "@ionic/vue";
-import { defineComponent, PropType } from "vue";
+import { defineComponent } from "vue";
 import { useRouter } from "vue-router";
 
 export default defineComponent({
@@ -68,25 +68,17 @@ export default defineComponent({
       type: Boolean,
       required: true,
     },
-    preparedOrderTests: {
-      type: Object as PropType<PreparedOrderTests>,
+    disablePlaceOrder: {
+      type: Boolean,
       required: true,
     },
   },
-  emits: ["NewOrder", "SaveOrder", "PlaceOrder", "NavigateNext", "NavigateBack"],
+  emits: [ "PlaceOrder", "NavigateNext", "NavigateBack"],
   setup(props, { emit }) {
     const router = useRouter();
 
     const NavigateToMainMenu = () => {
       router.push({ name: "PatientDashboard", replace: true });
-    };
-
-    const SAVE = () => {
-      emit("SaveOrder");
-    };
-
-    const NewOrder = () => {
-      emit("NewOrder");
     };
 
     const PlaceOrder = () => {
@@ -107,8 +99,6 @@ export default defineComponent({
 
     return {
       NavigateToMainMenu,
-      SAVE,
-      NewOrder,
       PlaceOrder,
       NavigateNext,
       NavigateBack
