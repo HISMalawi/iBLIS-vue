@@ -263,7 +263,7 @@ import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import PressOrderFooter from "@/components/PressOrderFooter.vue";
 import { useStore } from "@/store";
-import GetTests from "@/composables/getTests";
+import GetTestsBySpecimenTypeID from "@/composables/getTestsBySpecimenTypeID";
 import GetSpecimenTypes from "@/composables/getSpecimenTypes";
 import { Test } from "@/interfaces/Test";
 import { SpecimenType } from "@/interfaces/SpecimenType";
@@ -336,9 +336,7 @@ export default defineComponent({
 
     const selectedTestReason = ref<string>("");
 
-    const { fetchTests, Tests } = GetTests();
-
-    fetchTests();
+    const { fetchTests, Tests } = GetTestsBySpecimenTypeID();
 
     const MoveNextField = () => {
       currentPage.value = currentPage.value + 1;
@@ -401,6 +399,9 @@ export default defineComponent({
       () => {
 
           if (Object.keys(selectedSpecimen.value).length > 0 && currentPage.value == 1 ) {
+
+            Tests.value.length = 0;
+            fetchTests(selectedSpecimen.value.id);
             disableNext.value = false;
           }
         

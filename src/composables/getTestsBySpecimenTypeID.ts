@@ -36,7 +36,7 @@ const getTestsBySpecimenTypeID = () => {
 
           if (code.value == "200") {
 
-            Tests.value = responseData[0]
+            Tests.value = responseData[0];
 
             message.value = response.data.message;
           } else {
