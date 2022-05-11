@@ -170,7 +170,7 @@ import CreateOrder from "@/composables/createOrder";
 import { Order } from "@/interfaces/Order";
 import GetVisitTypes from "@/composables/getVisitTypes";
 import router from "@/router";
-import { el } from "date-fns/locale";
+// import { el } from "date-fns/locale";
 
 export default defineComponent({
   name: "PressOrderPage",

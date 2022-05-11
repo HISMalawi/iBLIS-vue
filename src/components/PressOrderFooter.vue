@@ -31,7 +31,6 @@
 </template>
 
 <script lang="ts">
-import { PreparedOrderTests } from "@/interfaces/PreparedOrderTests";
 import {
   IonFooter,
   IonTitle,
