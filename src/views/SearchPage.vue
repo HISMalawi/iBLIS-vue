@@ -264,21 +264,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
-#container {
-  padding: 15px;
-}
 
 ion-content {
   --ion-background-color: #eee;
 }
 
-ion-input {
-  /* border: solid 2px rgb(202, 201, 201);
-  border-radius: 8px;
-  background-color: white;
-  font-size: 23px;
-  color: black; */
-}
 .gender-label {
   font-size: 23px;
 }
