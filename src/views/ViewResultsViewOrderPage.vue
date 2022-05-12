@@ -99,7 +99,9 @@
           <ion-row>
             <ion-col class="head-col"> Test </ion-col>
             <ion-col class="head-col"> Result </ion-col>
-            <ion-col class="head-col"> Date </ion-col>
+            <ion-col class="head-col"> Authorised By </ion-col>
+            <ion-col class="head-col"> Authorised Date </ion-col>
+            <ion-col class="head-col"> Created Date </ion-col>
           </ion-row>
 
           <ion-row v-for="Test in Tests" :key="Test.id">
@@ -108,6 +110,7 @@
                 <ion-col>{{ Test.name }}</ion-col>
               </ion-row>
             </ion-col>
+
             <ion-col class="cus-row" v-if="Test.specimen_id == Specimen.id">
               <ion-row v-for="Result in Results" :key="Result.id">
                 <ion-col v-if="Result.test_id == Test.id">{{
@@ -115,6 +118,21 @@
                 }}</ion-col>
               </ion-row>
             </ion-col>
+
+            <ion-col class="cus-row" v-if="Test.specimen_id == Specimen.id">
+              <ion-row v-for="User in Users" :key="User.id">
+                <ion-col v-if="Test.verified_by !== 0 && Test.verified_by == User.id "> {{ User.name }} </ion-col>
+                
+              </ion-row>
+            </ion-col>
+
+            <ion-col class="cus-row" v-if="Test.specimen_id == Specimen.id">
+              <ion-row>
+                <ion-col v-if="Test.verified_by !== 0"> {{ getDate(Test.time_verified) }} </ion-col>
+                <ion-col v-if="Test.verified_by == 0"> Not Authorised </ion-col>
+              </ion-row>
+            </ion-col>
+
             <ion-col class="cus-row" v-if="Test.specimen_id == Specimen.id">
               <ion-row>
                 <ion-col> {{ getDate(Test.time_created) }} </ion-col>
@@ -139,7 +157,7 @@ import {
   IonCard,
   IonCardContent,
 } from "@ionic/vue";
-import { defineComponent } from "vue";
+import { defineComponent} from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import ViewResultsViewOrderFooter from "@/components/ViewResultsViewOrderFooter.vue";
@@ -169,7 +187,7 @@ export default defineComponent({
 
     const Specimen: Specimen = store.getters.selectedSpecimen;
 
-    const { fetchOrders, Tests, TestWithResults } = GetPatientOrders();
+    const { fetchOrders, Tests, TestWithResults, Users } = GetPatientOrders();
 
     const { Results, fetchTestResults } = GetTestsResults();
 
@@ -183,7 +201,7 @@ export default defineComponent({
       return date_time.substring(0, 10);
     };
 
-    return { Specimen, Patient, Tests, getDate, Results };
+    return { Specimen, Patient, Tests, getDate, Results, Users};
   },
 });
 </script>

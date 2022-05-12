@@ -331,6 +331,9 @@ export default defineComponent({
 
 
     const PlaceOrder = () => {
+      
+      disablePlaceOrder.value = true;
+
       const orders: Order[] = [];
 
       let order: Order = {
@@ -364,6 +367,7 @@ export default defineComponent({
       watch(
         () => [accessionNumber.value],
         () => {
+
           if (index !== orders.length) {
             save(orders[index]);
 

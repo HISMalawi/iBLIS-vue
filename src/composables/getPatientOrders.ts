@@ -3,88 +3,77 @@ import { useStore } from "@/store";
 import { Specimen } from "@/interfaces/Specimen";
 import { TestResult } from "@/interfaces/TestResult";
 import TokenCheck from "@/composables/tokenCheck";
+import { TestUser } from "@/interfaces/TestUser";
 
-const { logout } = TokenCheck()
+const { logout } = TokenCheck();
 
 const store = useStore();
 
 const Specimens = ref<Specimen[]>([]);
 const TestWithResults = ref<TestResult[]>([]);
 const Tests = ref<TestResult[]>([]);
+const Users = ref<TestUser[]>([]);
 const SpecimensWithResults = ref<number[]>([]);
 
-
 const getPatientOrders = () => {
+  const axios = ref(store.getters.axios);
 
-  const axios = ref(store.getters.axios)
-
-  const token = ref(store.getters.user.token)
+  const token = ref(store.getters.user.token);
 
   const message = ref<string>("");
   const code = ref<string>("");
 
   const fetchOrders = (patient_id: number) => {
-
     axios.value
       .post("/patient/orders", {
         token: token.value,
-        patient_id:patient_id
+        patient_id: patient_id,
       })
       .then(function (response: any) {
         if (response.statusText === "OK") {
-
-          if (response.data == "Invalid Token") logout()
+          if (response.data == "Invalid Token") logout();
 
           code.value = response.data.code;
 
           const responseData = response.data.data;
 
-
           if (code.value == "200") {
 
-            Tests.value = responseData.tests
+            Users.value = responseData.users;
 
-            TestWithResults.value = responseData.tests_with_results
+            Tests.value = responseData.tests;
 
-            TestWithResults.value.forEach(test => {
+            TestWithResults.value = responseData.tests_with_results;
 
-              SpecimensWithResults.value.push(test.specimen_id)
-              
+            TestWithResults.value.forEach((test) => {
+              SpecimensWithResults.value.push(test.specimen_id);
             });
 
-            Specimens.value = responseData.specimens
+            Specimens.value = responseData.specimens;
 
-            Specimens.value.forEach(Specimen => {
-
-              if (store.getters.createdOrders.includes(Specimen.accession_number)) {
-        
-                Specimen = Object.assign(Specimen, { class:"is-new"});
-        
-                
+            Specimens.value.forEach((Specimen) => {
+              if (
+                store.getters.createdOrders.includes(Specimen.accession_number)
+              ) {
+                Specimen = Object.assign(Specimen, { class: "is-new" });
               } else {
-
-                Specimen = Object.assign(Specimen, { class:"is-old"});
-
+                Specimen = Object.assign(Specimen, { class: "is-old" });
               }
-              
             });
 
             message.value = response.data.message;
-
           } else {
-
-            Specimens.value.length = 0
+            Specimens.value.length = 0;
             message.value = response.data.message;
           }
-
         }
       })
       .catch(function (error: any) {
         message.value = error.message;
       });
   };
- 
-  return { fetchOrders, Specimens, Tests, TestWithResults};
+
+  return { fetchOrders, Specimens, Tests, Users, TestWithResults };
 };
 
 export default getPatientOrders;

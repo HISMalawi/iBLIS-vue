@@ -24,7 +24,7 @@
             
             <options-card
               @OpenView="Navigate"
-              btnTitle="Summary"
+              btnTitle="Activity Summary"
               icon="results"
               CusClass="card-1"
             />
@@ -88,7 +88,7 @@ export default defineComponent({
 
           router.push("/register");
           break;
-        case "Summary":
+        case "Activity Summary":
           // code block
 
           router.push("/summary");

@@ -152,6 +152,11 @@ ion-content {
   text-align: left;
   background: #ffffe2;
   border-left: solid 1px rgb(202, 201, 201);
+  color: black;
+}
+
+ion-col {
+  color: black;
 }
 
 .is-new{
