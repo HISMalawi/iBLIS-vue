@@ -13,7 +13,7 @@ const Specimens = ref<Specimen[]>([]);
 const TestWithResults = ref<TestResult[]>([]);
 const Tests = ref<TestResult[]>([]);
 const Users = ref<TestUser[]>([]);
-const SpecimensWithResults = ref<number[]>([]);
+const SpecimensWithResults = ref<Specimen[]>([]);
 
 const getPatientOrders = () => {
   const axios = ref(store.getters.axios);
@@ -45,11 +45,31 @@ const getPatientOrders = () => {
 
             TestWithResults.value = responseData.tests_with_results;
 
-            TestWithResults.value.forEach((test) => {
-              SpecimensWithResults.value.push(test.specimen_id);
-            });
-
             Specimens.value = responseData.specimens;
+
+            TestWithResults.value.forEach((test) => {
+
+              Specimens.value.forEach(specimen => {
+
+                if (specimen.id == test.specimen_id) {
+
+                  // UNFINISHED BUSINESS!!!
+                  
+                    SpecimensWithResults.value.push(specimen);
+                    if (SpecimensWithResults.value.length > 1){
+                      SpecimensWithResults.value.forEach(sp => {
+                        if (sp.id == specimen.id){
+                          const index = SpecimensWithResults.value.indexOf(sp)
+                          SpecimensWithResults.value.splice(index,1);
+                        }
+                      })
+                    }  
+                  
+                }
+                
+              });
+              
+            });
 
             Specimens.value.forEach((Specimen) => {
               if (
@@ -73,7 +93,7 @@ const getPatientOrders = () => {
       });
   };
 
-  return { fetchOrders, Specimens, Tests, Users, TestWithResults };
+  return { fetchOrders, Specimens, Tests, Users, TestWithResults, SpecimensWithResults };
 };
 
 export default getPatientOrders;

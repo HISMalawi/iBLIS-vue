@@ -14,6 +14,7 @@
             <ion-col class="head-col"> Accession #</ion-col>
             <ion-col class="head-col"> Test(s) </ion-col>
             <ion-col class="head-col"> Specimen </ion-col>
+            <ion-col class="head-col"> Reason </ion-col>
             <ion-col class="head-col"> Date Ordered </ion-col>
           </ion-row>
 
@@ -22,7 +23,6 @@
             v-for="Specimen in Specimens"
             :key="Specimen.id"
             :class="Specimen.class"
-            @click="ViewOrder(Specimen)"
           >
             <ion-col>
               <ion-row
@@ -39,6 +39,11 @@
             <ion-col>
               <ion-row
                 ><ion-col>{{ Specimen.specimen_type }}</ion-col></ion-row
+              >
+            </ion-col>
+            <ion-col>
+              <ion-row
+                ><ion-col>{{ Specimen.priority}}</ion-col></ion-row
               >
             </ion-col>
             <ion-col>

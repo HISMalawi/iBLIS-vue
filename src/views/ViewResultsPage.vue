@@ -18,7 +18,7 @@
 
           <ion-row
             class="cus-row"
-            v-for="Specimen in Specimens"
+            v-for="Specimen in SpecimensWithResults"
             :key="Specimen.id"
             @click="ViewOrder(Specimen)"
           >
@@ -86,7 +86,7 @@ export default defineComponent({
 
     const router = useRouter();
 
-    const { fetchOrders, Specimens, Tests } = GetPatientOrders();
+    const { fetchOrders, Specimens, Tests, SpecimensWithResults} = GetPatientOrders();
 
     fetchOrders(parseInt(store.getters.selectedPatient.patient_number));
      
@@ -105,7 +105,7 @@ export default defineComponent({
 
     }
 
-    return { Specimens, getDateCollected, Tests, ViewOrder };
+    return { Specimens, getDateCollected, Tests, ViewOrder, SpecimensWithResults };
   }
 });
 </script>

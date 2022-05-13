@@ -104,7 +104,7 @@
             <ion-col class="head-col"> Created Date </ion-col>
           </ion-row>
 
-          <ion-row v-for="Test in Tests" :key="Test.id">
+          <ion-row v-for="Test in TestWithResults" :key="Test.id">
             <ion-col class="cus-row" v-if="Test.specimen_id == Specimen.id">
               <ion-row>
                 <ion-col>{{ Test.name }}</ion-col>
@@ -138,7 +138,9 @@
                 <ion-col> {{ getDate(Test.time_created) }} </ion-col>
               </ion-row>
             </ion-col>
+            
           </ion-row>
+
         </ion-grid>
       </div>
     </ion-content>
@@ -201,7 +203,7 @@ export default defineComponent({
       return date_time.substring(0, 10);
     };
 
-    return { Specimen, Patient, Tests, getDate, Results, Users};
+    return { Specimen, Patient, TestWithResults, getDate, Results, Users};
   },
 });
 </script>
