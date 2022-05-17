@@ -21,6 +21,13 @@
             <ion-col> {{ pending_orders }} </ion-col>
             <ion-col> View </ion-col>
           </ion-row>
+
+          <ion-row>
+            <ion-col> Rejected Orders</ion-col>
+            <ion-col> {{ rejected_orders }} </ion-col>
+            <ion-col> View </ion-col>
+          </ion-row>
+
         </ion-grid>
       </div>
     </ion-content>

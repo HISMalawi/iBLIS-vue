@@ -43,6 +43,8 @@ const getActivitySummary = () => {
 
             pending_orders.value = responseData.pending_orders;
 
+            rejected_orders.value = responseData.rejected_orders;
+
             message.value = response.data.message;
 
           } else {
