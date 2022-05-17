@@ -31,12 +31,12 @@ const getTestMeasures = () => {
 
           code.value = response.data.code;
 
-          const responseData = response.data.data[0];
+          const responseData = response.data.data;
 
 
           if (code.value == "200") {
 
-            Measures.value = responseData;
+            Measures.value = responseData.measures;
 
             message.value = response.data.message;
           } else {
@@ -50,7 +50,7 @@ const getTestMeasures = () => {
       });
   };
 
-  return { fetchMeasures, message , Measures};
+  return { fetchMeasures, message , Measures };
 };
 
 export default getTestMeasures;

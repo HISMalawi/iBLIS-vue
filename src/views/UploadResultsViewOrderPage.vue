@@ -2,7 +2,7 @@
   <ion-page>
     <tool-bar
       :pageTitle="'iBLIS | Order : ' + Specimen.accession_number"
-      defaltBackButtonLink="/view_results"
+      defaltBackButtonLink="/upload_results"
     />
 
     <ion-content :fullscreen="true">
@@ -145,25 +145,42 @@
           />
 
           <ion-grid>
-            <ion-row class="cus-row" v-for="Measure in Measures" :key="Measure.id">
+            <ion-row
+              class="cus-row"
+              v-for="Measure in Measures"
+              :key="Measure.id"
+            >
               <ion-col>
                 <ion-row
-                  ><ion-col class="title-col">{{ Measure.name }}</ion-col>
-                </ion-row
-                >
+                  ><ion-col class="title-col">{{
+                    Measure.name
+                  }}</ion-col>
+                </ion-row>
               </ion-col>
-              <ion-col>
+              <ion-col
+                v-if="Measure.measure_type_name == 'Alphanumeric Valuese'"
+              >
                 <ion-input
-                      placeholder="Result"
-                      :value="Measure.result"
-                      @change="resultChange(Measure, $event.target.value)"
-                    ></ion-input> 
+                  placeholder="Result"
+                  :value="Measure.result"
+                  @change="resultChange(Measure, $event.target.value)"
+                ></ion-input>
+              </ion-col>
+
+              <ion-col
+                v-if="Measure.measure_type_name == 'Alphanumeric Values'"
+              >
+                <ion-select>
+                  <ion-select-option
+                    v-for="Range in Measure.ranges"
+                    :key="Range.id"
+                    >{{ Range.alphanumeric }}</ion-select-option
+                  >
+                </ion-select>
               </ion-col>
             </ion-row>
           </ion-grid>
-          
         </ion-content>
-        
       </ion-modal>
     </ion-content>
 
@@ -182,6 +199,8 @@ import {
   IonCardContent,
   IonModal,
   IonInput,
+  IonSelect,
+  IonSelectOption,
 } from "@ionic/vue";
 import { defineComponent, ref } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
@@ -213,10 +232,10 @@ export default defineComponent({
     IonCardContent,
     IonModal,
     IonInput,
+    IonSelect,
+    IonSelectOption,
   },
   setup() {
-
-
     const store = useStore();
 
     const MeasuresToUpdate = ref<Measure[]>([]);
@@ -252,11 +271,8 @@ export default defineComponent({
       showModal.value = b;
 
       if (b) {
-
         MeasuresToUpdate.value.length = 0;
-        
       }
-      
     };
 
     const getDate = (date_string: string) => {
@@ -265,40 +281,33 @@ export default defineComponent({
       return date_time.substring(0, 10);
     };
 
-    const resultChange = (measure : Measure, update : string) => {
-
+    const resultChange = (measure: Measure, update: string) => {
       if (measure.result !== update) {
-
         for (let index = 0; index < MeasuresToUpdate.value.length; index++) {
           const element = MeasuresToUpdate.value[index];
 
           if (element.id == measure.id) {
             MeasuresToUpdate.value.splice(index, 1);
-          } 
+          }
         }
 
-         measure.result = update;
+        measure.result = update;
 
-         MeasuresToUpdate.value.push(measure);
-          
+        MeasuresToUpdate.value.push(measure);
       }
-    }
+    };
 
     const SaveChanges = () => {
-
       if (MeasuresToUpdate.value.length > 0) {
-
         upload(MeasuresToUpdate.value);
 
         fetchOrders(parseInt(store.getters.selectedPatient.patient_number));
 
         fetchTestResults(TestWithResults.value);
-
       }
 
       showModal.value = false;
-      
-    }
+    };
 
     return {
       Specimen,
@@ -312,7 +321,7 @@ export default defineComponent({
       setModalOpen,
       Measures,
       resultChange,
-      SaveChanges
+      SaveChanges,
     };
   },
 });
@@ -341,7 +350,7 @@ ion-content {
   border-bottom: solid 1px rgb(202, 201, 201);
 }
 
-.title-col{
+.title-col {
   padding-top: 15px;
 }
 

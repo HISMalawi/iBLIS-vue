@@ -189,7 +189,7 @@ export default defineComponent({
 
     const Specimen: Specimen = store.getters.selectedSpecimen;
 
-    const { fetchOrders, Tests, TestWithResults, Users } = GetPatientOrders();
+    const { fetchOrders, TestWithResults, Users } = GetPatientOrders();
 
     const { Results, fetchTestResults } = GetTestsResults();
 
