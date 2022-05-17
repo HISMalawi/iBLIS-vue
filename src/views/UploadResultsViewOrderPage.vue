@@ -152,26 +152,34 @@
             >
               <ion-col>
                 <ion-row
-                  ><ion-col class="title-col">{{
-                    Measure.name
-                  }}</ion-col>
+                  ><ion-col class="title-col">{{ Measure.name }}</ion-col>
                 </ion-row>
               </ion-col>
 
               <ion-col
-                v-if="Measure.measure_type_name == 'Alphanumeric Values' && (Measure.result == '0' || Measure.result == '')"
+                v-if="
+                  Measure.measure_type_name == 'Alphanumeric Values' &&
+                  (Measure.result == '0' || Measure.result == '')
+                "
               >
-                <ion-select>
+                <ion-select
+                  v-model="Measure.result"
+                  @click="TriggerForUpdate(Measure)"
+                >
                   <ion-select-option
                     v-for="Range in Measure.ranges"
                     :key="Range.id"
+                    :value="Range.alphanumeric"
                     >{{ Range.alphanumeric }}</ion-select-option
                   >
                 </ion-select>
               </ion-col>
 
               <ion-col
-                v-else-if="Measure.measure_type_name == 'Alphanumeric Values' && Measure.result !== '0'"
+                v-else-if="
+                  Measure.measure_type_name == 'Alphanumeric Values' &&
+                  Measure.result !== '0'
+                "
               >
                 <ion-input
                   placeholder="Result"
@@ -180,23 +188,21 @@
                 ></ion-input>
               </ion-col>
 
-              <ion-col
-                v-else
-              >
-                <ion-input v-if="Measure.result == ''"
+              <ion-col v-else>
+                <ion-input
+                  v-if="Measure.result == ''"
                   placeholder="Result"
                   :value="Measure.result"
                   @change="resultChange(Measure, $event.target.value)"
                 ></ion-input>
 
-                <ion-input v-else
+                <ion-input
+                  v-else
                   placeholder="Result"
                   :value="Measure.result"
                   :disabled="true"
                 ></ion-input>
-
               </ion-col>
-
             </ion-row>
           </ion-grid>
         </ion-content>
@@ -258,6 +264,7 @@ export default defineComponent({
     const store = useStore();
 
     const MeasuresToUpdate = ref<Measure[]>([]);
+    const MeasuresToCheckForUpdate = ref<Measure[]>([]);
 
     const { upload } = UploadResults();
 
@@ -291,6 +298,8 @@ export default defineComponent({
 
       if (b) {
         MeasuresToUpdate.value.length = 0;
+      } else {
+        MeasuresToCheckForUpdate.value.length = 0;
       }
     };
 
@@ -325,7 +334,47 @@ export default defineComponent({
         fetchTestResults(TestWithResults.value);
       }
 
+      for (
+        let index = 0;
+        index < MeasuresToCheckForUpdate.value.length;
+        index++
+      ) {
+        const measure = MeasuresToCheckForUpdate.value[index];
+
+        if (measure.result == "0") {
+          MeasuresToCheckForUpdate.value.splice(index, 1);
+        }
+
+        if (index + 1 == MeasuresToCheckForUpdate.value.length) {
+          upload(MeasuresToCheckForUpdate.value);
+
+          fetchOrders(parseInt(store.getters.selectedPatient.patient_number));
+
+          fetchTestResults(TestWithResults.value);
+        }
+      }
+
       showModal.value = false;
+    };
+
+    const TriggerForUpdate = (measure: Measure) => {
+      let isAvailable = false;
+
+      for (
+        let index = 0;
+        index < MeasuresToCheckForUpdate.value.length;
+        index++
+      ) {
+        const element = MeasuresToCheckForUpdate.value[index];
+
+        if (element.id == measure.id) {
+          isAvailable = true;
+        }
+      }
+
+      if (!isAvailable) {
+        MeasuresToCheckForUpdate.value.push(measure);
+      }
     };
 
     return {
@@ -341,6 +390,8 @@ export default defineComponent({
       Measures,
       resultChange,
       SaveChanges,
+      MeasuresToUpdate,
+      TriggerForUpdate,
     };
   },
 });
