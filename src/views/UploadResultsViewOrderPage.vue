@@ -157,18 +157,9 @@
                   }}</ion-col>
                 </ion-row>
               </ion-col>
-              <ion-col
-                v-if="Measure.measure_type_name == 'Alphanumeric Valuese'"
-              >
-                <ion-input
-                  placeholder="Result"
-                  :value="Measure.result"
-                  @change="resultChange(Measure, $event.target.value)"
-                ></ion-input>
-              </ion-col>
 
               <ion-col
-                v-if="Measure.measure_type_name == 'Alphanumeric Values'"
+                v-if="Measure.measure_type_name == 'Alphanumeric Values' && (Measure.result == '0' || Measure.result == '')"
               >
                 <ion-select>
                   <ion-select-option
@@ -178,6 +169,34 @@
                   >
                 </ion-select>
               </ion-col>
+
+              <ion-col
+                v-else-if="Measure.measure_type_name == 'Alphanumeric Values' && Measure.result !== '0'"
+              >
+                <ion-input
+                  placeholder="Result"
+                  :value="Measure.result"
+                  :disabled="true"
+                ></ion-input>
+              </ion-col>
+
+              <ion-col
+                v-else
+              >
+                <ion-input v-if="Measure.result == ''"
+                  placeholder="Result"
+                  :value="Measure.result"
+                  @change="resultChange(Measure, $event.target.value)"
+                ></ion-input>
+
+                <ion-input v-else
+                  placeholder="Result"
+                  :value="Measure.result"
+                  :disabled="true"
+                ></ion-input>
+
+              </ion-col>
+
             </ion-row>
           </ion-grid>
         </ion-content>
