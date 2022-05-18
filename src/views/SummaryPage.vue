@@ -17,17 +17,60 @@
           </ion-row>
 
           <ion-row>
-            <ion-col> Peding Orders</ion-col>
-            <ion-col> {{ pending_orders }} </ion-col>
-            <ion-col> View </ion-col>
+            <ion-col>
+              <ion-row>
+                <ion-col>Peding Orders</ion-col>
+              </ion-row>
+            </ion-col>
+            <ion-col>
+              <ion-row>
+                <ion-col>{{ pending_orders }}</ion-col>
+              </ion-row>
+            </ion-col>
+            <ion-col>
+              <ion-button
+                color="primary"
+                size="small"
+                @click="NavigateToPendingOrders"
+                >View</ion-button
+              >
+            </ion-col>
           </ion-row>
 
           <ion-row>
-            <ion-col> Rejected Orders</ion-col>
-            <ion-col> {{ rejected_orders }} </ion-col>
-            <ion-col> View </ion-col>
+            <ion-col>
+              <ion-row>
+                <ion-col>Rejected Orders</ion-col>
+              </ion-row>
+            </ion-col>
+            <ion-col>
+              <ion-row>
+                <ion-col>{{ rejected_orders }}</ion-col>
+              </ion-row>
+            </ion-col>
+            <ion-col>
+              <ion-button
+                color="primary"
+                size="small"
+                @click="NavigateToRejectedOrders"
+                >View</ion-button
+              >
+            </ion-col>
           </ion-row>
 
+          <ion-row>
+            <ion-col>
+              <ion-row>
+                <ion-col>Authorized Results</ion-col>
+              </ion-row>
+            </ion-col>
+            <ion-col>
+              <ion-row>
+                <ion-col>{{ authorized_results }}</ion-col>
+              </ion-row>
+            </ion-col>
+            <ion-col> </ion-col>
+          </ion-row>
         </ion-grid>
       </div>
     </ion-content>
@@ -37,12 +80,20 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage, IonGrid, IonRow, IonCol } from "@ionic/vue";
+import {
+  IonContent,
+  IonPage,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonButton,
+} from "@ionic/vue";
 import { defineComponent, ref } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import PendingOrdersFooter from "@/components/PendingOrdersFooter.vue";
 import GetActivitySummary from "@/composables/getActivitySummary";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "SummaryPage",
@@ -55,8 +106,10 @@ export default defineComponent({
     IonRow,
     IonCol,
     PendingOrdersFooter,
+    IonButton,
   },
   setup() {
+    const router = useRouter();
 
     const now = new Date()
       .toISOString()
@@ -72,11 +125,30 @@ export default defineComponent({
 
     toDate.value = now;
 
-    const { fetchSummary, pending_orders, rejected_orders, authorized_results } = GetActivitySummary();
+    const {
+      fetchSummary,
+      pending_orders,
+      rejected_orders,
+      authorized_results,
+    } = GetActivitySummary();
 
-    fetchSummary(fromDate.value,toDate.value);
+    fetchSummary(fromDate.value, toDate.value);
 
-    return { pending_orders, rejected_orders, authorized_results };
+    const NavigateToPendingOrders = () => {
+      router.push({ name: "PendingOrders", replace: true });
+    };
+
+    const NavigateToRejectedOrders = () => {
+      // router.push({ name: "Home", replace: true });
+    };
+
+    return {
+      pending_orders,
+      rejected_orders,
+      authorized_results,
+      NavigateToPendingOrders,
+      NavigateToRejectedOrders,
+    };
   },
 });
 </script>

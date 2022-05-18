@@ -45,6 +45,8 @@ const getActivitySummary = () => {
 
             rejected_orders.value = responseData.rejected_orders;
 
+            authorized_results.value = responseData.authorized_results;
+
             message.value = response.data.message;
 
           } else {

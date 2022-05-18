@@ -67,7 +67,7 @@
 
 <script lang="ts">
 import { IonContent, IonPage, IonGrid, IonRow, IonCol } from '@ionic/vue';
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import CollapseToolBar from "@/components/CollapseToolBar.vue"
 import ToolBar from "@/components/ToolBar.vue"
 import PendingOrdersFooter from "@/components/PendingOrdersFooter.vue"
@@ -89,6 +89,20 @@ export default defineComponent({
 
     // const { set } = SetOrderStatus();
 
+    const now = new Date()
+      .toISOString()
+      .replace(/T/, " ") // replace T with a space
+      .replace(/\..+/, "")
+      .substring(0, 10);
+
+    const fromDate = ref<string>();
+
+    const toDate = ref<string>();
+
+    fromDate.value = now;
+
+    toDate.value = now;
+
     const getDateCollected = (Specimen: Specimen) => {
 
       let date_time: string = Specimen.date_of_collection;
@@ -98,7 +112,7 @@ export default defineComponent({
 
     const { fetchOrders, Specimens, Tests } = GetSiteOrders();
 
-    fetchOrders();
+    fetchOrders(fromDate.value, toDate.value);
 
     // const ChangeStatus = (Specimen: Specimen) => {
 

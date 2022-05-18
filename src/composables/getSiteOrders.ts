@@ -27,12 +27,14 @@ const getSiteOrders = () => {
   const message = ref<string>("");
   const code = ref<string>("");
 
-  const fetchOrders = () => {
+  const fetchOrders = (fromDate: string, toDate : string) => {
 
     axios.value
       .post("/ward/pending/orders", {
         token: token.value,
-        ward:ward.value
+        ward:ward.value,
+        from: fromDate,
+        to: toDate,
       })
       .then(function (response: any) {
         if (response.statusText === "OK") {
