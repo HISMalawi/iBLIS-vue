@@ -10,23 +10,19 @@
 
       <div id="container">
 
-        <ion-modal trigger="start-date">
+        <ion-modal :is-open="startDateModal" @didDismiss="OpenStartDateModal(false)">
           <ion-content force-overscroll="false">
-            <ion-list-header class="card-3">
-            <ion-label class="gender-label"> Start Date </ion-label>
-          </ion-list-header>
-            <ion-datetime presentation="date"
+            <date-modal-tool-bar pageTitle="Start Date" @CloseDateModals="CloseDateModals"/>
+            <ion-datetime class="cus-datetime" presentation="date"
             @ionChange="(ev: DatetimeCustomEvent) => fromDate = formatDate(ev.detail.value)"
             ></ion-datetime>
           </ion-content>
         </ion-modal>
 
-        <ion-modal trigger="end-date">
+        <ion-modal :is-open="endDateModal" @didDismiss="OpenEndDateModal(false)">
           <ion-content force-overscroll="false">
-            <ion-list-header class="card-3">
-            <ion-label class="gender-label"> End Date</ion-label>
-          </ion-list-header>
-            <ion-datetime presentation="date"
+            <date-modal-tool-bar pageTitle="End Date" @CloseDateModals="CloseDateModals"/>
+            <ion-datetime class="cus-datetime" presentation="date"
             @ionChange="(ev: DatetimeCustomEvent) => toDate = formatDate(ev.detail.value)"
             ></ion-datetime>
           </ion-content>
@@ -40,7 +36,7 @@
                 <ion-input
                   v-model="fromDate"
                   :placeholder="fromDate"
-                  id="start-date"
+                  @click="OpenStartDateModal(true)"
                 ></ion-input>
               </ion-item>
             </ion-col>
@@ -48,7 +44,7 @@
             <ion-col>
               <ion-item>
                 <ion-label position="floating"> End Date </ion-label>
-                <ion-input v-model="toDate" :placeholder="toDate" id="end-date"></ion-input>
+                <ion-input v-model="toDate" :placeholder="toDate" @click="OpenEndDateModal(true)"></ion-input>
               </ion-item>
             </ion-col>
           </ion-row>
@@ -119,7 +115,7 @@
       </div>
     </ion-content>
 
-    <pending-orders-footer />
+    <pending-orders-footer/>
   </ion-page>
 </template>
 
@@ -136,15 +132,15 @@ import {
   IonInput,
   IonModal,
   IonDatetime,
-  IonListHeader
 } from "@ionic/vue";
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import PendingOrdersFooter from "@/components/PendingOrdersFooter.vue";
 import GetActivitySummary from "@/composables/getActivitySummary";
 import { useRouter } from "vue-router";
 import { format, parseISO } from "date-fns";
+import DateModalToolBar from "@/components/DateModalToolBar.vue";
 
 export default defineComponent({
   name: "SummaryPage",
@@ -163,10 +159,13 @@ export default defineComponent({
     IonInput,
     IonModal,
     IonDatetime,
-    IonListHeader
+    DateModalToolBar
   },
   setup() {
     const router = useRouter();
+
+    const startDateModal = ref<boolean>(false);
+    const endDateModal = ref<boolean>(false);
 
     const now = new Date()
       .toISOString()
@@ -174,7 +173,7 @@ export default defineComponent({
       .replace(/\..+/, "")
       .substring(0, 10);
 
-    const fromDate = ref<string>();
+    const fromDate = ref<string | null>();
 
     const toDate = ref<string>();
 
@@ -203,6 +202,27 @@ export default defineComponent({
       return format(parseISO(value), "yyyy-MM-dd");
     };
 
+    const OpenStartDateModal = (b : boolean) => {
+
+      startDateModal.value = b;
+
+    }
+
+    const OpenEndDateModal = (b : boolean) => {
+
+      endDateModal.value = b;
+      
+    }
+
+    const CloseDateModals = () => {
+
+      startDateModal.value = false;
+
+      endDateModal.value = false;
+
+    }
+
+
     return {
       pending_orders,
       rejected_orders,
@@ -212,6 +232,11 @@ export default defineComponent({
       fromDate,
       toDate,
       formatDate,
+      startDateModal,
+      endDateModal,
+      OpenStartDateModal,
+      OpenEndDateModal,
+      CloseDateModals
     };
   },
 });
@@ -228,5 +253,11 @@ ion-content {
 }
 .gender-label {
   font-size: 23px;
+}
+
+.cus-datetime{
+  align-self: center !important;
+  margin:auto;
+  margin-top: 20px;
 }
 </style>
