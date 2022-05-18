@@ -9,6 +9,50 @@
       <collapse-tool-bar pageTitle="iBLIS | Activity Summary" />
 
       <div id="container">
+
+        <ion-modal trigger="start-date">
+          <ion-content force-overscroll="false">
+            <ion-list-header class="card-3">
+            <ion-label class="gender-label"> Start Date </ion-label>
+          </ion-list-header>
+            <ion-datetime presentation="date"
+            @ionChange="(ev: DatetimeCustomEvent) => fromDate = formatDate(ev.detail.value)"
+            ></ion-datetime>
+          </ion-content>
+        </ion-modal>
+
+        <ion-modal trigger="end-date">
+          <ion-content force-overscroll="false">
+            <ion-list-header class="card-3">
+            <ion-label class="gender-label"> End Date</ion-label>
+          </ion-list-header>
+            <ion-datetime presentation="date"
+            @ionChange="(ev: DatetimeCustomEvent) => toDate = formatDate(ev.detail.value)"
+            ></ion-datetime>
+          </ion-content>
+        </ion-modal>
+
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-item>
+                <ion-label position="floating"> Start Date </ion-label>
+                <ion-input
+                  v-model="fromDate"
+                  :placeholder="fromDate"
+                  id="start-date"
+                ></ion-input>
+              </ion-item>
+            </ion-col>
+
+            <ion-col>
+              <ion-item>
+                <ion-label position="floating"> End Date </ion-label>
+                <ion-input v-model="toDate" :placeholder="toDate" id="end-date"></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
         <ion-grid>
           <ion-row>
             <ion-col class="head-col"> Category</ion-col>
@@ -87,6 +131,12 @@ import {
   IonRow,
   IonCol,
   IonButton,
+  IonItem,
+  IonLabel,
+  IonInput,
+  IonModal,
+  IonDatetime,
+  IonListHeader
 } from "@ionic/vue";
 import { defineComponent, ref } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
@@ -94,6 +144,7 @@ import ToolBar from "@/components/ToolBar.vue";
 import PendingOrdersFooter from "@/components/PendingOrdersFooter.vue";
 import GetActivitySummary from "@/composables/getActivitySummary";
 import { useRouter } from "vue-router";
+import { format, parseISO } from "date-fns";
 
 export default defineComponent({
   name: "SummaryPage",
@@ -107,6 +158,12 @@ export default defineComponent({
     IonCol,
     PendingOrdersFooter,
     IonButton,
+    IonItem,
+    IonLabel,
+    IonInput,
+    IonModal,
+    IonDatetime,
+    IonListHeader
   },
   setup() {
     const router = useRouter();
@@ -142,12 +199,19 @@ export default defineComponent({
       // router.push({ name: "Home", replace: true });
     };
 
+    const formatDate = (value: string) => {
+      return format(parseISO(value), "yyyy-MM-dd");
+    };
+
     return {
       pending_orders,
       rejected_orders,
       authorized_results,
       NavigateToPendingOrders,
       NavigateToRejectedOrders,
+      fromDate,
+      toDate,
+      formatDate,
     };
   },
 });
@@ -161,5 +225,8 @@ export default defineComponent({
 }
 ion-content {
   --ion-background-color: #eee;
+}
+.gender-label {
+  font-size: 23px;
 }
 </style>
