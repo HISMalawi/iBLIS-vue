@@ -1,13 +1,71 @@
 <template>
   <ion-page>
-    
-    <tool-bar pageTitle="iBLIS | Pending Orders" defaltBackButtonLink="/home"/>
-    
-    <ion-content :fullscreen="true">
+    <tool-bar pageTitle="iBLIS | Pending Orders" defaltBackButtonLink="/home" />
 
-      <collapse-tool-bar pageTitle="iBLIS | Pending Orders"/>
-    
+    <ion-content :fullscreen="true">
+      <collapse-tool-bar pageTitle="iBLIS | Pending Orders" />
+
       <div id="container">
+        <ion-modal
+          :is-open="startDateModal"
+          @didDismiss="OpenStartDateModal(false)"
+        >
+          <ion-content force-overscroll="false">
+            <date-modal-tool-bar
+              pageTitle="Start Date"
+              @CloseDateModals="CloseDateModals"
+            />
+            <ion-datetime
+              class="cus-datetime"
+              presentation="date"
+              @ionChange="(ev: DatetimeCustomEvent) => fromDate = formatDate(ev.detail.value)"
+            ></ion-datetime>
+          </ion-content>
+        </ion-modal>
+
+        <ion-modal
+          :is-open="endDateModal"
+          @didDismiss="OpenEndDateModal(false)"
+        >
+          <ion-content force-overscroll="false">
+            <date-modal-tool-bar
+              pageTitle="End Date"
+              @CloseDateModals="CloseDateModals"
+            />
+            <ion-datetime
+              class="cus-datetime"
+              presentation="date"
+              @ionChange="(ev: DatetimeCustomEvent) => toDate = formatDate(ev.detail.value)"
+            ></ion-datetime>
+          </ion-content>
+        </ion-modal>
+
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-item>
+                <ion-label position="floating"> Start Date </ion-label>
+                <ion-input
+                  v-model="fromDate"
+                  :placeholder="fromDate"
+                  @click="OpenStartDateModal(true)"
+                ></ion-input>
+              </ion-item>
+            </ion-col>
+
+            <ion-col>
+              <ion-item>
+                <ion-label position="floating"> End Date </ion-label>
+                <ion-input
+                  v-model="toDate"
+                  :placeholder="toDate"
+                  @click="OpenEndDateModal(true)"
+                ></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
         <ion-grid>
           <ion-row>
             <ion-col class="head-col"> Accession #</ion-col>
@@ -48,46 +106,63 @@
             <ion-col>
               <ion-row
                 ><ion-col>{{ getDateCollected(Specimen) }}</ion-col>
-                </ion-row
-              >
+              </ion-row>
             </ion-col>
-           
           </ion-row>
-
-          
         </ion-grid>
       </div>
-
     </ion-content>
 
     <pending-orders-footer />
-
   </ion-page>
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage, IonGrid, IonRow, IonCol } from '@ionic/vue';
-import { defineComponent, ref } from 'vue';
-import CollapseToolBar from "@/components/CollapseToolBar.vue"
-import ToolBar from "@/components/ToolBar.vue"
-import PendingOrdersFooter from "@/components/PendingOrdersFooter.vue"
+import {
+  IonContent,
+  IonPage,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonItem,
+  IonLabel,
+  IonInput,
+  IonModal,
+  IonDatetime,
+} from "@ionic/vue";
+import { defineComponent, ref } from "vue";
+import CollapseToolBar from "@/components/CollapseToolBar.vue";
+import ToolBar from "@/components/ToolBar.vue";
+import PendingOrdersFooter from "@/components/PendingOrdersFooter.vue";
 import GetSiteOrders from "@/composables/getSiteOrders";
 import { Specimen } from "@/interfaces/Specimen";
+import DateModalToolBar from "@/components/DateModalToolBar.vue";
+import { format, parseISO } from "date-fns";
 // import SetOrderStatus from "@/composables/setOrderStatus";
 
 export default defineComponent({
-  name: 'PendingOrdersPage',
+  name: "PendingOrdersPage",
   components: {
     IonContent,
     IonPage,
     ToolBar,
     CollapseToolBar,
     PendingOrdersFooter,
-    IonGrid, IonRow, IonCol,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonItem,
+    IonLabel,
+    IonInput,
+    IonModal,
+    IonDatetime,
+    DateModalToolBar
   },
-  setup(){
-
+  setup() {
     // const { set } = SetOrderStatus();
+
+    const startDateModal = ref<boolean>(false);
+    const endDateModal = ref<boolean>(false);
 
     const now = new Date()
       .toISOString()
@@ -95,22 +170,49 @@ export default defineComponent({
       .replace(/\..+/, "")
       .substring(0, 10);
 
-    const fromDate = ref<string>();
+    const fromDate = ref<string>("");
 
-    const toDate = ref<string>();
+    const toDate = ref<string>("");
 
     fromDate.value = now;
 
     toDate.value = now;
 
-    const getDateCollected = (Specimen: Specimen) => {
+    const { fetchOrders, Specimens, Tests } = GetSiteOrders();
 
+    const formatDate = (value: string) => {
+      return format(parseISO(value), "yyyy-MM-dd");
+    };
+
+    const OpenStartDateModal = (b: boolean) => {
+      if (!b) {
+        fetchOrders(fromDate.value, toDate.value);
+      }
+
+      startDateModal.value = b;
+    };
+
+    const OpenEndDateModal = (b: boolean) => {
+      if (!b) {
+        fetchOrders(fromDate.value, toDate.value);
+      }
+
+      endDateModal.value = b;
+    };
+
+    const CloseDateModals = () => {
+      fetchOrders(fromDate.value, toDate.value);
+
+      startDateModal.value = false;
+
+      endDateModal.value = false;
+    };
+
+    const getDateCollected = (Specimen: Specimen) => {
       let date_time: string = Specimen.date_of_collection;
 
       return date_time.substring(0, 10);
     };
-
-    const { fetchOrders, Specimens, Tests } = GetSiteOrders();
 
     fetchOrders(fromDate.value, toDate.value);
 
@@ -156,14 +258,13 @@ export default defineComponent({
     //   presentAlert();
 
     // }
-   
-    return { Specimens, Tests, getDateCollected }
-  }
+
+    return { startDateModal, endDateModal, fromDate, toDate, Specimens, Tests, getDateCollected, formatDate, OpenStartDateModal, OpenEndDateModal, CloseDateModals};
+  },
 });
 </script>
 
 <style scoped>
-
 ion-content {
   --ion-background-color: #eee;
 }
@@ -179,16 +280,16 @@ ion-col {
   color: black;
 }
 
-.is-new{
+.is-new {
   background-color: rgba(61, 231, 146, 0.281) !important;
 }
 
 .cus-row {
   border-bottom: solid 1px rgb(202, 201, 201);
 }
-
-.order-status-alert {
-  --width: 200px;
-  --min-width: 200px;
+.cus-datetime {
+  align-self: center !important;
+  margin: auto;
+  margin-top: 20px;
 }
 </style>

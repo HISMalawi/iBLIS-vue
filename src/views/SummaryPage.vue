@@ -9,21 +9,36 @@
       <collapse-tool-bar pageTitle="iBLIS | Activity Summary" />
 
       <div id="container">
-
-        <ion-modal :is-open="startDateModal" @didDismiss="OpenStartDateModal(false)">
+        <ion-modal
+          :is-open="startDateModal"
+          @didDismiss="OpenStartDateModal(false)"
+        >
           <ion-content force-overscroll="false">
-            <date-modal-tool-bar pageTitle="Start Date" @CloseDateModals="CloseDateModals"/>
-            <ion-datetime class="cus-datetime" presentation="date"
-            @ionChange="(ev: DatetimeCustomEvent) => fromDate = formatDate(ev.detail.value)"
+            <date-modal-tool-bar
+              pageTitle="Start Date"
+              @CloseDateModals="CloseDateModals"
+            />
+            <ion-datetime
+              class="cus-datetime"
+              presentation="date"
+              @ionChange="(ev: DatetimeCustomEvent) => fromDate = formatDate(ev.detail.value)"
             ></ion-datetime>
           </ion-content>
         </ion-modal>
 
-        <ion-modal :is-open="endDateModal" @didDismiss="OpenEndDateModal(false)">
+        <ion-modal
+          :is-open="endDateModal"
+          @didDismiss="OpenEndDateModal(false)"
+        >
           <ion-content force-overscroll="false">
-            <date-modal-tool-bar pageTitle="End Date" @CloseDateModals="CloseDateModals"/>
-            <ion-datetime class="cus-datetime" presentation="date"
-            @ionChange="(ev: DatetimeCustomEvent) => toDate = formatDate(ev.detail.value)"
+            <date-modal-tool-bar
+              pageTitle="End Date"
+              @CloseDateModals="CloseDateModals"
+            />
+            <ion-datetime
+              class="cus-datetime"
+              presentation="date"
+              @ionChange="(ev: DatetimeCustomEvent) => toDate = formatDate(ev.detail.value)"
             ></ion-datetime>
           </ion-content>
         </ion-modal>
@@ -44,7 +59,11 @@
             <ion-col>
               <ion-item>
                 <ion-label position="floating"> End Date </ion-label>
-                <ion-input v-model="toDate" :placeholder="toDate" @click="OpenEndDateModal(true)"></ion-input>
+                <ion-input
+                  v-model="toDate"
+                  :placeholder="toDate"
+                  @click="OpenEndDateModal(true)"
+                ></ion-input>
               </ion-item>
             </ion-col>
           </ion-row>
@@ -115,7 +134,7 @@
       </div>
     </ion-content>
 
-    <pending-orders-footer/>
+    <pending-orders-footer />
   </ion-page>
 </template>
 
@@ -159,7 +178,7 @@ export default defineComponent({
     IonInput,
     IonModal,
     IonDatetime,
-    DateModalToolBar
+    DateModalToolBar,
   },
   setup() {
     const router = useRouter();
@@ -202,40 +221,29 @@ export default defineComponent({
       return format(parseISO(value), "yyyy-MM-dd");
     };
 
-    const OpenStartDateModal = (b : boolean) => {
-
+    const OpenStartDateModal = (b: boolean) => {
       if (!b) {
-
         fetchSummary(fromDate.value, toDate.value);
-        
       }
 
       startDateModal.value = b;
+    };
 
-    }
-
-    const OpenEndDateModal = (b : boolean) => {
-
+    const OpenEndDateModal = (b: boolean) => {
       if (!b) {
-
         fetchSummary(fromDate.value, toDate.value);
-        
       }
 
       endDateModal.value = b;
-      
-    }
+    };
 
     const CloseDateModals = () => {
-
       fetchSummary(fromDate.value, toDate.value);
 
       startDateModal.value = false;
 
       endDateModal.value = false;
-
-    }
-
+    };
 
     return {
       pending_orders,
@@ -250,7 +258,7 @@ export default defineComponent({
       endDateModal,
       OpenStartDateModal,
       OpenEndDateModal,
-      CloseDateModals
+      CloseDateModals,
     };
   },
 });
@@ -269,9 +277,9 @@ ion-content {
   font-size: 23px;
 }
 
-.cus-datetime{
+.cus-datetime {
   align-self: center !important;
-  margin:auto;
+  margin: auto;
   margin-top: 20px;
 }
 </style>
