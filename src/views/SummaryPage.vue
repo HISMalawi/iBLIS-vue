@@ -154,7 +154,7 @@ import {
   IonModal,
   IonDatetime,
 } from "@ionic/vue";
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, watchEffect } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import PendingOrdersFooter from "@/components/PendingOrdersFooter.vue";
@@ -268,6 +268,12 @@ export default defineComponent({
 
       endDateModal.value = false;
     };
+
+    watchEffect(() => {
+      if (!store.getters.isLoggedIn) {
+        router.push({ name: "Login", replace: true });
+      }
+    });
 
     return {
       pending_orders,

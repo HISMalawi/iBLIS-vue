@@ -1,5 +1,5 @@
 <template>
-  <ion-page>
+  <ion-page  v-if="$store.state.loggedIn">
     <tool-bar
       :pageTitle="'iBLIS | Order : ' + Specimen.accession_number"
       defaltBackButtonLink="/view_results"
@@ -159,7 +159,7 @@ import {
   IonCard,
   IonCardContent,
 } from "@ionic/vue";
-import { defineComponent, ref} from "vue";
+import { defineComponent, ref, watchEffect} from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import ViewResultsViewOrderFooter from "@/components/ViewResultsViewOrderFooter.vue";
@@ -168,6 +168,7 @@ import { Specimen } from "@/interfaces/Specimen";
 import { Patient } from "@/interfaces/Patient";
 import GetPatientOrders from "@/composables/getPatientOrders";
 import GetTestsResults from "@/composables/getTestsResults";
+import { useRouter } from "vue-router";
 export default defineComponent({
   name: "ViewResultsViewOrderPage",
   components: {
@@ -184,6 +185,14 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
+
+    const router = useRouter();
+
+    watchEffect(() => {
+      if (!store.getters.isLoggedIn) {
+        router.push({ name: "Login", replace: true });
+      }
+    });
 
     const now = new Date()
       .toISOString()

@@ -129,7 +129,7 @@ import {
   IonModal,
   IonDatetime,
 } from "@ionic/vue";
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, watchEffect } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import ViewResultsFooter from "@/components/ViewResultsFooter.vue";
@@ -239,6 +239,12 @@ export default defineComponent({
 
       endDateModal.value = false;
     };
+
+    watchEffect(() => {
+      if (!store.getters.isLoggedIn) {
+        router.push({ name: "Login", replace: true });
+      }
+    });
 
     return { CloseDateModals, OpenEndDateModal, OpenStartDateModal, formatDate, fromDate, toDate,startDateModal, endDateModal, Specimens, getDateCollected, Tests, ViewOrder };
   },

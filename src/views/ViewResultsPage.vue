@@ -162,7 +162,7 @@ import {
   IonSelect,
   IonSelectOption,
 } from "@ionic/vue";
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, ref, watch, watchEffect } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import ViewResultsFooter from "@/components/ViewResultsFooter.vue";
@@ -286,6 +286,12 @@ export default defineComponent({
         }
       }
     );
+
+    watchEffect(() => {
+      if (!store.getters.isLoggedIn) {
+        router.push({ name: "Login", replace: true });
+      }
+    });
 
     return {
       selectedTests,

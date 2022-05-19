@@ -45,11 +45,8 @@ const SearchPatient = () => {
             message.value = response.data.message;
           }
 
-        } else {
-
-          console.log("Search Patient Error");
-
         }
+        
       })
       .catch(function (error: any) {
         message.value = error.message;

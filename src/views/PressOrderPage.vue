@@ -156,7 +156,7 @@ import {
   IonSearchbar,
   IonChip,
 } from "@ionic/vue";
-import { computed, defineComponent, reactive, ref, watch } from "vue";
+import { computed, defineComponent, reactive, ref, watch, watchEffect } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import PressOrderFooter from "@/components/PressOrderFooter.vue";
@@ -384,6 +384,12 @@ export default defineComponent({
     onIonViewDidLeave(() => {
       specimenTypes.value.length = 0;
       selectedTestReason.value = "";
+    });
+
+    watchEffect(() => {
+      if (!store.getters.isLoggedIn) {
+        router.push({ name: "Login", replace: true });
+      }
     });
 
     return {

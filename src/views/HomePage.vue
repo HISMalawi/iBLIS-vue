@@ -7,40 +7,39 @@
 
       <div id="container">
         <div id="flex-container" v-if="$store.state.loggedIn">
-         
-            <options-card
-              @OpenView="Navigate"
-              btnTitle="Search Client"
-              icon="search"
-              CusClass="card-3"
-            />
+          <options-card
+            @OpenView="Navigate"
+            btnTitle="Search Client"
+            icon="search"
+            CusClass="card-3"
+          />
 
-            <options-card
-              @OpenView="Navigate"
-              btnTitle="Register Client"
-              icon="register"
-              CusClass="card-2"
-            />
-            
-            <options-card
-              @OpenView="Navigate"
-              btnTitle="Activity Summary"
-              icon="results"
-              CusClass="card-1"
-            />
-            <options-card
-              @OpenView="Navigate"
-              btnTitle="Pending Orders"
-              icon="pending"
-              CusClass="card-4-orange"
-            />
-            <options-card class="last-option"
-              @OpenView="Navigate"
-              btnTitle="Configurations"
-              icon="configurations"
-              CusClass="card-4-violet"
-            />
-         
+          <options-card
+            @OpenView="Navigate"
+            btnTitle="Register Client"
+            icon="register"
+            CusClass="card-2"
+          />
+
+          <options-card
+            @OpenView="Navigate"
+            btnTitle="Activity Summary"
+            icon="results"
+            CusClass="card-1"
+          />
+          <options-card
+            @OpenView="Navigate"
+            btnTitle="Pending Orders"
+            icon="pending"
+            CusClass="card-4-orange"
+          />
+          <options-card
+            class="last-option"
+            @OpenView="Navigate"
+            btnTitle="Configurations"
+            icon="configurations"
+            CusClass="card-4-violet"
+          />
         </div>
       </div>
     </ion-content>
@@ -50,7 +49,12 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage, useBackButton } from "@ionic/vue";
+import {
+  IonContent,
+  IonPage,
+  useBackButton,
+  alertController,
+} from "@ionic/vue";
 import { defineComponent, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
@@ -58,6 +62,8 @@ import ToolBar from "@/components/ToolBar.vue";
 import AppFooter from "@/components/AppFooter.vue";
 import OptionsCard from "@/components/OptionsCard.vue";
 import { useStore } from "@/store";
+import { Plugins } from '@capacitor/core';
+const { App } = Plugins;
 
 export default defineComponent({
   name: "HomePage",
@@ -70,14 +76,12 @@ export default defineComponent({
     OptionsCard,
   },
   setup() {
-
     const store = useStore();
-    
+
     const router = useRouter();
 
     const Navigate = (viewName: string) => {
       switch (viewName) {
-        
         case "Search Client":
           // code block
 
@@ -93,7 +97,7 @@ export default defineComponent({
 
           router.push("/summary");
           break;
-    
+
         case "Pending Orders":
           // code block
 
@@ -111,15 +115,55 @@ export default defineComponent({
 
     watchEffect(() => {
       if (!store.getters.isLoggedIn) {
-        router.push({ name: 'Login', replace: true })
+        router.push({ name: "Login", replace: true });
       }
     });
 
+    const AlertExitApp = () => {
+      const presentAlert = async () => {
+        const alert = await alertController.create({
+          cssClass: "order-status-alert",
+          header: "Heads Up!",
+          message: "Are you sure you want to Exit?",
+          buttons: [
+            {
+              text: "CANCEL",
+              role: "cancel",
+              cssClass: "secondary",
+            },
+            {
+              text: "EXIT",
+              role: "accept",
+              cssClass: "secondary",
+              handler: () => {
+                App.exitApp();
+              },
+            },
+          ],
+        });
+        await alert.present();
+      };
+
+      presentAlert();
+    };
 
     useBackButton(5, () => {
-      router.push({ name: "Home", replace: true });
+      if (router.currentRoute.value.name == "Home") {
+
+        AlertExitApp();
+
+      } else if(router.currentRoute.value.name == "Login"){
+        
+        App.exitApp();
+
+      } else {
+
+        router.push({ name: "Home", replace: true });
+
+      }
+      
     });
-    
+
     return { Navigate };
   },
 });

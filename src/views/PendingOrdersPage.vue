@@ -133,7 +133,7 @@ import {
   IonDatetime,
 onIonViewDidLeave,
 } from "@ionic/vue";
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, watchEffect } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import PendingOrdersFooter from "@/components/PendingOrdersFooter.vue";
@@ -238,6 +238,12 @@ export default defineComponent({
 
       store.commit(MutationTypes.SET_PREVIOUS_LINK, "");
       
+    });
+
+    watchEffect(() => {
+      if (!store.getters.isLoggedIn) {
+        router.push({ name: "Login", replace: true });
+      }
     });
 
     // const ChangeStatus = (Specimen: Specimen) => {

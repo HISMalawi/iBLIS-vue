@@ -1,5 +1,5 @@
 <template>
-  <ion-header :translucent="true" v-if="$store.state.loggedIn">
+  <ion-header :translucent="true">
     <ion-toolbar>
       <ion-buttons v-if="defaltBackButtonLink !== '#'" slot="start">
         <ion-back-button :default-href="defaltBackButtonLink"></ion-back-button>

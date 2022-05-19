@@ -1,5 +1,5 @@
 <template>
-  <ion-page>
+  <ion-page  v-if="$store.state.loggedIn">
     <tool-bar
       :pageTitle="'iBLIS | Order : ' + Specimen.accession_number"
       defaltBackButtonLink="/upload_results"
@@ -227,7 +227,7 @@ import {
   IonSelect,
   IonSelectOption,
 } from "@ionic/vue";
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, watchEffect } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import ModalToolBar from "@/components/ModalToolBar.vue";
@@ -241,6 +241,7 @@ import { TestResult } from "@/interfaces/TestResult";
 import GetTestMeasures from "@/composables/getTestMeasures";
 import { Measure } from "@/interfaces/Measure";
 import UploadResults from "@/composables/uploadResults";
+import { useRouter } from "vue-router";
 export default defineComponent({
   name: "UploadResultsViewOrderPage",
   components: {
@@ -262,6 +263,14 @@ export default defineComponent({
   },
   setup() {
     const store = useStore();
+
+    const router = useRouter();
+
+    watchEffect(() => {
+      if (!store.getters.isLoggedIn) {
+        router.push({ name: "Login", replace: true });
+      }
+    });
 
     const now = new Date()
       .toISOString()

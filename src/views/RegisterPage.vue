@@ -221,7 +221,7 @@ import {
   IonListHeader,
   IonDatetime,
 } from "@ionic/vue";
-import { defineComponent, reactive, ref, watch } from "vue";
+import { defineComponent, reactive, ref, watch, watchEffect } from "vue";
 import { useStore } from "@/store";
 // import { useRouter } from "vue-router";
 import { format, parseISO } from "date-fns";
@@ -323,6 +323,12 @@ export default defineComponent({
         router.push({ name: "PatientDashboard", replace: true });
       }
     );
+
+    watchEffect(() => {
+      if (!store.getters.isLoggedIn) {
+        router.push({ name: "Login", replace: true });
+      }
+    });
 
     return {
       numberOfPages,

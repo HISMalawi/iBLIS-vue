@@ -1,6 +1,6 @@
 <template>
 
-  <ion-footer collapse="fade" v-if="$store.state.loggedIn">
+  <ion-footer collapse="fade">
     <ion-toolbar>
       <ion-title size="small" slot="end">v1.0</ion-title>
     </ion-toolbar>

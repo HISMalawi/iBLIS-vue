@@ -161,7 +161,7 @@ import {
   IonCol,
   onIonViewDidLeave,
 } from "@ionic/vue";
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, ref, watch, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
@@ -247,6 +247,12 @@ export default defineComponent({
       searchClient.value.first_name = "";
       searchClient.value.last_name = "";
       searchClient.value.gender = "";
+    });
+
+    watchEffect(() => {
+      if (!store.getters.isLoggedIn) {
+        router.push({ name: "Login", replace: true });
+      }
     });
 
     return {

@@ -102,7 +102,7 @@ import {
   IonCol,
   IonRow,
 } from "@ionic/vue";
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
@@ -162,6 +162,12 @@ export default defineComponent({
         // code block
       }
     };
+
+    watchEffect(() => {
+      if (!store.getters.isLoggedIn) {
+        router.push({ name: "Login", replace: true });
+      }
+    });
 
     return { Navigate, selectedPatient };
   },
