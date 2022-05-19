@@ -7,7 +7,7 @@ const { logout } = TokenCheck()
 
 const store = useStore();
 
-const Tests = ref<Test[]>([]);
+const TestsSp = ref<Test[]>([]);
 
 const getTestsBySpecimenTypeID = () => {
 
@@ -36,7 +36,7 @@ const getTestsBySpecimenTypeID = () => {
 
           if (code.value == "200") {
 
-            Tests.value = responseData[0];
+            TestsSp.value = responseData[0];
 
             message.value = response.data.message;
           } else {
@@ -50,7 +50,7 @@ const getTestsBySpecimenTypeID = () => {
       });
   };
 
-  return { fetchTests, message, Tests };
+  return { fetchTests, message, TestsSp };
 };
 
 export default getTestsBySpecimenTypeID;

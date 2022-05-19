@@ -230,7 +230,7 @@ export default defineComponent({
 
     const selectedTestReason = ref<string>("");
 
-    const { fetchTests, Tests } = GetTestsBySpecimenTypeID();
+    const { fetchTests, TestsSp } = GetTestsBySpecimenTypeID();
 
     const MoveNextField = () => {
       currentPage.value = currentPage.value + 1;
@@ -263,7 +263,7 @@ export default defineComponent({
     };
 
     const filterTests = computed(() => {
-      return Tests.value.filter((test) =>
+      return TestsSp.value.filter((test) =>
         test.name.toLowerCase().includes(searchString.value.toLowerCase())
       );
     });
@@ -283,7 +283,7 @@ export default defineComponent({
           selectedTestReason.value = "";
           disableReason.value = true;
 
-          Tests.value.forEach(test => {
+          TestsSp.value.forEach(test => {
             test.isChecked = false;
           });
 
@@ -322,7 +322,7 @@ export default defineComponent({
           Object.keys(selectedSpecimen.value).length > 0 &&
           currentPage.value == 1
         ) {
-          Tests.value.length = 0;
+          TestsSp.value.length = 0;
           fetchTests(selectedSpecimen.value.id);
           disableNext.value = false;
         }
