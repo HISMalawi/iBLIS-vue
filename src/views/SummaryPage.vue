@@ -133,7 +133,7 @@ import {
   IonModal,
   IonDatetime,
 } from "@ionic/vue";
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, ref } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import PendingOrdersFooter from "@/components/PendingOrdersFooter.vue";
@@ -173,9 +173,9 @@ export default defineComponent({
       .replace(/\..+/, "")
       .substring(0, 10);
 
-    const fromDate = ref<string | null>();
+    const fromDate = ref<string>("");
 
-    const toDate = ref<string>();
+    const toDate = ref<string>("");
 
     fromDate.value = now;
 
@@ -204,17 +204,31 @@ export default defineComponent({
 
     const OpenStartDateModal = (b : boolean) => {
 
+      if (!b) {
+
+        fetchSummary(fromDate.value, toDate.value);
+        
+      }
+
       startDateModal.value = b;
 
     }
 
     const OpenEndDateModal = (b : boolean) => {
 
+      if (!b) {
+
+        fetchSummary(fromDate.value, toDate.value);
+        
+      }
+
       endDateModal.value = b;
       
     }
 
     const CloseDateModals = () => {
+
+      fetchSummary(fromDate.value, toDate.value);
 
       startDateModal.value = false;
 
