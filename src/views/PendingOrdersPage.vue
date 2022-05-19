@@ -49,6 +49,7 @@
                   v-model="fromDate"
                   :placeholder="fromDate"
                   @click="OpenStartDateModal(true)"
+                  readonly
                 ></ion-input>
               </ion-item>
             </ion-col>
@@ -60,6 +61,7 @@
                   v-model="toDate"
                   :placeholder="toDate"
                   @click="OpenEndDateModal(true)"
+                  readonly
                 ></ion-input>
               </ion-item>
             </ion-col>
@@ -140,6 +142,7 @@ import { Specimen } from "@/interfaces/Specimen";
 import DateModalToolBar from "@/components/DateModalToolBar.vue";
 import { format, parseISO } from "date-fns";
 import { MutationTypes, useStore } from "@/store";
+import { useRouter } from "vue-router";
 // import SetOrderStatus from "@/composables/setOrderStatus";
 
 export default defineComponent({
@@ -163,6 +166,8 @@ export default defineComponent({
   setup() {
     // const { set } = SetOrderStatus();
     const store = useStore();
+
+    const router = useRouter();
 
     const startDateModal = ref<boolean>(false);
     const endDateModal = ref<boolean>(false);
@@ -310,5 +315,12 @@ ion-col {
   align-self: center !important;
   margin: auto;
   margin-top: 20px;
+}
+
+ion-input[disabled],
+ion-input[disabled="true"],
+ion-input:disabled {
+   --opacity: 1!important;
+   opacity: 1!important;
 }
 </style>

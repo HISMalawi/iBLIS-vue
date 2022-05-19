@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage } from "@ionic/vue";
+import { IonContent, IonPage, useBackButton } from "@ionic/vue";
 import { defineComponent, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
@@ -115,6 +115,11 @@ export default defineComponent({
       }
     });
 
+
+    useBackButton(5, () => {
+      router.push({ name: "Home", replace: true });
+    });
+    
     return { Navigate };
   },
 });
