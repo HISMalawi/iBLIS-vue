@@ -129,6 +129,7 @@ import {
   IonInput,
   IonModal,
   IonDatetime,
+onIonViewDidLeave,
 } from "@ionic/vue";
 import { defineComponent, ref } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
@@ -138,6 +139,7 @@ import GetSiteOrders from "@/composables/getSiteOrders";
 import { Specimen } from "@/interfaces/Specimen";
 import DateModalToolBar from "@/components/DateModalToolBar.vue";
 import { format, parseISO } from "date-fns";
+import { MutationTypes, useStore } from "@/store";
 // import SetOrderStatus from "@/composables/setOrderStatus";
 
 export default defineComponent({
@@ -160,6 +162,7 @@ export default defineComponent({
   },
   setup() {
     // const { set } = SetOrderStatus();
+    const store = useStore();
 
     const startDateModal = ref<boolean>(false);
     const endDateModal = ref<boolean>(false);
@@ -174,9 +177,19 @@ export default defineComponent({
 
     const toDate = ref<string>("");
 
-    fromDate.value = now;
+    if (store.getters.previousLink == "/summary") {
 
-    toDate.value = now;
+      fromDate.value = store.getters.fromDate;
+
+      toDate.value = store.getters.toDate;
+      
+    } else {
+
+      fromDate.value = now;
+
+      toDate.value = now;
+
+    }
 
     const { fetchOrders, Specimens, Tests } = GetSiteOrders();
 
@@ -215,6 +228,12 @@ export default defineComponent({
     };
 
     fetchOrders(fromDate.value, toDate.value);
+
+    onIonViewDidLeave(() => {
+
+      store.commit(MutationTypes.SET_PREVIOUS_LINK, "");
+      
+    });
 
     // const ChangeStatus = (Specimen: Specimen) => {
 

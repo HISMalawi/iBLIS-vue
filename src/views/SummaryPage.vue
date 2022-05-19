@@ -160,6 +160,7 @@ import GetActivitySummary from "@/composables/getActivitySummary";
 import { useRouter } from "vue-router";
 import { format, parseISO } from "date-fns";
 import DateModalToolBar from "@/components/DateModalToolBar.vue";
+import { MutationTypes, useStore } from "@/store";
 
 export default defineComponent({
   name: "SummaryPage",
@@ -181,6 +182,9 @@ export default defineComponent({
     DateModalToolBar,
   },
   setup() {
+
+    const store = useStore();
+
     const router = useRouter();
 
     const startDateModal = ref<boolean>(false);
@@ -210,7 +214,7 @@ export default defineComponent({
     fetchSummary(fromDate.value, toDate.value);
 
     const NavigateToPendingOrders = () => {
-      router.push({ name: "PendingOrders", replace: true });
+      router.push({ name: "PendingOrders", replace: true, state: { fromSummary: true }});
     };
 
     const NavigateToRejectedOrders = () => {
@@ -224,6 +228,12 @@ export default defineComponent({
     const OpenStartDateModal = (b: boolean) => {
       if (!b) {
         fetchSummary(fromDate.value, toDate.value);
+
+        store.commit(MutationTypes.SET_FROM_DATE, fromDate.value);
+
+        store.commit(MutationTypes.SET_TO_DATE, toDate.value);
+
+        store.commit(MutationTypes.SET_PREVIOUS_LINK, "/summary");
       }
 
       startDateModal.value = b;
@@ -232,6 +242,12 @@ export default defineComponent({
     const OpenEndDateModal = (b: boolean) => {
       if (!b) {
         fetchSummary(fromDate.value, toDate.value);
+
+        store.commit(MutationTypes.SET_FROM_DATE, fromDate.value);
+
+        store.commit(MutationTypes.SET_TO_DATE, toDate.value);
+
+        store.commit(MutationTypes.SET_PREVIOUS_LINK, "/summary");
       }
 
       endDateModal.value = b;
@@ -239,6 +255,12 @@ export default defineComponent({
 
     const CloseDateModals = () => {
       fetchSummary(fromDate.value, toDate.value);
+
+      store.commit(MutationTypes.SET_FROM_DATE, fromDate.value);
+
+      store.commit(MutationTypes.SET_TO_DATE, toDate.value);
+
+      store.commit(MutationTypes.SET_PREVIOUS_LINK, "/summary");
 
       startDateModal.value = false;
 
