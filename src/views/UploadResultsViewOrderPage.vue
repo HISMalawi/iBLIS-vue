@@ -263,6 +263,20 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
+    const now = new Date()
+      .toISOString()
+      .replace(/T/, " ") // replace T with a space
+      .replace(/\..+/, "")
+      .substring(0, 10);
+
+    const fromDate = ref<string>("");
+
+    const toDate = ref<string>("");
+
+    fromDate.value = now;
+
+    toDate.value = now;
+
     const MeasuresToUpdate = ref<Measure[]>([]);
     const MeasuresToCheckForUpdate = ref<Measure[]>([]);
 
@@ -281,7 +295,7 @@ export default defineComponent({
 
     const { Results, fetchTestResults } = GetTestsResults();
 
-    fetchOrders(parseInt(store.getters.selectedPatient.patient_number));
+    fetchOrders(parseInt(store.getters.selectedPatient.patient_number),fromDate.value, toDate.value);
 
     fetchTestResults(TestWithResults.value);
 
@@ -329,7 +343,7 @@ export default defineComponent({
       if (MeasuresToUpdate.value.length > 0) {
         upload(MeasuresToUpdate.value);
 
-        fetchOrders(parseInt(store.getters.selectedPatient.patient_number));
+        fetchOrders(parseInt(store.getters.selectedPatient.patient_number),fromDate.value, toDate.value);
 
         fetchTestResults(TestWithResults.value);
       }
@@ -348,7 +362,7 @@ export default defineComponent({
         if (index + 1 == MeasuresToCheckForUpdate.value.length) {
           upload(MeasuresToCheckForUpdate.value);
 
-          fetchOrders(parseInt(store.getters.selectedPatient.patient_number));
+          fetchOrders(parseInt(store.getters.selectedPatient.patient_number),fromDate.value, toDate.value);
 
           fetchTestResults(TestWithResults.value);
         }

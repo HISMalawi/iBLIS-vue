@@ -255,7 +255,7 @@ export default defineComponent({
       endDateModal.value = false;
     };
 
-    fetchOrders(parseInt(store.getters.selectedPatient.patient_number));
+    fetchOrders(parseInt(store.getters.selectedPatient.patient_number),fromDate.value, toDate.value);
 
     fetchSpecimenTypes();
 

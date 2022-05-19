@@ -159,7 +159,7 @@ import {
   IonCard,
   IonCardContent,
 } from "@ionic/vue";
-import { defineComponent} from "vue";
+import { defineComponent, ref} from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import ViewResultsViewOrderFooter from "@/components/ViewResultsViewOrderFooter.vue";
@@ -185,6 +185,20 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
+    const now = new Date()
+      .toISOString()
+      .replace(/T/, " ") // replace T with a space
+      .replace(/\..+/, "")
+      .substring(0, 10);
+
+    const fromDate = ref<string>("");
+
+    const toDate = ref<string>("");
+
+    fromDate.value = now;
+
+    toDate.value = now;
+
     const Patient: Patient = store.getters.selectedPatient;
 
     const Specimen: Specimen = store.getters.selectedSpecimen;
@@ -193,7 +207,7 @@ export default defineComponent({
 
     const { Results, fetchTestResults } = GetTestsResults();
 
-    fetchOrders(parseInt(store.getters.selectedPatient.patient_number));
+    fetchOrders(parseInt(store.getters.selectedPatient.patient_number),fromDate.value, toDate.value);
 
     fetchTestResults(TestWithResults.value);
 

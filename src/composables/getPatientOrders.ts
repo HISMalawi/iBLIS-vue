@@ -23,11 +23,13 @@ const getPatientOrders = () => {
   const message = ref<string>("");
   const code = ref<string>("");
 
-  const fetchOrders = (patient_id: number) => {
+  const fetchOrders = (patient_id: number, fromDate: string, toDate : string) => {
     axios.value
       .post("/patient/orders", {
         token: token.value,
         patient_id: patient_id,
+        from: fromDate,
+        to: toDate,
       })
       .then(function (response: any) {
         if (response.statusText === "OK") {
