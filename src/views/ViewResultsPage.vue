@@ -84,7 +84,7 @@
             <ion-col size="3">
               <ion-item class="cus-select test-select">
                 <ion-label>Test (s)</ion-label>
-                <ion-select :multiple="true">
+                <ion-select v-model="selectedTests" :multiple="true">
                   <ion-select-option
                     :value="test"
                     v-for="test in TestsSp"
@@ -136,6 +136,8 @@
             </ion-col>
           </ion-row>
         </ion-grid>
+
+
       </div>
     </ion-content>
 
@@ -171,6 +173,7 @@ import { format, parseISO } from "date-fns";
 import GetSpecimenTypes from "@/composables/getSpecimenTypes";
 import { SpecimenType } from "@/interfaces/SpecimenType";
 import GetTestsBySpecimenTypeID from "@/composables/getTestsBySpecimenTypeID";
+import { Test } from "@/interfaces/Test";
 
 export default defineComponent({
   name: "ViewResultsPage",
@@ -198,6 +201,8 @@ export default defineComponent({
     const router = useRouter();
 
     const selectedSpecimen = ref<SpecimenType>({} as SpecimenType);
+
+    const selectedTests = ref<Test[]>([]);
 
     const startDateModal = ref<boolean>(false);
     const endDateModal = ref<boolean>(false);
@@ -274,12 +279,14 @@ export default defineComponent({
           Object.keys(selectedSpecimen.value).length > 0 
         ) {
           TestsSp.value.length = 0;
+          selectedTests.value = [];
           fetchTests(selectedSpecimen.value.id);
         }
       }
     );
 
     return {
+      selectedTests,
       TestsSp,
       selectedSpecimen,
       startDateModal,
