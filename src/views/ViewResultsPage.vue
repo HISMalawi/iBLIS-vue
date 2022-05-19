@@ -52,6 +52,7 @@
                   v-model="fromDate"
                   :placeholder="fromDate"
                   @click="OpenStartDateModal(true)"
+                  readonly
                 ></ion-input>
               </ion-item>
             </ion-col>
@@ -63,6 +64,7 @@
                   v-model="toDate"
                   :placeholder="toDate"
                   @click="OpenEndDateModal(true)"
+                  readonly
                 ></ion-input>
               </ion-item>
             </ion-col>
