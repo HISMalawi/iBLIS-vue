@@ -15,6 +15,7 @@ import ViewResultsPage from '@/views/ViewResultsPage.vue'
 import ViewResultsViewOrderPage from '@/views/ViewResultsViewOrderPage.vue'
 import UploadResultsViewOrderPage from '@/views/UploadResultsViewOrderPage.vue'
 import UploadResultsPage from '@/views/UploadResultsPage.vue'
+import RejectedOrdersPage from '@/views/RejectedOrdersPage.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -45,6 +46,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/pending_orders',
     name: 'PendingOrders',
     component: PendingOrdersPage
+  },
+  {
+    path: '/rejected_orders',
+    name: 'RejectedOrders',
+    component: RejectedOrdersPage
   },
   {
     path: '/configurations',
