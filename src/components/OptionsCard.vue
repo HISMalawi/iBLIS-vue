@@ -103,9 +103,10 @@ export default defineComponent({
 <style scoped>
 .opt-card {
   flex: 1;
-  min-width: 160px;
-  max-width: 360px; 
+  min-width: 300px;
+  max-width: 335px; 
   margin-top: 0px;
+  margin-bottom: 15px;
 }
 
 .opt-content {
@@ -118,15 +119,4 @@ export default defineComponent({
   align-items: center;
 }
 
-@media screen and (max-width: 1138px) and (max-height: 712px) {
-  .opt-card {
-    min-width: 300px;
-  }
-}
-
-@media screen and (max-width: 712px) and (max-height: 1138px) {
-  .opt-card {
-    min-width: 300px;
-  }
-}
 </style>

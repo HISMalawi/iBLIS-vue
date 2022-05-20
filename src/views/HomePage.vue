@@ -42,12 +42,29 @@
           />
 
           <options-card
-            class="last-option"
             @OpenView="Navigate"
             btnTitle="Configurations"
             icon="configurations"
             CusClass="card-4-violet"
           />
+
+          <options-card
+            class="item-empty"
+            @OpenView="Navigate"
+            btnTitle="Configurations"
+            icon="configurations"
+            CusClass="card-4-violet"
+          />
+
+          <options-card
+            class="item-empty"
+            @OpenView="Navigate"
+            btnTitle="Configurations"
+            icon="configurations"
+            CusClass="card-4-violet"
+          />
+
+
         </div>
       </div>
     </ion-content>
@@ -70,7 +87,7 @@ import ToolBar from "@/components/ToolBar.vue";
 import AppFooter from "@/components/AppFooter.vue";
 import OptionsCard from "@/components/OptionsCard.vue";
 import { useStore } from "@/store";
-import { Plugins } from '@capacitor/core';
+import { Plugins } from "@capacitor/core";
 const { App } = Plugins;
 
 export default defineComponent({
@@ -164,19 +181,12 @@ export default defineComponent({
 
     useBackButton(5, () => {
       if (router.currentRoute.value.name == "Home") {
-
         AlertExitApp();
-
-      } else if(router.currentRoute.value.name == "Login"){
-        
+      } else if (router.currentRoute.value.name == "Login") {
         App.exitApp();
-
       } else {
-
         router.push({ name: "Home", replace: true });
-
       }
-      
     });
 
     return { Navigate };
@@ -192,20 +202,8 @@ export default defineComponent({
   justify-content: center;
 }
 
-@media screen and (max-width: 1138px) and (max-height: 712px) {
-  .last-option {
-    margin-right: auto;
-    order: 5;
-  }
-}
-
-@media screen and (max-width: 712px) and (max-height: 1138px) {
-  .last-option {
-    margin-right: auto;
-    max-width: 335px;
-    min-width: 300px;
-    order: 5;
-  }
+.item-empty {
+  visibility: hidden;
 }
 
 #container {
