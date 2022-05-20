@@ -233,6 +233,7 @@ import { SearchClient } from "@/interfaces/SearchClient";
 import AddPatient from "@/composables/addPatient";
 import { Patient } from "@/interfaces/Patient";
 import { useRouter } from "vue-router";
+import Utils from "@/composables/utils";
 
 export default defineComponent({
   name: "RegisterPage",
@@ -257,6 +258,8 @@ export default defineComponent({
 
     const { save } = AddPatient();
 
+    const { CapitalizeAllFirstLetters } = Utils();
+
     const numberOfPages = ref<number>(4);
     const currentPage = ref<number>(1);
 
@@ -274,8 +277,8 @@ export default defineComponent({
     const client = ref<SearchClient>({} as SearchClient);
 
     if (store.getters.previousLink == "/search") {
-      client.value.first_name = store.getters.searchClient.first_name;
-      client.value.last_name = store.getters.searchClient.last_name;
+      client.value.first_name = CapitalizeAllFirstLetters(store.getters.searchClient.first_name);
+      client.value.last_name = CapitalizeAllFirstLetters(store.getters.searchClient.last_name);
 
       if (store.getters.searchClient.gender == "Female") {
         client.value.gender = "1";
@@ -285,18 +288,18 @@ export default defineComponent({
     }
 
     const RegisterClient = () => {
+
+      patient.firstname = CapitalizeAllFirstLetters(patient.firstname);
+
+      patient.lastname= CapitalizeAllFirstLetters(patient.lastname);
+
       save(patient);
-      // search(
-      //   client.value.first_name + " " + client.value.last_name,
-      //   client.value.gender
-      // );
-      // MoveNextField();
     };
 
     const MoveNextField = () => {
       if (currentPage.value == 5) {
-        patient.firstname = client.value.first_name.trim();
-        patient.lastname = client.value.last_name.trim();
+        patient.firstname = CapitalizeAllFirstLetters(client.value.first_name.trim());
+        patient.lastname = CapitalizeAllFirstLetters(client.value.last_name.trim());
         patient.gender = client.value.gender;
       }
       currentPage.value = currentPage.value + 1;
