@@ -1,6 +1,12 @@
 <template>
   <ion-page>
     <ion-content :fullscreen="true">
+      <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+        <ion-fab-button color="light">
+          <ion-icon :icon="settingsOutline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+
       <div id="container">
         <div id="flex-container">
           <ion-card class="login-card">
@@ -19,18 +25,18 @@
                     <ion-label position="floating">Username</ion-label>
                     <ion-input v-model="authCred.username"></ion-input>
                   </ion-item>
-
                 </ion-col>
               </ion-row>
 
               <ion-row>
                 <ion-col>
-
                   <ion-item>
                     <ion-label position="floating">Password</ion-label>
-                    <ion-input type="password" v-model="authCred.password"></ion-input>
+                    <ion-input
+                      type="password"
+                      v-model="authCred.password"
+                    ></ion-input>
                   </ion-item>
-                  
                 </ion-col>
               </ion-row>
               <ion-row>
@@ -38,7 +44,12 @@
                   <ion-item>
                     <ion-label>Ward / Location</ion-label>
                     <ion-select v-model="selectedWard">
-                      <ion-select-option :value="ward" v-for="ward in Wards" :key="ward.id">{{ ward.name }}</ion-select-option>
+                      <ion-select-option
+                        :value="ward"
+                        v-for="ward in Wards"
+                        :key="ward.id"
+                        >{{ ward.name }}</ion-select-option
+                      >
                     </ion-select>
                   </ion-item>
                 </ion-col>
@@ -74,7 +85,10 @@ import {
   IonInput,
   IonButton,
   IonSelect,
-  IonSelectOption
+  IonSelectOption,
+  IonFab,
+  IonFabButton,
+  IonIcon,
 } from "@ionic/vue";
 import { defineComponent, reactive, ref, watch, watchEffect } from "vue";
 import { AuthRequest } from "@/interfaces/AuthRequest";
@@ -83,6 +97,7 @@ import { useStore } from "@/store";
 import Authenticate from "@/composables/authenticate";
 import GetAllWards from "@/composables/getAllWards";
 import { Ward } from "@/interfaces/Ward";
+import { settingsOutline } from "ionicons/icons";
 
 export default defineComponent({
   name: "LoginPage",
@@ -98,7 +113,10 @@ export default defineComponent({
     IonInput,
     IonButton,
     IonSelect,
-    IonSelectOption
+    IonSelectOption,
+    IonFab,
+    IonFabButton,
+    IonIcon,
   },
   setup() {
     const store = useStore();
@@ -134,7 +152,7 @@ export default defineComponent({
 
     watchEffect(() => {
       if (store.getters.isLoggedIn) {
-        router.push({ name: 'Home', replace: true })
+        router.push({ name: "Home", replace: true });
       }
     });
 
@@ -159,7 +177,7 @@ export default defineComponent({
       }
     );
 
-    return { authCred, Signin, message, Wards, selectedWard };
+    return { authCred, Signin, message, Wards, selectedWard, settingsOutline };
   },
 });
 </script>
@@ -201,6 +219,4 @@ ion-content {
 .error-msgs-label {
   color: rgb(201, 19, 19);
 }
-
-
 </style>
