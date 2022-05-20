@@ -216,11 +216,11 @@ export default defineComponent({
     fetchSummary(fromDate.value, toDate.value);
 
     const NavigateToPendingOrders = () => {
-      router.push({ name: "PendingOrders", replace: true, state: { fromSummary: true }});
+      router.push({ name: "PendingOrders", replace: true });
     };
 
     const NavigateToRejectedOrders = () => {
-      // router.push({ name: "Home", replace: true });
+      router.push({ name: "RejectedOrders", replace: true });
     };
 
     const formatDate = (value: string) => {

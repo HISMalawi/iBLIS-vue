@@ -33,6 +33,14 @@
             icon="pending"
             CusClass="card-4-orange"
           />
+
+          <options-card
+            @OpenView="Navigate"
+            btnTitle="Rejected Orders"
+            icon="rejected"
+            CusClass="card-4-gray"
+          />
+
           <options-card
             class="last-option"
             @OpenView="Navigate"
@@ -103,6 +111,13 @@ export default defineComponent({
 
           router.push("/pending_orders");
           break;
+
+        case "Rejected Orders":
+          // code block
+
+          router.push("/rejected_orders");
+          break;
+
         case "Configurations":
           // code block
 

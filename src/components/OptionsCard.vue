@@ -48,6 +48,12 @@
           />
 
           <img
+            v-if="icon == 'rejected'"
+            class="opt-img"
+            src="../assets/rejected-icon.png"
+          />
+
+          <img
             v-if="icon == 'configurations'"
             class="opt-img"
             src="../assets/configurations-icon.png"
