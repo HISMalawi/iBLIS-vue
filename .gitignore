@@ -50,6 +50,8 @@ typings/
 # Optional npm cache directory
 .npm
 
+android/
+
 # Optional eslint cache
 .eslintcache
 
