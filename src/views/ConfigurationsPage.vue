@@ -6,7 +6,15 @@
       <collapse-tool-bar pageTitle="iBLIS | Configurations" />
 
       <div id="container">
-        <div id="flex-container"></div>
+        <ion-card>
+          <ion-item>
+            <ion-icon :icon="serverOutline" slot="start"></ion-icon>
+            <ion-label position="floating"> Server Address </ion-label>
+            <ion-input
+              placeholder="Server Address"
+            ></ion-input>
+          </ion-item>
+        </ion-card>
       </div>
     </ion-content>
 
@@ -15,13 +23,20 @@
 </template>
 
 <script lang="ts">
-import { IonContent, IonPage } from "@ionic/vue";
-import { defineComponent, watchEffect } from "vue";
+import {
+  IonContent,
+  IonPage,
+  IonCard,
+  IonItem,
+  IonLabel,
+  IonIcon,
+  IonInput
+} from "@ionic/vue";
+import { defineComponent } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import AppFooter from "@/components/AppFooter.vue";
-import { useRouter } from "vue-router";
-import { useStore } from "@/store";
+import { serverOutline} from "ionicons/icons";
 
 export default defineComponent({
   name: "ConfigurationsPage",
@@ -31,31 +46,19 @@ export default defineComponent({
     ToolBar,
     CollapseToolBar,
     AppFooter,
+    IonCard,
+    IonItem,
+    IonLabel,
+    IonIcon,
+    IonInput
   },
   setup() {
-    const store = useStore();
-
-    const router = useRouter();
-
-    watchEffect(() => {
-      if (!store.getters.isLoggedIn) {
-        router.push({ name: "Login", replace: true });
-      }
-    });
-
-    return {};
+    return { serverOutline };
   },
 });
 </script>
 
 <style scoped>
-#flex-container {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
 #container {
   padding-top: 15px;
 }

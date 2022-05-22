@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <tool-bar pageTitle="iBLIS" />
+    <tool-bar pageTitle="iBLIS" v-if="$store.state.loggedIn" />
 
     <ion-content :fullscreen="true">
       <collapse-tool-bar pageTitle="iBLIS" />
@@ -69,7 +69,7 @@
       </div>
     </ion-content>
 
-    <app-footer />
+    <app-footer v-if="$store.state.loggedIn"/>
   </ion-page>
 </template>
 

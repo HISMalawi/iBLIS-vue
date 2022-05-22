@@ -2,7 +2,7 @@
   <ion-page>
     <ion-content :fullscreen="true">
       <ion-fab vertical="bottom" horizontal="start" slot="fixed">
-        <ion-fab-button color="light">
+        <ion-fab-button color="light" @click="NavigateToConfigurations">
           <ion-icon :icon="settingsOutline"></ion-icon>
         </ion-fab-button>
       </ion-fab>
@@ -150,6 +150,11 @@ export default defineComponent({
       }
     };
 
+    const NavigateToConfigurations = () => {
+      router.push({ name: "Configurations", replace: true });
+    };
+
+
     watchEffect(() => {
       if (store.getters.isLoggedIn) {
         router.push({ name: "Home", replace: true });
@@ -177,7 +182,7 @@ export default defineComponent({
       }
     );
 
-    return { authCred, Signin, message, Wards, selectedWard, settingsOutline };
+    return { authCred, Signin, message, Wards, selectedWard, settingsOutline , NavigateToConfigurations};
   },
 });
 </script>

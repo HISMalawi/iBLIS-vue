@@ -5,7 +5,7 @@
         <ion-back-button :default-href="defaltBackButtonLink"></ion-back-button>
       </ion-buttons>
       <ion-title>{{ pageTitle }}</ion-title>
-      <ion-buttons slot="secondary">
+      <ion-buttons slot="secondary" v-if="$store.state.loggedIn">
         <ion-button>
           <ion-icon slot="icon-only" :icon="mailOutline"></ion-icon>
         </ion-button>
