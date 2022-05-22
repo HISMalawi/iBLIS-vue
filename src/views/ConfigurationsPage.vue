@@ -6,7 +6,7 @@
       <collapse-tool-bar pageTitle="iBLIS | Configurations" />
 
       <div id="container">
-        <ion-card>
+        <ion-card v-if="!$store.state.loggedIn">
           <ion-item>
             <ion-icon :icon="serverOutline" slot="start"></ion-icon>
             <ion-label position="floating"> Server Address </ion-label>
