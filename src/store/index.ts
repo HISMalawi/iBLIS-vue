@@ -96,6 +96,7 @@ const state: State = {
 
 export enum MutationTypes {
   SET_LOCK_TIMEOUT = "SETTING_LOCK_TIMEOUT",
+  SET_AXIOS = "SETTING_AXIOS",
   SET_PATIENT_FILTER = "SETTING_PATIENT_FILTER",
   SET_RESULTS_FILTER = "SETTING_RESULTS_FILTER",
   SET_FROM_DATE = "SETTING_FROM_DATE",
@@ -125,6 +126,7 @@ export enum MutationTypes {
 
 export enum ActionTypes {
   SET_LOCK_TIMEOUT = "SETTING_LOCK_TIMEOUT",
+  SET_AXIOS = "SETTING_AXIOS",
   SET_PATIENT_FILTER = "SETTING_PATIENT_FILTER",
   SET_RESULTS_FILTER = "SETTING_RESULTS_FILTER",
   SET_FROM_DATE = "SETTING_FROM_DATE",
@@ -154,6 +156,7 @@ export enum ActionTypes {
 
 export type Mutations<S = State> = {
   [MutationTypes.SET_LOCK_TIMEOUT](state: S, payload: number): void;
+  [MutationTypes.SET_AXIOS](state: S, payload: Axios): void;
   [MutationTypes.SET_PATIENT_FILTER](state: S, payload: string): void;
   [MutationTypes.SET_RESULTS_FILTER](state: S, payload: string): void;
   [MutationTypes.SET_FROM_DATE](state: S, payload: string): void;
@@ -184,6 +187,9 @@ export type Mutations<S = State> = {
 const mutations: MutationTree<State> & Mutations = {
   [MutationTypes.SET_LOCK_TIMEOUT](state: State, payload: number) {
     state.lockTimeOut = payload * 1000;
+  },
+  [MutationTypes.SET_AXIOS](state: State, payload: Axios) {
+    state.axios = payload;
   },
   [MutationTypes.SET_PATIENT_FILTER](state: State, payload: string) {
     state.patientFilter = payload;

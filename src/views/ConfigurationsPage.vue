@@ -12,6 +12,7 @@
             <ion-label position="floating"> Server Address </ion-label>
             <ion-input
               placeholder="Server Address"
+              v-model="serverAddress"
             ></ion-input>
           </ion-item>
         </ion-card>
@@ -30,13 +31,14 @@ import {
   IonItem,
   IonLabel,
   IonIcon,
-  IonInput
+  IonInput,
 } from "@ionic/vue";
-import { defineComponent } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import AppFooter from "@/components/AppFooter.vue";
-import { serverOutline} from "ionicons/icons";
+import { serverOutline } from "ionicons/icons";
+import Utils from "@/composables/utils";
 
 export default defineComponent({
   name: "ConfigurationsPage",
@@ -50,10 +52,27 @@ export default defineComponent({
     IonItem,
     IonLabel,
     IonIcon,
-    IonInput
+    IonInput,
   },
   setup() {
-    return { serverOutline };
+    const serverAddress = ref<string | null>("");
+
+    const { GetServerAddress, SetServerAddress } = Utils();
+
+    GetServerAddress().then((address) => {
+      serverAddress.value = address;
+    });
+
+    watch(
+      () => [serverAddress.value],
+      () => {
+       
+          SetServerAddress(serverAddress.value);
+        
+      }
+    );
+
+    return { serverOutline, serverAddress };
   },
 });
 </script>
