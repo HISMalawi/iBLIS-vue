@@ -1,9 +1,9 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router';
-import { store } from './store'
-
+import { store } from './store';
 import { IonicVue } from '@ionic/vue';
+import print from '@/plugins/vue3-print-nb';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/vue/css/core.css';
@@ -28,7 +28,8 @@ import './theme/custom.css';
 const app = createApp(App)
   .use(IonicVue)
   .use(store)
-  .use(router);
+  .use(router)
+  .use(print);
   
 router.isReady().then(() => {
   app.mount('#app');

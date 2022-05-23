@@ -1,0 +1,55 @@
+{
+  "_from": "vue3-print-nb",
+  "_id": "vue3-print-nb@0.1.4",
+  "_inBundle": false,
+  "_integrity": "sha512-LExI7viEzplR6ZKQ2b+V4U0cwGYbVD4fut/XHvk3UPGlT5CcvIGs6VlwGp107aKgk6P8Pgx4rco3Rehv2lti3A==",
+  "_location": "/vue3-print-nb",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "vue3-print-nb",
+    "name": "vue3-print-nb",
+    "escapedName": "vue3-print-nb",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/vue3-print-nb/-/vue3-print-nb-0.1.4.tgz",
+  "_shasum": "11ee3ef8857c34b403fb782da722e82ab7e20952",
+  "_spec": "vue3-print-nb",
+  "_where": "/var/www/iblis_reception_vue",
+  "bundleDependencies": false,
+  "dependencies": {
+    "vue": "^3.0.5"
+  },
+  "deprecated": false,
+  "description": "This is a directive wrapper for printed, Simple, fast, convenient, light.\r <!-- TOC -->",
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^1.2.2",
+    "@vue/compiler-sfc": "^3.0.5",
+    "vite": "^2.3.0"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/vue3-print-nb.es.js",
+      "require": "./dist/vue3-print-nb.umd.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/vue3-print-nb.umd.js",
+  "module": "./dist/vue3-print-nb.es.js",
+  "name": "vue3-print-nb",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite",
+    "serve": "vite preview"
+  },
+  "version": "0.1.4"
+}

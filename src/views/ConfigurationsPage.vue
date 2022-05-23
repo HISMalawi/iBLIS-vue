@@ -11,7 +11,7 @@
             <ion-icon :icon="serverOutline" slot="start"></ion-icon>
             <ion-label position="floating"> Server Address </ion-label>
             <ion-input
-              placeholder="Server Address"
+              placeholder="http://0.0.0.0:3001/"
               v-model="serverAddress"
             ></ion-input>
           </ion-item>

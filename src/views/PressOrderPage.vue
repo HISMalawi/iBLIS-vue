@@ -77,49 +77,48 @@
                   </ion-list-header>
 
                   <ion-list>
-                <ion-radio-group v-model="selectedTestReason">
-                  <ion-item>
-                    <ion-label>Routine</ion-label>
-                    <ion-radio
-                      value="Routine"
-                      :disabled="disableReason"
-                    ></ion-radio>
-                  </ion-item>
-                  <ion-item>
-                    <ion-label>Targeted</ion-label>
-                    <ion-radio
-                      value="Targeted"
-                      :disabled="disableReason"
-                    ></ion-radio>
-                  </ion-item>
-                  <ion-item>
-                    <ion-label>Confirmatory</ion-label>
-                    <ion-radio
-                      value="Confirmatory"
-                      :disabled="disableReason"
-                    ></ion-radio>
-                  </ion-item>
-                  <ion-item>
-                    <ion-label>Start</ion-label>
-                    <ion-radio
-                      value="Start"
-                      :disabled="disableReason"
-                    ></ion-radio>
-                  </ion-item>
-                  <ion-item>
-                    <ion-label>Repeat / Missing</ion-label>
-                    <ion-radio
-                      value="Repeat"
-                      :disabled="disableReason"
-                    ></ion-radio>
-                  </ion-item>
-                </ion-radio-group>
-              </ion-list>
+                    <ion-radio-group v-model="selectedTestReason">
+                      <ion-item>
+                        <ion-label>Routine</ion-label>
+                        <ion-radio
+                          value="Routine"
+                          :disabled="disableReason"
+                        ></ion-radio>
+                      </ion-item>
+                      <ion-item>
+                        <ion-label>Targeted</ion-label>
+                        <ion-radio
+                          value="Targeted"
+                          :disabled="disableReason"
+                        ></ion-radio>
+                      </ion-item>
+                      <ion-item>
+                        <ion-label>Confirmatory</ion-label>
+                        <ion-radio
+                          value="Confirmatory"
+                          :disabled="disableReason"
+                        ></ion-radio>
+                      </ion-item>
+                      <ion-item>
+                        <ion-label>Start</ion-label>
+                        <ion-radio
+                          value="Start"
+                          :disabled="disableReason"
+                        ></ion-radio>
+                      </ion-item>
+                      <ion-item>
+                        <ion-label>Repeat / Missing</ion-label>
+                        <ion-radio
+                          value="Repeat"
+                          :disabled="disableReason"
+                        ></ion-radio>
+                      </ion-item>
+                    </ion-radio-group>
+                  </ion-list>
                 </ion-col>
               </ion-row>
             </ion-col>
           </ion-row>
-
         </ion-grid>
       </div>
     </ion-content>
@@ -156,7 +155,14 @@ import {
   IonSearchbar,
   IonChip,
 } from "@ionic/vue";
-import { computed, defineComponent, reactive, ref, watch, watchEffect } from "vue";
+import {
+  computed,
+  defineComponent,
+  reactive,
+  ref,
+  watch,
+  watchEffect,
+} from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import PressOrderFooter from "@/components/PressOrderFooter.vue";
@@ -170,6 +176,8 @@ import CreateOrder from "@/composables/createOrder";
 import { Order } from "@/interfaces/Order";
 import GetVisitTypes from "@/composables/getVisitTypes";
 import router from "@/router";
+import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
+// import { saveAs } from "file-saver";
 // import { el } from "date-fns/locale";
 
 export default defineComponent({
@@ -202,7 +210,7 @@ export default defineComponent({
 
     const searchSpecimen = ref<string>("");
 
-    const { save, accessionNumber } = CreateOrder();
+    const { save, accessionNumber, zpl } = CreateOrder();
 
     const disableNext = ref<boolean>(true);
 
@@ -278,16 +286,14 @@ export default defineComponent({
       () => [currentPage.value],
       () => {
         if (currentPage.value == 1) {
-
           selectedTests.value.length = 0;
           selectedTestReason.value = "";
           disableReason.value = true;
 
-          TestsSp.value.forEach(test => {
+          TestsSp.value.forEach((test) => {
             test.isChecked = false;
           });
-
-        } 
+        }
       }
     );
 
@@ -329,28 +335,25 @@ export default defineComponent({
       }
     );
 
-
     const PlaceOrder = () => {
-      
       disablePlaceOrder.value = true;
 
       const orders: Order[] = [];
 
       let order: Order = {
-          visit_type: visitTypes.value[0],
-          requesting_location: store.getters.selectedWard,
-          requesting_physician: "Requesting Physician",
-          specimen_type_id: selectedSpecimen.value.id,
-          tests: selectedTests.value,
-          patient: store.getters.selectedPatient,
-          reason: selectedTestReason.value,
-          user: store.getters.user,
-        };
+        visit_type: visitTypes.value[0],
+        requesting_location: store.getters.selectedWard,
+        requesting_physician: "Requesting Physician",
+        specimen_type_id: selectedSpecimen.value.id,
+        tests: selectedTests.value,
+        patient: store.getters.selectedPatient,
+        reason: selectedTestReason.value,
+        user: store.getters.user,
+      };
 
       orders.push(order);
 
       Upload(orders);
-
     };
 
     const Upload = (orders: Order[]) => {
@@ -367,7 +370,6 @@ export default defineComponent({
       watch(
         () => [accessionNumber.value],
         () => {
-
           if (index !== orders.length) {
             save(orders[index]);
 
@@ -390,6 +392,46 @@ export default defineComponent({
       if (!store.getters.isLoggedIn) {
         router.push({ name: "Login", replace: true });
       }
+    });
+
+    const download = async () => {
+      let blob = new Blob([zpl.value], { type: "text/lbl;charset=utf-8" });
+      // Convert photo to base64 format, required by Filesystem API to save
+      const base64Data = await readAsBase64(blob);
+
+      const fileName = `${accessionNumber.value}.lbl`;
+
+      const writeFile = async () => {
+        await Filesystem.writeFile({
+          path: fileName,
+          data: base64Data,
+          directory: Directory.Documents,
+          encoding: Encoding.UTF8,
+        });
+      };
+
+      writeFile().then(() =>
+      {
+        console.log("Print Label");
+      })
+    };
+
+    const readAsBase64 = async (blob: Blob) => {
+      return (await convertBlobToBase64(blob)) as string;
+    };
+
+    const convertBlobToBase64 = (blob: Blob) =>
+      new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = reject;
+        reader.onload = () => {
+          resolve(reader.result);
+        };
+        reader.readAsDataURL(blob);
+      });
+
+    watch(zpl, () => {
+      download();
     });
 
     return {
@@ -430,12 +472,9 @@ ion-chip {
   padding-right: 0px;
 }
 
-
 .custom-aside-list {
   height: 100vh;
   padding-bottom: 120px;
   overflow-y: scroll;
 }
-
-
 </style>
