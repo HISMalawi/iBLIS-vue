@@ -85,6 +85,23 @@
             icon="upload-results"
             CusClass="card-4-violet"
           />
+
+          <options-card
+            class="item-empty"
+            @OpenView="Navigate"
+            btnTitle="Configurations"
+            icon="configurations"
+            CusClass="card-4-violet"
+          />
+
+          <options-card
+            class="item-empty"
+            @OpenView="Navigate"
+            btnTitle="Configurations"
+            icon="configurations"
+            CusClass="card-4-violet"
+          />
+
         </div>
       </div>
     </ion-content>
@@ -182,24 +199,11 @@ export default defineComponent({
   justify-content: center;
 }
 
-@media screen and (max-width: 1138px) and (max-height: 712px) {
-  .last-option {
-    margin-right: auto;
-    order: 3;
-  }
-}
-
-@media screen and (max-width: 712px) and (max-height: 1138px) {
-  .last-option {
-    margin-right: auto;
-    max-width: 335px;
-    min-width: 300px;
-    order: 3;
-  }
-}
-
 ion-content {
   --ion-background-color: #eee;
+}
+.item-empty {
+  visibility: hidden;
 }
 
 .client-info-card {
