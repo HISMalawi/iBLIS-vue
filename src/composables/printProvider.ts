@@ -1,9 +1,9 @@
-import { BluetoothSerial } from "@awesome-cordova-plugins/bluetooth-serial/ngx";
+import { BluetoothSerial } from "@awesome-cordova-plugins/bluetooth-serial";
 import { reactive } from "vue";
 import { alertController } from "@ionic/vue";
 
 const printProvider = () => {
-  const btSerial: BluetoothSerial = reactive({} as BluetoothSerial);
+  const btSerial = BluetoothSerial;
 
   const searchPrinters = () => {
     return btSerial.list();
@@ -14,10 +14,10 @@ const printProvider = () => {
   };
 
   const printTestPage = (address: string) => {
-    let printData =
+    const printData =
       "iBLIS Print Test Page \n\n\n\n Hello ============================ \n\n\n";
 
-    let xyz = connectToPrinter(address).subscribe(
+    const xyz = connectToPrinter(address).subscribe(
       (data) => {
         btSerial.write(printData).then(
           (dataz) => {
@@ -26,7 +26,6 @@ const printProvider = () => {
             const AlertExitApp = () => {
               const presentAlert = async () => {
                 const alert = await alertController.create({
-                  cssClass: "order-status-alert",
                   header: "SUCCESS!",
                   message: "iBLIS is able to print",
                   buttons: [
@@ -51,7 +50,6 @@ const printProvider = () => {
             const AlertExitApp = () => {
               const presentAlert = async () => {
                 const alert = await alertController.create({
-                  cssClass: "order-status-alert",
                   header: "ERROR!",
                   message: "iBLIS is NOT able to print : " + errx,
                   buttons: [
