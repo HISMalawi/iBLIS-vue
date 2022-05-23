@@ -78,6 +78,7 @@
             <ion-col class="head-col"> Specimen </ion-col>
             <ion-col class="head-col"> Reason </ion-col>
             <ion-col class="head-col"> Date Ordered </ion-col>
+            <ion-col class="head-col"> Action </ion-col>
           </ion-row>
 
           <ion-row
@@ -113,6 +114,15 @@
                 ><ion-col>{{ getDateCollected(Specimen) }}</ion-col>
               </ion-row>
             </ion-col>
+
+            <ion-col>
+              <ion-button
+                color="primary"
+                size="small"
+                @click="PrintBarcode"
+                >Print</ion-button
+              >
+            </ion-col>
           </ion-row>
         </ion-grid>
       </div>
@@ -135,6 +145,7 @@ import {
   IonInput,
   IonModal,
   IonDatetime,
+  IonButton
 } from "@ionic/vue";
 import { defineComponent, ref, watchEffect } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
@@ -163,7 +174,8 @@ export default defineComponent({
     IonInput,
     IonModal,
     IonDatetime,
-    DateModalToolBar
+    DateModalToolBar,
+    IonButton
   },
   setup() {
     const store = useStore();
@@ -218,10 +230,10 @@ export default defineComponent({
     const OpenStartDateModal = (b: boolean) => {
       if (!b) {
         fetchOrders(
-      parseInt(store.getters.selectedPatient.patient_number),
-      fromDate.value,
-      toDate.value
-    );
+          parseInt(store.getters.selectedPatient.patient_number),
+          fromDate.value,
+          toDate.value
+        );
       }
 
       startDateModal.value = b;
@@ -230,10 +242,10 @@ export default defineComponent({
     const OpenEndDateModal = (b: boolean) => {
       if (!b) {
         fetchOrders(
-      parseInt(store.getters.selectedPatient.patient_number),
-      fromDate.value,
-      toDate.value
-    );
+          parseInt(store.getters.selectedPatient.patient_number),
+          fromDate.value,
+          toDate.value
+        );
       }
 
       endDateModal.value = b;
@@ -241,15 +253,21 @@ export default defineComponent({
 
     const CloseDateModals = () => {
       fetchOrders(
-      parseInt(store.getters.selectedPatient.patient_number),
-      fromDate.value,
-      toDate.value
-    );
+        parseInt(store.getters.selectedPatient.patient_number),
+        fromDate.value,
+        toDate.value
+      );
 
       startDateModal.value = false;
 
       endDateModal.value = false;
     };
+
+    const PrintBarcode = () => {
+
+      console.log("Print Barcode");
+
+    }
 
     watchEffect(() => {
       if (!store.getters.isLoggedIn) {
@@ -257,7 +275,21 @@ export default defineComponent({
       }
     });
 
-    return {CloseDateModals, OpenEndDateModal, OpenStartDateModal, formatDate, fromDate, toDate,startDateModal, endDateModal, Specimens, getDateCollected, Tests, ViewOrder };
+    return {
+      CloseDateModals,
+      OpenEndDateModal,
+      OpenStartDateModal,
+      formatDate,
+      fromDate,
+      toDate,
+      startDateModal,
+      endDateModal,
+      Specimens,
+      getDateCollected,
+      Tests,
+      ViewOrder,
+      PrintBarcode
+    };
   },
 });
 </script>
