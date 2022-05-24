@@ -92,7 +92,7 @@ export default defineComponent({
   setup() {
     const store = useStore();
 
-    const serverAddress = ref<string | null>("");
+    const serverAddress = ref<string>("");
 
     let defaultPrinter = ref<string>("");
 
@@ -104,13 +104,16 @@ export default defineComponent({
 
     const {
       searchPrinters,
-      connectToPrinter,
       testPrinterConnection,
       printers,
     } = PrintProvider();
 
     GetServerAddress().then((address) => {
-      serverAddress.value = address;
+
+      if (address !== null) {
+        serverAddress.value = address;
+      }
+
     });
 
     GetDefaultPrinter().then((printer)=>{
