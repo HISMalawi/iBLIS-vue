@@ -116,10 +116,7 @@
             </ion-col>
 
             <ion-col>
-              <ion-button
-                color="primary"
-                size="small"
-                @click="PrintBarcode"
+              <ion-button color="primary" size="small" @click="PrintBarcode"
                 >Print</ion-button
               >
             </ion-col>
@@ -145,7 +142,7 @@ import {
   IonInput,
   IonModal,
   IonDatetime,
-  IonButton
+  IonButton,
 } from "@ionic/vue";
 import { defineComponent, ref, watchEffect } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
@@ -175,7 +172,7 @@ export default defineComponent({
     IonModal,
     IonDatetime,
     DateModalToolBar,
-    IonButton
+    IonButton,
   },
   setup() {
     const store = useStore();
@@ -264,10 +261,8 @@ export default defineComponent({
     };
 
     const PrintBarcode = () => {
-
       console.log("Print Barcode");
-
-    }
+    };
 
     watchEffect(() => {
       if (!store.getters.isLoggedIn) {
@@ -288,7 +283,7 @@ export default defineComponent({
       getDateCollected,
       Tests,
       ViewOrder,
-      PrintBarcode
+      PrintBarcode,
     };
   },
 });

@@ -62,7 +62,7 @@ import {
   IonCol,
   IonButton,
 } from "@ionic/vue";
-import { defineComponent, reactive, ref, watch } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import AppFooter from "@/components/AppFooter.vue";
@@ -70,7 +70,6 @@ import { serverOutline, printOutline } from "ionicons/icons";
 import Utils from "@/composables/utils";
 import PrintProvider from "@/composables/printProvider";
 import { MutationTypes, useStore } from "@/store";
-import { Printer } from "@/interfaces/Printer";
 
 export default defineComponent({
   name: "ConfigurationsPage",

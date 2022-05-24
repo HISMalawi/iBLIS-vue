@@ -154,6 +154,7 @@ import {
   onIonViewDidLeave,
   IonSearchbar,
   IonChip,
+  alertController,
 } from "@ionic/vue";
 import {
   computed,
@@ -177,6 +178,7 @@ import { Order } from "@/interfaces/Order";
 import GetVisitTypes from "@/composables/getVisitTypes";
 import router from "@/router";
 import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
+import PrintProvider from "@/composables/printProvider";
 // import { saveAs } from "file-saver";
 // import { el } from "date-fns/locale";
 
@@ -211,6 +213,8 @@ export default defineComponent({
     const searchSpecimen = ref<string>("");
 
     const { save, accessionNumber, zpl } = CreateOrder();
+
+    const { printLabel } = PrintProvider();
 
     const disableNext = ref<boolean>(true);
 
@@ -336,24 +340,75 @@ export default defineComponent({
     );
 
     const PlaceOrder = () => {
-      disablePlaceOrder.value = true;
+      if (store.getters.defaultPrinter.address == "") {
+        const AlertExitApp = () => {
+          const presentAlert = async () => {
+            const alert = await alertController.create({
+              header: "Heads Up!",
+              message:
+                "Barcode printer not configured, Click configure to setup or proceed to ignore!",
+              buttons: [
+                {
+                  text: "CONFIGURE",
+                  cssClass: "secondary",
+                  handler: () => {
+                    router.push({ name: "Configurations", replace: false });
+                  },
+                },
+                {
+                  text: "IGNORE",
+                  role: "cancel",
+                  cssClass: "secondary",
+                  handler: () => {
+                    disablePlaceOrder.value = true;
 
-      const orders: Order[] = [];
+                    const orders: Order[] = [];
 
-      let order: Order = {
-        visit_type: visitTypes.value[0],
-        requesting_location: store.getters.selectedWard,
-        requesting_physician: "Requesting Physician",
-        specimen_type_id: selectedSpecimen.value.id,
-        tests: selectedTests.value,
-        patient: store.getters.selectedPatient,
-        reason: selectedTestReason.value,
-        user: store.getters.user,
-      };
+                    let order: Order = {
+                      visit_type: visitTypes.value[0],
+                      requesting_location: store.getters.selectedWard,
+                      requesting_physician: "Requesting Physician",
+                      specimen_type_id: selectedSpecimen.value.id,
+                      tests: selectedTests.value,
+                      patient: store.getters.selectedPatient,
+                      reason: selectedTestReason.value,
+                      user: store.getters.user,
+                    };
 
-      orders.push(order);
+                    orders.push(order);
 
-      Upload(orders);
+                    Upload(orders);
+                  },
+                },
+              ],
+            });
+            await alert.present();
+          };
+
+          presentAlert();
+        };
+
+        AlertExitApp();
+      } else {
+        disablePlaceOrder.value = true;
+
+        const orders: Order[] = [];
+
+        let order: Order = {
+          visit_type: visitTypes.value[0],
+          requesting_location: store.getters.selectedWard,
+          requesting_physician: "Requesting Physician",
+          specimen_type_id: selectedSpecimen.value.id,
+          tests: selectedTests.value,
+          patient: store.getters.selectedPatient,
+          reason: selectedTestReason.value,
+          user: store.getters.user,
+        };
+
+        orders.push(order);
+
+        Upload(orders);
+      }
     };
 
     const Upload = (orders: Order[]) => {
@@ -410,10 +465,13 @@ export default defineComponent({
         });
       };
 
-      writeFile().then(() =>
-      {
-        console.log("Print Label");
-      })
+      if (store.getters.defaultPrinter.address !== "") {
+        printLabel(base64Data);
+      }
+
+      writeFile().then(() => {
+        console.log("Write FIle");
+      });
     };
 
     const readAsBase64 = async (blob: Blob) => {
