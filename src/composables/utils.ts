@@ -1,5 +1,6 @@
 import { Storage } from "@capacitor/storage";
 import { MutationTypes, useStore } from "@/store";
+import { Printer } from "@/interfaces/Printer";
 const store = useStore();
 
 const utils = () => {
@@ -22,6 +23,28 @@ const utils = () => {
     const output = inputArry.join(" ");
 
     return output;
+  };
+
+  const SetDefaultPrinter = async (printer: Printer) => {
+
+    await Storage.set({
+      key: "default-printer",
+      value: `${printer.id}` + "|" + `${printer.name}` + "|" + `${printer.address}` + "|" + `${printer.checked}`,
+    });
+    
+
+    store.commit(MutationTypes.SET_DEFAULT_PRINTER, printer);
+
+  };
+
+  const GetDefaultPrinter = async () => {
+
+    const { value } = await Storage.get({
+      key: "default-printer"
+    });
+
+    return value;
+
   };
 
   const SetServerAddress = async (address: string | null) => {
@@ -49,6 +72,8 @@ const utils = () => {
     CapitalizeAllFirstLetters,
     SetServerAddress,
     GetServerAddress,
+    SetDefaultPrinter,
+    GetDefaultPrinter
   };
 };
 

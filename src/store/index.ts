@@ -16,10 +16,23 @@ import { Ward } from "@/interfaces/Ward";
 import { reactive } from "vue";
 import { SearchClient } from "@/interfaces/SearchClient";
 import { Specimen } from "@/interfaces/Specimen";
+import { Printer } from "@/interfaces/Printer";
+
+// const axios = require("axios").create({
+//   baseURL: process.env.VUE_APP_SERVICE_BASE_URL,
+//   timeout: process.env.VUE_APP_REQUEST_TIMEOUT,
+// });
 
 const axios = require("axios").create({
-  baseURL: process.env.VUE_APP_SERVICE_BASE_URL,
+  baseURL: "http://0.0.0.0:3001/",
   timeout: process.env.VUE_APP_REQUEST_TIMEOUT,
+});
+
+const defaultPrinter: Printer = reactive({
+  id: "",
+  address: "",
+  name: "",
+  checked: false,
 });
 
 const user: User = reactive({} as User);
@@ -37,9 +50,10 @@ const createdOrdersTrackingNum: string[] = [];
 const patient: Patient = reactive({} as Patient);
 
 export type State = {
-  lockTimeOut:number,
-  patientFilter: string,
-  resultsFilter: string,
+  lockTimeOut: number;
+  patientFilter: string;
+  defaultPrinter: Printer;
+  resultsFilter: string;
   fromDate: string;
   toDate: string;
   counter: number;
@@ -66,8 +80,9 @@ export type State = {
 };
 
 const state: State = {
-  lockTimeOut:process.env.VUE_APP_TIMEOUT_IN_SECONDS * 1000,
+  lockTimeOut: process.env.VUE_APP_TIMEOUT_IN_SECONDS * 1000,
   patientFilter: "",
+  defaultPrinter: defaultPrinter,
   resultsFilter: "",
   fromDate: "",
   toDate: "",
@@ -97,6 +112,7 @@ const state: State = {
 export enum MutationTypes {
   SET_LOCK_TIMEOUT = "SETTING_LOCK_TIMEOUT",
   SET_AXIOS = "SETTING_AXIOS",
+  SET_DEFAULT_PRINTER = "SETTING_DEFAULT_PRINTER",
   SET_PATIENT_FILTER = "SETTING_PATIENT_FILTER",
   SET_RESULTS_FILTER = "SETTING_RESULTS_FILTER",
   SET_FROM_DATE = "SETTING_FROM_DATE",
@@ -121,12 +137,13 @@ export enum MutationTypes {
   SET_PREVIOUS_LINK = "SETTING_PREVIOUS_LINK",
   ADD_ORDER = "ADDING_ORDER",
   CLEAR_ORDER = "CLEARING_ORDERS",
-  SET_SELECTED_SPECIMEN = "SETTING_SELECTED_SPECIMEN"
+  SET_SELECTED_SPECIMEN = "SETTING_SELECTED_SPECIMEN",
 }
 
 export enum ActionTypes {
   SET_LOCK_TIMEOUT = "SETTING_LOCK_TIMEOUT",
   SET_AXIOS = "SETTING_AXIOS",
+  SET_DEFAULT_PRINTER = "SETTING_DEFAULT_PRINTER",
   SET_PATIENT_FILTER = "SETTING_PATIENT_FILTER",
   SET_RESULTS_FILTER = "SETTING_RESULTS_FILTER",
   SET_FROM_DATE = "SETTING_FROM_DATE",
@@ -151,12 +168,13 @@ export enum ActionTypes {
   SET_PREVIOUS_LINK = "SETTING_PREVIOUS_LINK",
   ADD_ORDER = "ADDING_ORDER",
   CLEAR_ORDER = "CLEARING_ORDERS",
-  SET_SELECTED_SPECIMEN = "SETTING_SELECTED_SPECIMEN"
+  SET_SELECTED_SPECIMEN = "SETTING_SELECTED_SPECIMEN",
 }
 
 export type Mutations<S = State> = {
   [MutationTypes.SET_LOCK_TIMEOUT](state: S, payload: number): void;
   [MutationTypes.SET_AXIOS](state: S, payload: Axios): void;
+  [MutationTypes.SET_DEFAULT_PRINTER](state: S, payload: Printer): void;
   [MutationTypes.SET_PATIENT_FILTER](state: S, payload: string): void;
   [MutationTypes.SET_RESULTS_FILTER](state: S, payload: string): void;
   [MutationTypes.SET_FROM_DATE](state: S, payload: string): void;
@@ -172,7 +190,10 @@ export type Mutations<S = State> = {
   [MutationTypes.VIEW_TEST_RESULTS](state: S, payload: boolean): void;
   [MutationTypes.OPEN_PATIENT_DETAILS](state: S, payload: boolean): void;
   [MutationTypes.OPEN_PATIENT_PLACE_ORDER](state: S, payload: boolean): void;
-  [MutationTypes.VIEW_PATIENT_PREVIOUS_ORDERS](state: S, payload: boolean): void;
+  [MutationTypes.VIEW_PATIENT_PREVIOUS_ORDERS](
+    state: S,
+    payload: boolean
+  ): void;
   [MutationTypes.SET_SELECTED_PATIENT](state: S, payload: Patient): void;
   [MutationTypes.SET_SELECTED_TEST](state: S, payload: TestResult): void;
   [MutationTypes.SEARCH_PATIENT_IN_PROGRESS](state: S, payload: boolean): void;
@@ -190,6 +211,9 @@ const mutations: MutationTree<State> & Mutations = {
   },
   [MutationTypes.SET_AXIOS](state: State, payload: Axios) {
     state.axios = payload;
+  },
+  [MutationTypes.SET_DEFAULT_PRINTER](state: State, payload: Printer) {
+    state.defaultPrinter = payload;
   },
   [MutationTypes.SET_PATIENT_FILTER](state: State, payload: string) {
     state.patientFilter = payload;
@@ -263,13 +287,9 @@ const mutations: MutationTree<State> & Mutations = {
     state.createdOrdersTrackingNum.push(payload);
   },
   [MutationTypes.CLEAR_ORDER](state: State, payload: string) {
-
     if (payload) {
-
       state.createdOrdersTrackingNum.length = 0;
-      
     }
-    
   },
   [MutationTypes.SET_SELECTED_SPECIMEN](state: State, payload: Specimen) {
     state.selectedSpecimen = payload;
@@ -284,35 +304,82 @@ type AugmentedActionContext = {
 } & Omit<ActionContext<State, State>, "commit">;
 
 export interface Actions {
-  [ActionTypes.SET_LOCK_TIMEOUT]({ commit }: AugmentedActionContext, payload: number): void;
+  [ActionTypes.SET_LOCK_TIMEOUT](
+    { commit }: AugmentedActionContext,
+    payload: number
+  ): void;
 
-  [ActionTypes.SET_PATIENT_FILTER]({ commit }: AugmentedActionContext, payload: string): void;
+  [ActionTypes.SET_PATIENT_FILTER](
+    { commit }: AugmentedActionContext,
+    payload: string
+  ): void;
 
-  [ActionTypes.SET_RESULTS_FILTER]({ commit }: AugmentedActionContext, payload: string): void;
+  [ActionTypes.SET_DEFAULT_PRINTER](
+    { commit }: AugmentedActionContext,
+    payload: Printer
+  ): void;
 
-  [ActionTypes.SET_FROM_DATE]({ commit }: AugmentedActionContext, payload: string): void;
+  [ActionTypes.SET_RESULTS_FILTER](
+    { commit }: AugmentedActionContext,
+    payload: string
+  ): void;
 
-  [ActionTypes.SET_TO_DATE]({ commit }: AugmentedActionContext, payload: string): void;
+  [ActionTypes.SET_FROM_DATE](
+    { commit }: AugmentedActionContext,
+    payload: string
+  ): void;
 
-  [ActionTypes.INC_COUNTER]({ commit }: AugmentedActionContext, payload: number): void;
+  [ActionTypes.SET_TO_DATE](
+    { commit }: AugmentedActionContext,
+    payload: string
+  ): void;
+
+  [ActionTypes.INC_COUNTER](
+    { commit }: AugmentedActionContext,
+    payload: number
+  ): void;
 
   [ActionTypes.LOGIN]({ commit }: AugmentedActionContext, payload: User): void;
 
-  [ActionTypes.LOGOUT]({ commit }: AugmentedActionContext, payload: boolean): void;
+  [ActionTypes.LOGOUT](
+    { commit }: AugmentedActionContext,
+    payload: boolean
+  ): void;
 
-  [ActionTypes.SET_SELECTED_PATIENT]({ commit }: AugmentedActionContext, payload: Patient): void;
+  [ActionTypes.SET_SELECTED_PATIENT](
+    { commit }: AugmentedActionContext,
+    payload: Patient
+  ): void;
 
-  [ActionTypes.SET_SELECTED_TEST]({ commit }: AugmentedActionContext, payload: TestResult): void;
+  [ActionTypes.SET_SELECTED_TEST](
+    { commit }: AugmentedActionContext,
+    payload: TestResult
+  ): void;
 
-  [ActionTypes.SET_SELECTED_WARD]({ commit }: AugmentedActionContext, payload: Ward): void;
+  [ActionTypes.SET_SELECTED_WARD](
+    { commit }: AugmentedActionContext,
+    payload: Ward
+  ): void;
 
-  [ActionTypes.SET_SEARCH_CLIENT]({ commit }: AugmentedActionContext, payload: SearchClient): void;
+  [ActionTypes.SET_SEARCH_CLIENT](
+    { commit }: AugmentedActionContext,
+    payload: SearchClient
+  ): void;
 
-  [ActionTypes.SET_PREVIOUS_LINK]({ commit }: AugmentedActionContext, payload: string): void;
+  [ActionTypes.SET_PREVIOUS_LINK](
+    { commit }: AugmentedActionContext,
+    payload: string
+  ): void;
 
-  [ActionTypes.ADD_ORDER]({ commit }: AugmentedActionContext, payload: string): void;
+  [ActionTypes.ADD_ORDER](
+    { commit }: AugmentedActionContext,
+    payload: string
+  ): void;
 
-  [ActionTypes.SET_SELECTED_SPECIMEN]({ commit }: AugmentedActionContext, payload: Specimen): void;
+  [ActionTypes.SET_SELECTED_SPECIMEN](
+    { commit }: AugmentedActionContext,
+    payload: Specimen
+  ): void;
 }
 
 export const actions: ActionTree<State, State> & Actions = {
@@ -321,6 +388,9 @@ export const actions: ActionTree<State, State> & Actions = {
   },
   [ActionTypes.SET_PATIENT_FILTER]({ commit }, payload: string) {
     commit(MutationTypes.SET_PATIENT_FILTER, payload);
+  },
+  [ActionTypes.SET_DEFAULT_PRINTER]({ commit }, payload: Printer) {
+    commit(MutationTypes.SET_DEFAULT_PRINTER, payload);
   },
   [ActionTypes.SET_RESULTS_FILTER]({ commit }, payload: string) {
     commit(MutationTypes.SET_RESULTS_FILTER, payload);
@@ -367,6 +437,7 @@ export type Getters = {
   lockTimeOut(state: State): number;
   patientFilter(state: State): string;
   resultsFilter(state: State): string;
+  defaultPrinter(state: State): Printer;
   fromDate(state: State): string;
   toDate(state: State): string;
   doubleCounter(state: State): number;
@@ -389,6 +460,9 @@ export const getters: GetterTree<State, State> & Getters = {
   },
   patientFilter: (state) => {
     return state.patientFilter;
+  },
+  defaultPrinter: (state) => {
+    return state.defaultPrinter;
   },
   resultsFilter: (state) => {
     return state.resultsFilter;
@@ -435,7 +509,7 @@ export const getters: GetterTree<State, State> & Getters = {
   },
   selectedSpecimen: (state) => {
     return state.selectedSpecimen;
-  }
+  },
 };
 
 export type Store = Omit<

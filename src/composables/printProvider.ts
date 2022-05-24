@@ -1,12 +1,87 @@
 import { BluetoothSerial } from "@awesome-cordova-plugins/bluetooth-serial";
-import { reactive } from "vue";
+import { ref } from "vue";
 import { alertController } from "@ionic/vue";
+import { Printer } from "@/interfaces/Printer";
+import { useStore } from "@/store";
+import Utils from "@/composables/utils";
+
+const store = useStore();
 
 const printProvider = () => {
   const btSerial = BluetoothSerial;
+  const printers = ref<Printer[]>([]);
+
+  const { SetDefaultPrinter } = Utils();
 
   const searchPrinters = () => {
-    return btSerial.list();
+    btSerial.list().then((printerz) => {
+      printers.value = printerz;
+
+      printers.value.forEach((printer) => {
+        printer = Object.assign(printer, { type: "radio" });
+        printer = Object.assign(printer, { label: printer.name });
+        printer = Object.assign(printer, { value: printer.id });
+        printer = Object.assign(printer, {
+          handler: () => {
+            SetDefaultPrinter(printer);
+          },
+        });
+
+        if (printer.id == store.getters.defaultPrinter.id) {
+          printer.checked = true;
+        }
+      });
+    });
+  };
+
+  const testPrinterConnection = (address: string) => {
+    btSerial.connect(address).subscribe((data) => {
+      const feedback = JSON.stringify(data);
+
+      if (feedback == '"OK"') {
+        const AlertExitApp = () => {
+          const presentAlert = async () => {
+            const alert = await alertController.create({
+              header: "SUCCESS!",
+              message: "Printer Connected",
+              buttons: [
+                {
+                  text: "OK",
+                  role: "cancel",
+                  cssClass: "secondary",
+                },
+              ],
+            });
+            await alert.present();
+          };
+
+          presentAlert();
+        };
+
+        AlertExitApp();
+      } else {
+        const AlertExitApp = () => {
+          const presentAlert = async () => {
+            const alert = await alertController.create({
+              header: "ERROR!",
+              message: JSON.stringify(data),
+              buttons: [
+                {
+                  text: "OK",
+                  role: "cancel",
+                  cssClass: "secondary",
+                },
+              ],
+            });
+            await alert.present();
+          };
+
+          presentAlert();
+        };
+
+        AlertExitApp();
+      }
+    });
   };
 
   const connectToPrinter = (address: string) => {
@@ -107,9 +182,11 @@ const printProvider = () => {
   };
 
   return {
+    printers,
     searchPrinters,
     connectToPrinter,
     printTestPage,
+    testPrinterConnection,
   };
 };
 

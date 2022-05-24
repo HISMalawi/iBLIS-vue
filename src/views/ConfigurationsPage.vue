@@ -24,6 +24,21 @@
               readonly
               @click="LoadPrinters"
             ></ion-input>
+            <ion-row>
+              <ion-col>
+                <ion-button color="primary" size="small" @click="LoadPrinters"
+                  >Choose</ion-button
+                >
+              </ion-col>
+              <ion-col>
+                <ion-button
+                  color="primary"
+                  size="small"
+                  @click="ConnectToPrinter"
+                  >Test Connection</ion-button
+                >
+              </ion-col>
+            </ion-row>
           </ion-item>
         </ion-card>
       </div>
@@ -43,14 +58,19 @@ import {
   IonIcon,
   IonInput,
   alertController,
+  IonRow,
+  IonCol,
+  IonButton,
 } from "@ionic/vue";
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, reactive, ref, watch } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import AppFooter from "@/components/AppFooter.vue";
 import { serverOutline, printOutline } from "ionicons/icons";
 import Utils from "@/composables/utils";
 import PrintProvider from "@/composables/printProvider";
+import { MutationTypes, useStore } from "@/store";
+import { Printer } from "@/interfaces/Printer";
 
 export default defineComponent({
   name: "ConfigurationsPage",
@@ -65,32 +85,108 @@ export default defineComponent({
     IonLabel,
     IonIcon,
     IonInput,
+    IonRow,
+    IonCol,
+    IonButton,
   },
   setup() {
+    const store = useStore();
+
     const serverAddress = ref<string | null>("");
 
-    const defaultPrinter = ref<string>("");
+    let defaultPrinter = ref<string>("");
 
-    const { GetServerAddress, SetServerAddress } = Utils();
+    const {
+      GetServerAddress,
+      SetServerAddress,
+      GetDefaultPrinter,
+    } = Utils();
 
-    const { searchPrinters, connectToPrinter, printTestPage } = PrintProvider();
+    const {
+      searchPrinters,
+      connectToPrinter,
+      testPrinterConnection,
+      printers,
+    } = PrintProvider();
 
     GetServerAddress().then((address) => {
       serverAddress.value = address;
     });
 
-    const LoadPrinters = () => {
+    GetDefaultPrinter().then((printer)=>{
 
-      searchPrinters().then(() => {
+      if (printer !== null) {
+
+        const printerArry = printer?.split("|");
+        
+        let check = false;
+
+        if (printerArry[3] == "true") {
+
+          check = true;
+          
+        } 
+
+        store.commit(MutationTypes.SET_DEFAULT_PRINTER, {
+          id:printerArry[0],
+          name:printerArry[1],
+          address:printerArry[2],
+          checked:check,
+        });
+
+
+        
+      }
+      
+
+    })
+
+    searchPrinters();
+
+    const LoadPrinters = () => {
+      searchPrinters();
+
+      if (printers.value.length > 0) {
         const AlertExitApp = () => {
           const presentAlert = async () => {
             const alert = await alertController.create({
-              cssClass: "order-status-alert",
-              header: "SUCCESS!",
-              message: "Done",
+              header: "Select Printer",
+              inputs: printers.value,
               buttons: [
                 {
-                  text: "OK",
+                  text: "Done",
+                  role: "cancel",
+                  cssClass: "secondary",
+                  handler: () => {
+                    searchPrinters();
+                  },
+                },
+                {
+                  text: "REFRESH",
+                  role: "refresh",
+                  cssClass: "secondary",
+                  handler: () => {
+                    searchPrinters();
+                  },
+                },
+              ],
+            });
+            await alert.present();
+          };
+
+          presentAlert();
+        };
+
+        AlertExitApp();
+      } else {
+        const AlertExitApp = () => {
+          const presentAlert = async () => {
+            const alert = await alertController.create({
+              header: "Select Printer",
+              message: "Please pair your davice to a printer",
+              buttons: [
+                {
+                  text: "CANCEL",
                   role: "cancel",
                   cssClass: "secondary",
                 },
@@ -103,9 +199,11 @@ export default defineComponent({
         };
 
         AlertExitApp();
-      });
+      }
+    };
 
-      
+    const ConnectToPrinter = () => {
+      testPrinterConnection(store.getters.defaultPrinter.address);
     };
 
     watch(
@@ -115,12 +213,20 @@ export default defineComponent({
       }
     );
 
+    watch(
+      () => [store.getters.defaultPrinter],
+      () => {
+        defaultPrinter.value = store.getters.defaultPrinter.name;
+      }
+    );
+
     return {
       LoadPrinters,
-      defaultPrinter,
       serverAddress,
       serverOutline,
       printOutline,
+      defaultPrinter,
+      ConnectToPrinter,
     };
   },
 });
