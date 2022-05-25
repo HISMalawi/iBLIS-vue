@@ -9,53 +9,83 @@
       <collapse-tool-bar pageTitle="iBLIS | Register Client" />
 
       <div id="container">
-        <ion-item v-if="currentPage == 1">
-          <ion-label position="floating"> First Name </ion-label>
-          <ion-input
-            v-model="client.first_name"
-            placeholder="First Name"
-          ></ion-input>
-        </ion-item>
-
-        <ion-item v-if="currentPage == 2">
-          <ion-label position="floating"> Last Name </ion-label>
-          <ion-input
-            v-model="client.last_name"
-            placeholder="Last Name"
-          ></ion-input>
-        </ion-item>
-
-        <ion-list v-if="currentPage == 3">
-          <ion-radio-group v-model="client.gender">
+        <ion-row v-if="currentPage == 1">
+          <ion-col>
             <ion-list-header class="card-3">
-              <ion-label class="gender-label"> Gender </ion-label>
+              <ion-label class="gender-label"> Names </ion-label>
+            </ion-list-header>
+          </ion-col>
+        </ion-row>
+
+        <ion-row v-if="currentPage == 1">
+          <ion-col>
+            <ion-item>
+              <ion-label position="floating"> First Name </ion-label>
+              <ion-input
+                v-model="client.first_name"
+                placeholder="First Name"
+              ></ion-input>
+            </ion-item>
+          </ion-col>
+
+          <ion-col>
+            <ion-item>
+              <ion-label position="floating"> Last Name </ion-label>
+              <ion-input
+                v-model="client.last_name"
+                placeholder="Last Name"
+              ></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+
+        <ion-row v-if="currentPage == 1">
+          <ion-col>
+            <ion-radio-group v-model="client.gender">
+              <ion-list-header class="card-3 crb">
+                <ion-label class="gender-label"> Gender </ion-label>
+              </ion-list-header>
+
+              <ion-row>
+                <ion-col>
+                  <ion-item>
+                    <ion-label>Male</ion-label>
+                    <ion-radio value="0"></ion-radio>
+                  </ion-item>
+                </ion-col>
+
+                <ion-col>
+                  <ion-item>
+                    <ion-label>Female</ion-label>
+                    <ion-radio value="1"></ion-radio>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
+            </ion-radio-group>
+          </ion-col>
+
+          <ion-col>
+            <ion-list-header class="card-3">
+              <ion-label class="gender-label"> Date of Birth </ion-label>
             </ion-list-header>
 
-            <ion-item>
-              <ion-label>Male</ion-label>
-              <ion-radio value="0"></ion-radio>
-            </ion-item>
+            <ion-row>
+              <ion-col>
+                <ion-item>
+                  <ion-input
+                    v-model="dateOfBirth"
+                    type="date"
+                  ></ion-input>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-col>
+        </ion-row>
+        
 
-            <ion-item>
-              <ion-label>Female</ion-label>
-              <ion-radio value="1"></ion-radio>
-            </ion-item>
-          </ion-radio-group>
-        </ion-list>
-
-        <ion-list v-if="currentPage == 4">
-          <ion-list-header class="card-3">
-            <ion-label class="gender-label"> Date of Birth </ion-label>
-          </ion-list-header>
-
-          <ion-datetime
-            presentation="date"
-            @ionChange="(ev: DatetimeCustomEvent) => dateOfBirth = formatDate(ev.detail.value)"
-            placeholder="Date of Birth"
-          ></ion-datetime>
-        </ion-list>
-
-        <ion-list v-if="currentPage == 5">
+        <ion-row v-if="currentPage == 1">
+          <ion-col>
+            <ion-list>
           <ion-list-header class="card-3 other-info-head">
             <ion-label class="gender-label"> Other Info </ion-label>
           </ion-list-header>
@@ -85,7 +115,12 @@
           </ion-item>
         </ion-list>
 
-        <ion-list v-if="currentPage == 6">
+          </ion-col>
+        </ion-row>
+
+        <ion-row v-if="currentPage == 2">
+          <ion-col>
+            <ion-list>
           <ion-list-header class="card-3">
             <ion-label class="gender-label"> Client Summary</ion-label>
           </ion-list-header>
@@ -137,61 +172,9 @@
           </ion-item>
         </ion-list>
 
-        <ion-list class="poss-match-list" v-if="currentPage == 7">
-          <ion-radio-group v-model="selectedPatient">
-            <ion-list-header class="card-4-yellow">
-              <ion-label class="matches-label"> Select Client </ion-label>
-            </ion-list-header>
+          </ion-col>
+        </ion-row>
 
-            <ion-item v-for="patient in patients" :key="patient.id">
-              <ion-label>{{
-                patient.name +
-                ", " +
-                patient.gender +
-                ", " +
-                patient.age +
-                "yrs"
-              }}</ion-label>
-              <ion-radio :value="patient"></ion-radio>
-            </ion-item>
-          </ion-radio-group>
-        </ion-list>
-
-        <ion-list v-if="currentPage == 8">
-          <ion-list-header class="card-3">
-            <ion-label class="gender-label"> Client Summary</ion-label>
-          </ion-list-header>
-
-          <ion-item>
-            <ion-label>Name:{{ " " + selectedPatient.name }}</ion-label>
-          </ion-item>
-
-          <ion-item>
-            <ion-label>Gender:{{ " " + selectedPatient.gender }}</ion-label>
-          </ion-item>
-
-          <ion-item>
-            <ion-label>DOB:{{ " " + selectedPatient.dob }}</ion-label>
-          </ion-item>
-
-          <ion-item>
-            <ion-label v-if="selectedPatient.phone_number == ''"
-              >Phone:{{ " " + "N/A" }}</ion-label
-            >
-            <ion-label v-if="selectedPatient.phone_number !== ''"
-              >Phone:{{ " " + selectedPatient.phone_number }}</ion-label
-            >
-          </ion-item>
-
-          <ion-item>
-            <ion-label v-if="selectedPatient.address == ''"
-              >Address:{{ " " + "N/A" }}</ion-label
-            >
-            <ion-label v-if="selectedPatient.address !== ''"
-              >Address:{{ " " + selectedPatient.address }}</ion-label
-            >
-          </ion-item>
-        </ion-list>
       </div>
     </ion-content>
 
@@ -219,7 +202,9 @@ import {
   IonItem,
   IonLabel,
   IonListHeader,
-  IonDatetime,
+  // IonDatetime,
+  IonRow,
+  IonCol,
 } from "@ionic/vue";
 import { defineComponent, reactive, ref, watch, watchEffect } from "vue";
 import { useStore } from "@/store";
@@ -249,8 +234,10 @@ export default defineComponent({
     IonItem,
     IonLabel,
     IonListHeader,
-    IonDatetime,
+    // IonDatetime,
     RegisterPatientFooter,
+    IonRow,
+    IonCol,
   },
   setup() {
     const store = useStore();
@@ -277,8 +264,12 @@ export default defineComponent({
     const client = ref<SearchClient>({} as SearchClient);
 
     if (store.getters.previousLink == "/search") {
-      client.value.first_name = CapitalizeAllFirstLetters(store.getters.searchClient.first_name);
-      client.value.last_name = CapitalizeAllFirstLetters(store.getters.searchClient.last_name);
+      client.value.first_name = CapitalizeAllFirstLetters(
+        store.getters.searchClient.first_name
+      );
+      client.value.last_name = CapitalizeAllFirstLetters(
+        store.getters.searchClient.last_name
+      );
 
       if (store.getters.searchClient.gender == "Female") {
         client.value.gender = "1";
@@ -288,18 +279,21 @@ export default defineComponent({
     }
 
     const RegisterClient = () => {
-
       patient.firstname = CapitalizeAllFirstLetters(patient.firstname);
 
-      patient.lastname= CapitalizeAllFirstLetters(patient.lastname);
+      patient.lastname = CapitalizeAllFirstLetters(patient.lastname);
 
       save(patient);
     };
 
     const MoveNextField = () => {
-      if (currentPage.value == 5) {
-        patient.firstname = CapitalizeAllFirstLetters(client.value.first_name.trim());
-        patient.lastname = CapitalizeAllFirstLetters(client.value.last_name.trim());
+      if (currentPage.value == 1) {
+        patient.firstname = CapitalizeAllFirstLetters(
+          client.value.first_name.trim()
+        );
+        patient.lastname = CapitalizeAllFirstLetters(
+          client.value.last_name.trim()
+        );
         patient.gender = client.value.gender;
       }
       currentPage.value = currentPage.value + 1;
@@ -350,11 +344,9 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
 ion-content {
   --ion-background-color: #eee;
 }
-
 
 ion-textarea {
   border: solid 2px rgb(202, 201, 201);

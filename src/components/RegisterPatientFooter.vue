@@ -12,13 +12,13 @@
         ></ion-title
       >
 
-      <ion-title v-if="currentPage < 8 && currentPage != 6" size="small" slot="end"
+      <ion-title v-if="currentPage < 8 && currentPage != 2" size="small" slot="end"
         ><ion-button @click="NavigateNext" :disabled="disableNext"
           >Next</ion-button
         ></ion-title
       >
 
-      <ion-title size="small" slot="end" v-if="currentPage == 6"
+      <ion-title size="small" slot="end" v-if="currentPage == 2"
         ><ion-button @click="RegisterClient">Save</ion-button></ion-title
       >
 
@@ -133,32 +133,16 @@ export default defineComponent({
         if (
           props.currentPage == 1 &&
           "first_name" in props.client &&
-          props.client.first_name !== ""
-        ) {
-          disableNext.value = false;
-        } else if (
-          props.currentPage == 2 &&
+          props.client.first_name !== "" &&
           "last_name" in props.client &&
-          props.client.last_name !== ""
-        ) {
-          disableNext.value = false;
-        } else if (
-          props.currentPage == 3 &&
+          props.client.last_name !== "" &&
           "gender" in props.client &&
-          props.client.gender !== ""
-        ) {
-          disableNext.value = false;
-        } else if (
-          props.currentPage == 4 &&
+          props.client.gender !== "" &&
           "dob" in props.patient &&
           props.patient.dob !== ""
         ) {
           disableNext.value = false;
-        } else if (props.currentPage == 5) {
-          disableNext.value = false;
-        } else if (props.currentPage == 7) {
-          disableNext.value = false;
-        }else {
+        }  else {
           disableNext.value = true;
         }
 
