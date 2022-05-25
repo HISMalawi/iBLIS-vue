@@ -35,7 +35,7 @@ const printProvider = () => {
   };
 
   const testPrinterConnection = (address: string) => {
-    btSerial.connect(address).subscribe((data) => {
+    const conn = btSerial.connect(address).subscribe((data) => {
       const feedback = JSON.stringify(data);
 
       if (feedback == '"OK"') {
@@ -49,6 +49,9 @@ const printProvider = () => {
                   text: "OK",
                   role: "cancel",
                   cssClass: "secondary",
+                  handler: () => {
+                    conn.unsubscribe();
+                  }
                 },
               ],
             });
@@ -193,7 +196,7 @@ const printProvider = () => {
               const presentAlert = async () => {
                 const alert = await alertController.create({
                   header: "SUCCESS!",
-                  message: "iBLIS is able to print",
+                  message: "iBLIS label print successful",
                   buttons: [
                     {
                       text: "OK",

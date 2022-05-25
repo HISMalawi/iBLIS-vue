@@ -75,6 +75,7 @@
                   <ion-input
                     v-model="dateOfBirth"
                     type="date"
+                    placeholder="DD/MM/YYYY"
                   ></ion-input>
                 </ion-item>
               </ion-col>
