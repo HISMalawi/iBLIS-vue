@@ -6,75 +6,60 @@
       <collapse-tool-bar pageTitle="iBLIS | Search Client" />
 
       <div id="container">
-        <ion-item v-if="currentPage == 1">
-          <ion-label position="floating"> First Name </ion-label>
-          <ion-input
-            v-model="searchClient.first_name"
-            placeholder="First Name"
-          ></ion-input>
-        </ion-item>
-
-        <ion-item v-if="currentPage == 2">
-        <ion-label position="floating"> Last Name </ion-label>
-          <ion-input
-            v-model="searchClient.last_name"
-            placeholder="Last Name"
-          ></ion-input>
-        </ion-item>
-
-        <ion-list v-if="currentPage == 3">
-          <ion-radio-group v-model="searchClient.gender">
+        <ion-row v-if="currentPage < 3">
+          <ion-col>
             <ion-list-header class="card-3">
-              <ion-label class="gender-label"> Gender </ion-label>
+              <ion-label class="gender-label"> Names </ion-label>
             </ion-list-header>
+          </ion-col>
+        </ion-row>
 
+        <ion-row v-if="currentPage < 3">
+          <ion-col>
             <ion-item>
-              <ion-label>Male</ion-label>
-              <ion-radio value="Male"></ion-radio>
+              <ion-label position="floating"> First Name </ion-label>
+              <ion-input
+                v-model="searchClient.first_name"
+                placeholder="First Name"
+              ></ion-input>
             </ion-item>
+          </ion-col>
 
-            <ion-item>
-              <ion-label>Female</ion-label>
-              <ion-radio value="Female"></ion-radio>
+          <ion-col>
+            <ion-item >
+              <ion-label position="floating"> Last Name </ion-label>
+              <ion-input
+                v-model="searchClient.last_name"
+                placeholder="Last Name"
+              ></ion-input>
             </ion-item>
-          </ion-radio-group>
-        </ion-list>
+          </ion-col>
+        </ion-row>
 
-        <ion-card v-if="currentPage == 4" class="card-3">
-          <ion-card-content>
-            <ion-row>
-              <ion-col size="10">
-                <ion-row>
-                  <ion-col size="12">
-                    <h1>Search info</h1>
-                  </ion-col>
-                  <ion-col size="12">
-                    <div class="bolder">
-                      <h2>
-                        <span class="light-text">Name :</span>
-                        {{
-                          searchClient.first_name + " " + searchClient.last_name
-                        }}
-                      </h2>
-                    </div>
-                  </ion-col>
-                </ion-row>
-                <ion-row>
-                  <ion-col size="12">
-                    <div class="bolder">
-                      <h2>
-                        <span class="light-text">Gender :</span>
-                        {{ searchClient.gender }}
-                      </h2>
-                    </div>
-                  </ion-col>
-                </ion-row>
-              </ion-col>
-            </ion-row>
-          </ion-card-content>
-        </ion-card>
+        <ion-row v-if="currentPage < 3">
+          <ion-col>
+            <ion-list>
+              <ion-radio-group v-model="searchClient.gender">
+                <ion-list-header class="card-3">
+                  <ion-label class="gender-label"> Gender </ion-label>
+                </ion-list-header>
 
-        <ion-list class="poss-match-list" v-if="currentPage == 4">
+                <ion-item>
+                  <ion-label>Male</ion-label>
+                  <ion-radio value="Male"></ion-radio>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label>Female</ion-label>
+                  <ion-radio value="Female"></ion-radio>
+                </ion-item>
+              </ion-radio-group>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+
+
+        <ion-list class="poss-match-list" v-if="currentPage == 2">
           <ion-radio-group v-model="selectedPatient">
             <ion-list-header class="card-4-yellow">
               <ion-label class="matches-label"> Possible Matches </ion-label>
@@ -94,7 +79,7 @@
           </ion-radio-group>
         </ion-list>
 
-        <ion-list v-if="currentPage == 5">
+        <ion-list v-if="currentPage == 3">
           <ion-list-header class="card-3">
             <ion-label class="gender-label"> Client Summary</ion-label>
           </ion-list-header>
@@ -136,6 +121,7 @@
       @NavigateBack="MovePreviousField"
       @NavigateNext="MoveNextField"
       @NavigateToRegisterClient="NavigateToRegisterClient"
+      @SearchClient="SearchClient"
       :currentPage="currentPage"
       :numberOfPages="numberOfPages"
       :searchClient="searchClient"
@@ -155,13 +141,11 @@ import {
   IonItem,
   IonLabel,
   IonListHeader,
-  IonCard,
-  IonCardContent,
   IonRow,
   IonCol,
   onIonViewDidLeave,
 } from "@ionic/vue";
-import { defineComponent, ref, watch, watchEffect } from "vue";
+import { defineComponent, ref, watchEffect } from "vue";
 import { useRouter } from "vue-router";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
@@ -186,8 +170,6 @@ export default defineComponent({
     IonItem,
     IonLabel,
     IonListHeader,
-    IonCard,
-    IonCardContent,
     IonRow,
     IonCol,
   },
@@ -227,22 +209,6 @@ export default defineComponent({
       router.push({ name: "Register", replace: true });
     };
 
-    watch(
-      () => [currentPage.value],
-      () => {
-        if (currentPage.value == 4) {
-          patients.value.length = 0;
-
-          search(
-            searchClient.value.first_name.trim() +
-              " " +
-              searchClient.value.last_name.trim(),
-            searchClient.value.gender
-          );
-        }
-      }
-    );
-
     onIonViewDidLeave(() => {
       searchClient.value.first_name = "";
       searchClient.value.last_name = "";
@@ -255,6 +221,21 @@ export default defineComponent({
       }
     });
 
+    const SearchClient = () => {
+
+      currentPage.value = 2;
+
+      patients.value.length = 0;
+
+          search(
+            searchClient.value.first_name.trim() +
+              " " +
+              searchClient.value.last_name.trim(),
+            searchClient.value.gender
+          );
+
+    }
+
     return {
       currentPage,
       numberOfPages,
@@ -264,13 +245,13 @@ export default defineComponent({
       NavigateToRegisterClient,
       patients,
       selectedPatient,
+      SearchClient
     };
   },
 });
 </script>
 
 <style scoped>
-
 ion-content {
   --ion-background-color: #eee;
 }

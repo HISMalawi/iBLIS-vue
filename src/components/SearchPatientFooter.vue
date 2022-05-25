@@ -1,25 +1,29 @@
 <template>
   <ion-footer collapse="fade">
     <ion-toolbar>
-      <ion-title v-if="currentPage == 1" size="small" slot="start"
+      <ion-title v-if="currentPage < 3" size="small" slot="start"
         ><ion-button color="danger" @click="NavigateToMainMenu"
           >Cancel</ion-button
         ></ion-title
       >
-      <ion-title v-if="currentPage > 1" size="small" slot="start"
+      <ion-title v-if="currentPage > 2" size="small" slot="start"
         ><ion-button color="medium" @click="NavigateBack"
           >Back</ion-button
         ></ion-title
       >
-      <ion-title size="small" slot="end" v-if="newClient"
+      <ion-title size="small" slot="end" v-if="newClient && currentPage == 2"
         ><ion-button @click="NavigateToRegisterClient">New Client</ion-button></ion-title
       >
-      <ion-title v-if="currentPage < 5" size="small" slot="end"
-        ><ion-button @click="NavigateNext" :disabled="disableNext" :class="clientFound ? 'client-found':''">Next</ion-button></ion-title
+      <ion-title v-if="currentPage < 3" size="small" slot="end"
+        ><ion-button @click="SearchClient" :disabled="disableSearch">Search</ion-button></ion-title
       >
 
-      <ion-title size="small" slot="end" v-if="currentPage == 5"
-        ><ion-button @click="NavigateToPatientDashboard">Proceed</ion-button></ion-title
+      <ion-title v-if="currentPage == 2" size="small" slot="end"
+        ><ion-button @click="NavigateNext" :disabled="disableNext">Next</ion-button></ion-title
+      >
+
+      <ion-title size="small" slot="end" v-if="currentPage == 3"
+        ><ion-button @click="NavigateToPatientDashboard" class="client-found">Proceed</ion-button></ion-title
       >
     </ion-toolbar>
   </ion-footer>
@@ -60,12 +64,14 @@ export default defineComponent({
       required: true,
     }
   },
-  emits: ["NavigateNext", "NavigateBack", "NavigateToRegisterClient"],
+  emits: ["NavigateNext", "NavigateBack", "NavigateToRegisterClient", "SearchClient"],
   setup(props, { emit }) {
 
     const store = useStore();
 
     const router = useRouter();
+
+    const disableSearch = ref<boolean>(true);
 
     const disableNext = ref<boolean>(true);
 
@@ -103,25 +109,21 @@ export default defineComponent({
       () => [props.searchClient.first_name, props.searchClient.last_name, props.searchClient.gender, props.currentPage, props.selectedPatient.name],
       () => {
 
-        if (props.currentPage == 1 && 'first_name' in props.searchClient  && props.searchClient.first_name !== "" ) {
+        if (props.currentPage == 1 && 'first_name' in props.searchClient  && props.searchClient.first_name !== "" && 'last_name' in props.searchClient && props.searchClient.last_name !== "" && 'gender' in props.searchClient && props.searchClient.gender !== "") {
 
-          disableNext.value = false
+          disableSearch.value = false
+          
 
-        } else if (props.currentPage == 2 && 'last_name' in props.searchClient && props.searchClient.last_name !== "" ){
+        } else if (props.currentPage == 2 && 'first_name' in props.searchClient  && props.searchClient.first_name !== "" && 'last_name' in props.searchClient && props.searchClient.last_name !== "" && 'gender' in props.searchClient && props.searchClient.gender !== "" ){
 
-          disableNext.value = false
+          disableSearch.value = false
+          newClient.value = true
 
-        } else if (props.currentPage == 3 && 'gender' in props.searchClient && props.searchClient.gender !== ""){
-
-          disableNext.value = false
-
-        } else if (props.currentPage == 4 && Object.keys(props.selectedPatient).length > 0 && props.selectedPatient.name !== ""){
-
-          disableNext.value = false
-
+ 
         } else {
 
           disableNext.value = true;
+          disableSearch.value = true;
 
         }
 
@@ -131,8 +133,18 @@ export default defineComponent({
     watch(
       () => [props.selectedPatient],
       () => {
+
+        if (Object.keys(props.selectedPatient).length > 0 && props.selectedPatient.name.length > 0){
+         
+             disableNext.value = false;
+
+        } else {
+
+          disableNext.value = true;
+
+        }
         
-        disableNext.value = false;
+        
 
       }
     );
@@ -141,7 +153,7 @@ export default defineComponent({
       () => [props.currentPage, props.selectedPatient.name],
       () => {
 
-        if (props.currentPage == 4 && Object.keys(props.selectedPatient).length > 0 && props.selectedPatient.name.length > 0){
+        if (props.currentPage == 2 && Object.keys(props.selectedPatient).length > 0 && props.selectedPatient.name.length > 0){
          
             clientFound.value = true;
 
@@ -151,21 +163,15 @@ export default defineComponent({
 
         }
 
-        if (props.currentPage == 4) {
-
-          newClient.value = true;
-          
-        } else {
-
-          newClient.value = false;
-
-        }
 
       }
     );
 
+    const SearchClient = () => {
+      emit("SearchClient");
+    }
 
-    return { NavigateNext, NavigateBack, NavigateToMainMenu, disableNext, clientFound, newClient, NavigateToRegisterClient, NavigateToPatientDashboard};
+    return { NavigateNext, NavigateBack, NavigateToMainMenu, disableNext, disableSearch, clientFound, newClient, NavigateToRegisterClient, NavigateToPatientDashboard, SearchClient};
   },
 });
 </script>
