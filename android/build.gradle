@@ -28,12 +28,3 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-android{
-    sourceSets {
-        main {
-            jniLibs.srcDirs = ['libs']
-        }
-    }
-}
-implementation
-files('libs/CPCL_SDK_V1.01.jar')
