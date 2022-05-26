@@ -14,7 +14,7 @@ public class IMovePrinterPlugin extends Plugin {
     public void PrintTest(PluginCall call) {
 
         try {
-            
+
             PrinterHelper.Barcode(PrinterHelper.BARCODE, PrinterHelper.code128, "2", "1", "50", "0", "340", true, "7", "0", "5", "0234565687");
 
         } catch (Exception e) {

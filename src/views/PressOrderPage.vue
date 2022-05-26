@@ -470,6 +470,10 @@ export default defineComponent({
 
       if (store.getters.defaultPrinter.address !== "") {
 
+        const { PrintTest } = iMove3();
+
+        PrintTest();
+
 
         // let canvas  = document.createElement("canvas");
 
