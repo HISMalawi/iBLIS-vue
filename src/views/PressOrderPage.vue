@@ -219,10 +219,6 @@ export default defineComponent({
 
     const { printLabel, iMove3 } = PrintProvider();
 
-    const { PrinterTest } = iMove3();
-
-        PrinterTest();
-
     const disableNext = ref<boolean>(true);
 
     const uploadingOrders = ref<boolean>(false);
@@ -474,9 +470,6 @@ export default defineComponent({
 
       if (store.getters.defaultPrinter.address !== "") {
 
-        const { PrinterTest } = iMove3();
-
-        PrinterTest();
 
         // let canvas  = document.createElement("canvas");
 

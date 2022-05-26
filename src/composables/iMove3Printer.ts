@@ -1,12 +1,12 @@
 import { registerPlugin } from '@capacitor/core';
 
 export interface PrintTestPlugin {
-  printTest(options: { value: string }): Promise<{ value: string }>;
+  PrintTest(options: { value: string }): Promise<{ value: string }>;
   
 }
 
-const PrintTest = registerPlugin<PrintTestPlugin>('PrintTest');
+const Printer = registerPlugin<PrintTestPlugin>('iMovePrinter');
 
 
 
-export default PrintTest;
+export default Printer;

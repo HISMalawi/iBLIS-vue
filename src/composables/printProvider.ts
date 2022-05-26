@@ -281,7 +281,7 @@ const printProvider = () => {
 
     const PrinterTest = async () => {
 
-      const { value } = await iMove3Printer.printTest({ value: 'Hello World!' });
+      const { value } = await iMove3Printer.PrintTest({ value: 'Hello World!' });
 
       const AlertExitApp = () => {
         const presentAlert = async () => {

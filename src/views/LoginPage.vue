@@ -126,7 +126,7 @@ export default defineComponent({
 
     const start = async () => {
 
-      const { value } = await IMove3Printer.printTest({ value: 'Hello World!' });
+      const { value } = await IMove3Printer.PrintTest({ value: 'Hello World!' });
 
       const AlertExitApp = () => {
         const presentAlert = async () => {
