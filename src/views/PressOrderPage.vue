@@ -179,6 +179,8 @@ import GetVisitTypes from "@/composables/getVisitTypes";
 import router from "@/router";
 import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 import PrintProvider from "@/composables/printProvider";
+import JsBarcode from "jsbarcode";
+
 // import { saveAs } from "file-saver";
 // import { el } from "date-fns/locale";
 
@@ -204,6 +206,7 @@ export default defineComponent({
     IonChip,
   },
   setup() {
+
     const store = useStore();
 
     const currentPage = ref<number>(1);
@@ -214,7 +217,11 @@ export default defineComponent({
 
     const { save, accessionNumber, zpl } = CreateOrder();
 
-    const { printLabel } = PrintProvider();
+    const { printLabel, iMove3 } = PrintProvider();
+
+    const { PrinterTest } = iMove3();
+
+        PrinterTest();
 
     const disableNext = ref<boolean>(true);
 
@@ -466,7 +473,33 @@ export default defineComponent({
       };
 
       if (store.getters.defaultPrinter.address !== "") {
-        printLabel(base64Data);
+
+        const { PrinterTest } = iMove3();
+
+        PrinterTest();
+
+        // let canvas  = document.createElement("canvas");
+
+        // JsBarcode(canvas, "1234", {
+        //   format: "pharmacode",
+        //   lineColor: "#0aa",
+        //   width: 4,
+        //   height: 40,
+        //   displayValue: false,
+        // });
+
+        // canvas.toBlob((blob: any) => {
+
+        //   const reader = new FileReader();
+
+        // reader.onload = function () {
+        //   var arrayBuffer = reader.result;
+        //   printLabel(arrayBuffer);
+        // };
+        // reader.readAsArrayBuffer(blob);
+
+        // }, 'image/png');
+
       }
 
       writeFile().then(() => {

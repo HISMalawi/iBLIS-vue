@@ -89,6 +89,7 @@ import {
   IonFab,
   IonFabButton,
   IonIcon,
+  alertController
 } from "@ionic/vue";
 import { defineComponent, reactive, ref, watch, watchEffect } from "vue";
 import { AuthRequest } from "@/interfaces/AuthRequest";
@@ -98,6 +99,7 @@ import Authenticate from "@/composables/authenticate";
 import GetAllWards from "@/composables/getAllWards";
 import { Ward } from "@/interfaces/Ward";
 import { settingsOutline } from "ionicons/icons";
+import IMove3Printer from "@/composables/iMove3Printer";
 
 export default defineComponent({
   name: "LoginPage",
@@ -121,6 +123,36 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const router = useRouter();
+
+    const start = async () => {
+
+      const { value } = await IMove3Printer.printTest({ value: 'Hello World!' });
+
+      const AlertExitApp = () => {
+        const presentAlert = async () => {
+          const alert = await alertController.create({
+            header: "SUCCESS!",
+            message: value,
+            buttons: [
+              {
+                text: "OK",
+                role: "cancel",
+                cssClass: "secondary",
+              },
+            ],
+          });
+          await alert.present();
+        };
+
+        presentAlert();
+      };
+
+      AlertExitApp();
+
+    }
+
+    start();
+    
 
     const selectedWard = ref<Ward>({
       id: 0,

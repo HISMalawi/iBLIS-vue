@@ -4,6 +4,7 @@ import { alertController } from "@ionic/vue";
 import { Printer } from "@/interfaces/Printer";
 import { useStore } from "@/store";
 import Utils from "@/composables/utils";
+import iMove3Printer from "@/composables/iMove3Printer";
 
 const store = useStore();
 
@@ -184,7 +185,7 @@ const printProvider = () => {
     );
   };
 
-  const printLabel = (printData: string) => {
+  const printLabel = (printData: any) => {
 
     const xyz = connectToPrinter(store.getters.defaultPrinter.address).subscribe(
       () => {
@@ -275,13 +276,49 @@ const printProvider = () => {
     );
   };
 
+  const iMove3 = () => {
+
+
+    const PrinterTest = async () => {
+
+      const { value } = await iMove3Printer.printTest({ value: 'Hello World!' });
+
+      const AlertExitApp = () => {
+        const presentAlert = async () => {
+          const alert = await alertController.create({
+            header: "SUCCESS!",
+            message: value,
+            buttons: [
+              {
+                text: "OK",
+                role: "cancel",
+                cssClass: "secondary",
+              },
+            ],
+          });
+          await alert.present();
+        };
+
+        presentAlert();
+      };
+
+      AlertExitApp();
+
+    }
+
+
+    return { PrinterTest }
+
+  };
+
   return {
     printers,
     searchPrinters,
     connectToPrinter,
     printTestPage,
     testPrinterConnection,
-    printLabel
+    printLabel,
+    iMove3
   };
 };
 
