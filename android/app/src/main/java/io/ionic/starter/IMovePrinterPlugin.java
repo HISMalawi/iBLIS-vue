@@ -6,8 +6,8 @@ import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 
-@CapacitorPlugin(name = "PrintTest")
-public class IMovePrinter extends Plugin {
+@CapacitorPlugin(name = "iMovePrinter")
+public class IMovePrinterPlugin extends Plugin {
 
     @PluginMethod()
     public void PrintTest(PluginCall call) {
