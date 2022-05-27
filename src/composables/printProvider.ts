@@ -283,6 +283,27 @@ const printProvider = () => {
 
       const { value } = await iMove3Printer.PrintTest({ value: 'Hello World!' });
 
+      const AlertExitApp = () => {
+        const presentAlert = async () => {
+          const alert = await alertController.create({
+            header: "SUCCESS!",
+            message: value,
+            buttons: [
+              {
+                text: "OK",
+                role: "cancel",
+                cssClass: "secondary",
+              },
+            ],
+          });
+          await alert.present();
+        };
+
+        presentAlert();
+      };
+
+      AlertExitApp();
+
     }
 
 
