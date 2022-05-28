@@ -278,7 +278,6 @@ const printProvider = () => {
 
   const iMove3 = () => {
 
-
     const PrintTest = async () => {
 
       const { value } = await iMove3Printer.PrintTest({ value: 'Hello World!' });
@@ -306,8 +305,35 @@ const printProvider = () => {
 
     }
 
+    const PrintBarcode = async (accession_number: string) => {
 
-    return { PrintTest }
+      const { value } = await iMove3Printer.PrintBarcode({ value: accession_number });
+
+      const AlertExitApp = () => {
+        const presentAlert = async () => {
+          const alert = await alertController.create({
+            header: "SUCCESS!",
+            message: "Label printed for accession number: "+value,
+            buttons: [
+              {
+                text: "OK",
+                role: "cancel",
+                cssClass: "secondary",
+              },
+            ],
+          });
+          await alert.present();
+        };
+
+        presentAlert();
+      };
+
+      AlertExitApp();
+
+    }
+
+
+    return { PrintTest, PrintBarcode }
 
   };
 

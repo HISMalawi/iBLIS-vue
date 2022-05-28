@@ -470,9 +470,9 @@ export default defineComponent({
 
       if (store.getters.defaultPrinter.address !== "") {
 
-        const { PrintTest } = iMove3();
+        const { PrintBarcode } = iMove3();
 
-        PrintTest();
+        PrintBarcode(accessionNumber.value);
 
 
         // let canvas  = document.createElement("canvas");

@@ -24,6 +24,8 @@ public class IMovePrinterPlugin extends Plugin {
     @PluginMethod()
     public void PrintTest(PluginCall call) {
 
+        String value = call.getString("value");
+
         Context context;
 
         Global global = new Global();
@@ -42,11 +44,50 @@ public class IMovePrinterPlugin extends Plugin {
 
 			if(i==0){
                 PrinterHelper.printAreaSize("0","200","200","100","1");
-                PrinterHelper.AutCenter(PrinterHelper.TEXT,"0","0",100,4,"Text");
+                PrinterHelper.Barcode(PrinterHelper.BARCODE,PrinterHelper.code128,"1","1","50","0","0",true,"7","0","5",value);
                 PrinterHelper.Form();
                 PrinterHelper.Print();
 				PrinterHelper.portClose();
 			}
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            ret.put("value", e);
+        }
+
+        call.resolve(ret);
+    }
+
+    @PluginMethod()
+    public void PrintBarcode(PluginCall call) {
+
+        String value = call.getString("value");
+
+        Context context;
+
+        Global global = new Global();
+
+        context = global.getContext();
+
+        JSObject ret = new JSObject();
+
+        try {
+
+            PrinterHelper.portClose();
+
+            int i = PrinterHelper.portOpenBT( context,"FC:58:FA:17:CE:7F");
+
+            if(i==0){
+                PrinterHelper.printAreaSize("0","200","200","200","1");
+                PrinterHelper.Barcode(PrinterHelper.BARCODE,"128","2","1","100","160","40", true,"7","0","5",value);
+                PrinterHelper.Form();
+                PrinterHelper.Print();
+                PrinterHelper.portClose();
+
+                ret.put("value", value);
+            }
 
 
         } catch (Exception e) {

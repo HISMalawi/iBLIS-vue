@@ -89,7 +89,6 @@ import {
   IonFab,
   IonFabButton,
   IonIcon,
-  alertController
 } from "@ionic/vue";
 import { defineComponent, reactive, ref, watch, watchEffect } from "vue";
 import { AuthRequest } from "@/interfaces/AuthRequest";

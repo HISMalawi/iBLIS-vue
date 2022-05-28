@@ -1,7 +1,10 @@
 import { registerPlugin } from '@capacitor/core';
 
 export interface PrintTestPlugin {
+
   PrintTest(options: { value: string }): Promise<{ value: string }>;
+
+  PrintBarcode(options: { value: string }): Promise<{ value: string }>;
   
 }
 
