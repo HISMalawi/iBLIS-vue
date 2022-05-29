@@ -116,8 +116,7 @@
             </ion-col>
 
             <ion-col>
-              <ion-button color="primary" size="small" @click="PrintBarcode"
-                >Print</ion-button
+              <ion-button color="primary" size="small" @click="PrintBarcode(Specimen)">Print</ion-button
               >
             </ion-col>
           </ion-row>
@@ -143,6 +142,7 @@ import {
   IonModal,
   IonDatetime,
   IonButton,
+  alertController
 } from "@ionic/vue";
 import { defineComponent, ref, watchEffect } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
@@ -154,6 +154,7 @@ import { Specimen } from "@/interfaces/Specimen";
 import { useRouter } from "vue-router";
 import { format, parseISO } from "date-fns";
 import DateModalToolBar from "@/components/DateModalToolBar.vue";
+import PrintProvider from "@/composables/printProvider";
 
 export default defineComponent({
   name: "OrdersPage",
@@ -181,6 +182,8 @@ export default defineComponent({
 
     const startDateModal = ref<boolean>(false);
     const endDateModal = ref<boolean>(false);
+
+    const { iMove3 } = PrintProvider();
 
     const now = new Date()
       .toISOString()
@@ -260,8 +263,56 @@ export default defineComponent({
       endDateModal.value = false;
     };
 
-    const PrintBarcode = () => {
-      console.log("Print Barcode");
+    const PrintBarcode = (Specimen : Specimen) => {
+
+      if (store.getters.defaultPrinter.address == "") {
+        const AlertExitApp = () => {
+          const presentAlert = async () => {
+            const alert = await alertController.create({
+              header: "Heads Up!",
+              message:
+                "Barcode printer not configured, Click configure to setup or proceed to ignore!",
+              buttons: [
+                {
+                  text: "CONFIGURE",
+                  cssClass: "secondary",
+                  handler: () => {
+                    router.push({ name: "Configurations", replace: false });
+                  },
+                },
+                {
+                  text: "IGNORE",
+                  role: "cancel",
+                  cssClass: "secondary",
+                  handler: () => {
+
+                    console.log("Confirm Cancel");
+                    
+                  },
+                },
+              ],
+            });
+            await alert.present();
+          };
+
+          presentAlert();
+        };
+
+        AlertExitApp();
+
+      } else if(store.getters.defaultPrinter.address !== "") {
+
+        if (store.getters.defaultPrinter.name.substring(0, 7) == "iMOVE 3") {
+          const { PrintBarcode } = iMove3();
+
+          PrintBarcode(Specimen.accession_number);
+
+        } else {
+
+          alert("Printer not supported");
+
+        }
+      }
     };
 
     watchEffect(() => {
