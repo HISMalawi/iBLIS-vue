@@ -206,7 +206,6 @@ export default defineComponent({
     IonChip,
   },
   setup() {
-
     const store = useStore();
 
     const currentPage = ref<number>(1);
@@ -453,55 +452,54 @@ export default defineComponent({
     });
 
     const download = async () => {
-      let blob = new Blob([zpl.value], { type: "text/lbl;charset=utf-8" });
-      // Convert photo to base64 format, required by Filesystem API to save
-      const base64Data = await readAsBase64(blob);
-
-      const fileName = `${accessionNumber.value}.lbl`;
-
-      const writeFile = async () => {
-        await Filesystem.writeFile({
-          path: fileName,
-          data: base64Data,
-          directory: Directory.Documents,
-          encoding: Encoding.UTF8,
-        });
-      };
-
       if (store.getters.defaultPrinter.address !== "") {
+        if (store.getters.defaultPrinter.name.substring(0, 7) == "iMOVE 3") {
+          const { PrintBarcode } = iMove3();
 
-        const { PrintBarcode } = iMove3();
+          PrintBarcode(accessionNumber.value);
+        } else {
+          let blob = new Blob([zpl.value], { type: "text/lbl;charset=utf-8" });
+          // Convert photo to base64 format, required by Filesystem API to save
+          const base64Data = await readAsBase64(blob);
 
-        PrintBarcode(accessionNumber.value);
+          const fileName = `${accessionNumber.value}.lbl`;
 
+          const writeFile = async () => {
+            await Filesystem.writeFile({
+              path: fileName,
+              data: base64Data,
+              directory: Directory.Documents,
+              encoding: Encoding.UTF8,
+            });
+          };
 
-        // let canvas  = document.createElement("canvas");
+          // let canvas  = document.createElement("canvas");
 
-        // JsBarcode(canvas, "1234", {
-        //   format: "pharmacode",
-        //   lineColor: "#0aa",
-        //   width: 4,
-        //   height: 40,
-        //   displayValue: false,
-        // });
+          // JsBarcode(canvas, "1234", {
+          //   format: "pharmacode",
+          //   lineColor: "#0aa",
+          //   width: 4,
+          //   height: 40,
+          //   displayValue: false,
+          // });
 
-        // canvas.toBlob((blob: any) => {
+          // canvas.toBlob((blob: any) => {
 
-        //   const reader = new FileReader();
+          //   const reader = new FileReader();
 
-        // reader.onload = function () {
-        //   var arrayBuffer = reader.result;
-        //   printLabel(arrayBuffer);
-        // };
-        // reader.readAsArrayBuffer(blob);
+          // reader.onload = function () {
+          //   var arrayBuffer = reader.result;
+          //   printLabel(arrayBuffer);
+          // };
+          // reader.readAsArrayBuffer(blob);
 
-        // }, 'image/png');
+          // }, 'image/png');
 
+          writeFile().then(() => {
+            console.log("Write FIle");
+          });
+        }
       }
-
-      writeFile().then(() => {
-        console.log("Write FIle");
-      });
     };
 
     const readAsBase64 = async (blob: Blob) => {

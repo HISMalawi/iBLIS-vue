@@ -25,6 +25,7 @@ const printProvider = () => {
         printer = Object.assign(printer, {
           handler: () => {
             SetDefaultPrinter(printer);
+
           },
         });
 
@@ -307,7 +308,7 @@ const printProvider = () => {
 
     const PrintBarcode = async (accession_number: string) => {
 
-      const { value } = await iMove3Printer.PrintBarcode({ value: accession_number });
+      const { value } = await iMove3Printer.PrintBarcode({ value: accession_number, printer_id: store.getters.defaultPrinter.id });
 
       const AlertExitApp = () => {
         const presentAlert = async () => {

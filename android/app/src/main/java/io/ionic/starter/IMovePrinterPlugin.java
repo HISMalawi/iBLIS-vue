@@ -65,6 +65,8 @@ public class IMovePrinterPlugin extends Plugin {
 
         String value = call.getString("value");
 
+        String printer_id = call.getString("printer_id");
+
         Context context;
 
         Global global = new Global();
@@ -77,7 +79,7 @@ public class IMovePrinterPlugin extends Plugin {
 
             PrinterHelper.portClose();
 
-            int i = PrinterHelper.portOpenBT( context,"FC:58:FA:17:CE:7F");
+            int i = PrinterHelper.portOpenBT( context,printer_id);
 
             if(i==0){
                 PrinterHelper.printAreaSize("0","200","200","200","1");
