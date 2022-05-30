@@ -418,11 +418,9 @@ export default defineComponent({
 
       let index = 0;
 
-      setTimeout(() => {
-        save(orders[index]);
+      save(orders[index]);
 
-        index = index + 1;
-      }, 1000);
+      index = index + 1;
 
       watch(
         () => [accessionNumber.value],
@@ -434,7 +432,9 @@ export default defineComponent({
           }
 
           if (index == orders.length) {
-            router.push({ name: "Orders", replace: true });
+            setTimeout(() => {
+              router.push({ name: "Orders", replace: true });
+            }, 1000);
           }
         }
       );
