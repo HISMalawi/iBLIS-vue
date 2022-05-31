@@ -4,7 +4,6 @@ import { Specimen } from "@/interfaces/Specimen";
 import { TestResult } from "@/interfaces/TestResult";
 import TokenCheck from "@/composables/tokenCheck";
 import { TestUser } from "@/interfaces/TestUser";
-import { Result } from "@/interfaces/Result";
 
 const { logout } = TokenCheck();
 

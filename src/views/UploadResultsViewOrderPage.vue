@@ -238,7 +238,7 @@ import { useStore } from "@/store";
 import { Specimen } from "@/interfaces/Specimen";
 import { Patient } from "@/interfaces/Patient";
 import GetPatientOrdersWithResults from "@/composables/getPatientOrdersWithResults";
-import GetTestsResults from "@/composables/getTestsResults";
+// import GetTestsResults from "@/composables/getTestsResults";
 import { TestResult } from "@/interfaces/TestResult";
 import GetTestMeasures from "@/composables/getTestMeasures";
 import { Measure } from "@/interfaces/Measure";
@@ -305,13 +305,13 @@ export default defineComponent({
 
     const { fetchMeasures, Measures } = GetTestMeasures();
 
-    const { fetchOrders, Tests, TestWithResults, TestsResults } = GetPatientOrdersWithResults();
+    const { fetchOrders, Tests, TestsResults } = GetPatientOrdersWithResults();
 
-    const { Results, fetchTestResults } = GetTestsResults();
+    // const { Results, fetchTestResults } = GetTestsResults();
 
     fetchOrders(parseInt(store.getters.selectedPatient.patient_number),fromDate.value, toDate.value);
 
-    fetchTestResults(TestWithResults.value);
+    // fetchTestResults(TestWithResults.value);
 
     const OpenUploadResultsModal = (Test: TestResult, TestName: string) => {
      
@@ -385,7 +385,7 @@ export default defineComponent({
         }
       }
       fetchOrders(parseInt(store.getters.selectedPatient.patient_number),fromDate.value, toDate.value);
-      fetchTestResults(TestWithResults.value);
+      // fetchTestResults(TestWithResults.value);
       showModal.value = false;
     };
 
