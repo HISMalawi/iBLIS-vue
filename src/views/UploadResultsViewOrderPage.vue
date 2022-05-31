@@ -107,11 +107,11 @@
           <ion-row
             v-for="Test in Tests"
             :key="Test.id"
-            @click="OpenUploadResultsModal(Test, Test.name)"
+            @click="OpenUploadResultsModal(Test, Test.test_name)"
           >
             <ion-col class="cus-row" v-if="Test.specimen_id == Specimen.id">
               <ion-row>
-                <ion-col>{{ Test.name }}</ion-col>
+                <ion-col>{{ Test.test_name }}</ion-col>
               </ion-row>
             </ion-col>
             <ion-col class="cus-row" v-if="Test.specimen_id == Specimen.id">
@@ -190,16 +190,16 @@
 
               <ion-col v-else>
                 <ion-input
-                  v-if="Measure.result == ''"
+                  v-if="getResult(Measure) == ''"
                   placeholder="Result"
-                  :value="Measure.result"
+                  :value="getResult(Measure)"
                   @change="resultChange(Measure, $event.target.value)"
                 ></ion-input>
 
                 <ion-input
                   v-else
                   placeholder="Result"
-                  :value="Measure.result"
+                  :value="getResult(Measure)"
                   :disabled="true"
                 ></ion-input>
               </ion-col>
@@ -235,7 +235,7 @@ import UploadResultsViewOrderFooter from "@/components/UploadResultsViewOrderFoo
 import { useStore } from "@/store";
 import { Specimen } from "@/interfaces/Specimen";
 import { Patient } from "@/interfaces/Patient";
-import GetPatientOrders from "@/composables/getPatientOrders";
+import GetPatientOrdersWithResults from "@/composables/getPatientOrdersWithResults";
 import GetTestsResults from "@/composables/getTestsResults";
 import { TestResult } from "@/interfaces/TestResult";
 import GetTestMeasures from "@/composables/getTestMeasures";
@@ -282,6 +282,8 @@ export default defineComponent({
 
     const toDate = ref<string>("");
 
+    const selectedTestID = ref<number>(0);
+
     fromDate.value = now;
 
     toDate.value = now;
@@ -300,7 +302,7 @@ export default defineComponent({
 
     const { fetchMeasures, Measures } = GetTestMeasures();
 
-    const { fetchOrders, Tests, TestWithResults } = GetPatientOrders();
+    const { fetchOrders, Tests, TestWithResults, TestsResults } = GetPatientOrdersWithResults();
 
     const { Results, fetchTestResults } = GetTestsResults();
 
@@ -309,9 +311,12 @@ export default defineComponent({
     fetchTestResults(TestWithResults.value);
 
     const OpenUploadResultsModal = (Test: TestResult, TestName: string) => {
+     
       Measures.value.length = 0;
 
-      fetchMeasures(Test.id);
+      selectedTestID.value = Test.id;
+
+      fetchMeasures(Test.test_type_id);
       modalTitleTestName.value = TestName;
       showModal.value = true;
     };
@@ -333,7 +338,7 @@ export default defineComponent({
     };
 
     const resultChange = (measure: Measure, update: string) => {
-      if (measure.result !== update) {
+      if (getResult(measure) !== update) {
         for (let index = 0; index < MeasuresToUpdate.value.length; index++) {
           const element = MeasuresToUpdate.value[index];
 
@@ -350,11 +355,11 @@ export default defineComponent({
 
     const SaveChanges = () => {
       if (MeasuresToUpdate.value.length > 0) {
-        upload(MeasuresToUpdate.value);
+        upload(MeasuresToUpdate.value, Specimen.accession_number, selectedTestID.value);
 
-        fetchOrders(parseInt(store.getters.selectedPatient.patient_number),fromDate.value, toDate.value);
+        // fetchOrders(parseInt(store.getters.selectedPatient.patient_number),fromDate.value, toDate.value);
 
-        fetchTestResults(TestWithResults.value);
+        // fetchTestResults(TestWithResults.value);
       }
 
       for (
@@ -369,14 +374,15 @@ export default defineComponent({
         }
 
         if (index + 1 == MeasuresToCheckForUpdate.value.length) {
-          upload(MeasuresToCheckForUpdate.value);
+          upload(MeasuresToCheckForUpdate.value, Specimen.accession_number, selectedTestID.value);
 
-          fetchOrders(parseInt(store.getters.selectedPatient.patient_number),fromDate.value, toDate.value);
+          // fetchOrders(parseInt(store.getters.selectedPatient.patient_number),fromDate.value, toDate.value);
 
-          fetchTestResults(TestWithResults.value);
+          // fetchTestResults(TestWithResults.value);
         }
       }
-
+      fetchOrders(parseInt(store.getters.selectedPatient.patient_number),fromDate.value, toDate.value);
+      fetchTestResults(TestWithResults.value);
       showModal.value = false;
     };
 
@@ -400,6 +406,23 @@ export default defineComponent({
       }
     };
 
+    const getResult = (measure : Measure) => {
+
+      let results = "";
+
+      for (let index = 0; index < TestsResults.value.length; index++) {
+        const result = TestsResults.value[index];
+
+        if(result.measure_id == measure.id && result.test_id == selectedTestID.value){
+            results = result.result;
+        } 
+        
+      }
+
+      return results;
+
+    }
+
     return {
       Specimen,
       Patient,
@@ -415,6 +438,7 @@ export default defineComponent({
       SaveChanges,
       MeasuresToUpdate,
       TriggerForUpdate,
+      getResult,
     };
   },
 });

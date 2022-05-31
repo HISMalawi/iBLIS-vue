@@ -495,9 +495,9 @@ export default defineComponent({
 
           // }, 'image/png');
 
-          writeFile().then(() => {
-            console.log("Write FIle");
-          });
+          // writeFile().then(() => {
+          //   console.log("Write FIle");
+          // });
         }
       }
     };

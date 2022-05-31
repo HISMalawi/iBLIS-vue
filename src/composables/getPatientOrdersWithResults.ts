@@ -12,11 +12,12 @@ const store = useStore();
 
 const Specimens = ref<Specimen[]>([]);
 const TestWithResults = ref<TestResult[]>([]);
+const TestsResults = ref<Result[]>([]);
 const Tests = ref<TestResult[]>([]);
 const Users = ref<TestUser[]>([]);
 const SpecimensWithResults = ref<Specimen[]>([]);
 
-const getPatientOrders = () => {
+const getPatientOrdersWithResults = () => {
   const axios = ref(store.getters.axios);
 
   const token = ref(store.getters.user.token);
@@ -26,7 +27,7 @@ const getPatientOrders = () => {
 
   const fetchOrders = (patient_id: number, fromDate: string, toDate : string) => {
     axios.value
-      .post("/patient/orders", {
+      .post("/patient/orders_with_results", {
         token: token.value,
         patient_id: patient_id,
         from: fromDate,
@@ -47,6 +48,8 @@ const getPatientOrders = () => {
             Tests.value = responseData.tests;
 
             TestWithResults.value = responseData.tests_with_results;
+
+            TestsResults.value = responseData.tests_results;
 
             Specimens.value = responseData.specimens;
 
@@ -96,7 +99,7 @@ const getPatientOrders = () => {
       });
   };
 
-  return { fetchOrders, Specimens, Tests, Users, TestWithResults, SpecimensWithResults };
+  return { fetchOrders, Specimens, Tests, Users, TestWithResults, SpecimensWithResults, TestsResults };
 };
 
-export default getPatientOrders;
+export default getPatientOrdersWithResults;

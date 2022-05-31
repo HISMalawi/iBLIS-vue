@@ -18,11 +18,11 @@ const getTestMeasures = () => {
   const message = ref<string>("");
   const code = ref<string>("");
 
-  const fetchMeasures = (test_id: number) => {
+  const fetchMeasures = (testtype_id: number) => {
     axios.value
       .post("/test/measures", {
         token: token.value,
-        test_id:test_id,
+        testtype_id:testtype_id,
       })
       .then(function (response: any) {
         if (response.statusText === "OK") {

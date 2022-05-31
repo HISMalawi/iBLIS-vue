@@ -16,12 +16,15 @@ const uploadResults = () => {
   const message = ref<string>("");
   const code = ref<string>("");
 
-  const upload = (measures: Measure[]) => {
+  const upload = (measures: Measure[], accessionNumber: string, test_id: number) => {
 
     axios.value
       .post("/test/results/upload", {
         token: token.value,
         measures:measures,
+        accession_number: accessionNumber,
+        test_id: test_id,
+        user_id:store.getters.user.id,
       })
       .then(function (response: any) {
         if (response.statusText === "OK") {
