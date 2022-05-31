@@ -137,7 +137,7 @@ import { defineComponent, ref, watchEffect } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import PendingOrdersFooter from "@/components/PendingOrdersFooter.vue";
-import GetSiteOrders from "@/composables/getSiteOrders";
+import GetSitePendingOrders from "@/composables/getSitePendingOrders";
 import { Specimen } from "@/interfaces/Specimen";
 import DateModalToolBar from "@/components/DateModalToolBar.vue";
 import { format, parseISO } from "date-fns";
@@ -196,7 +196,7 @@ export default defineComponent({
 
     }
 
-    const { fetchOrders, Specimens, Tests } = GetSiteOrders();
+    const { fetchOrders, Specimens, Tests } = GetSitePendingOrders();
 
     const formatDate = (value: string) => {
       return format(parseISO(value), "yyyy-MM-dd");
