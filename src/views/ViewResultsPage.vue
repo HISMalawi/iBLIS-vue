@@ -110,7 +110,7 @@
 
           <ion-row
             class="cus-row"
-            v-for="Specimen in SpecimensWithResults"
+            v-for="Specimen in Specimens"
             :key="Specimen.id"
             @click="ViewOrder(Specimen)"
           >
@@ -227,7 +227,7 @@ export default defineComponent({
 
     const { fetchTests, TestsSp } = GetTestsBySpecimenTypeID();
 
-    const { fetchOrders, Specimens, Tests, SpecimensWithResults } = GetPatientOrders();
+    const { fetchOrders, Specimens, Tests } = GetPatientOrders();
 
     const formatDate = (value: string) => {
       return format(parseISO(value), "yyyy-MM-dd");
@@ -235,7 +235,7 @@ export default defineComponent({
 
     const OpenStartDateModal = (b: boolean) => {
       if (!b) {
-        // fetchOrders(fromDate.value, toDate.value);
+        fetchOrders(parseInt(store.getters.selectedPatient.patient_number),fromDate.value, toDate.value);
       }
 
       startDateModal.value = b;
@@ -243,14 +243,14 @@ export default defineComponent({
 
     const OpenEndDateModal = (b: boolean) => {
       if (!b) {
-        // fetchOrders(fromDate.value, toDate.value);
+        fetchOrders(parseInt(store.getters.selectedPatient.patient_number),fromDate.value, toDate.value);
       }
 
       endDateModal.value = b;
     };
 
     const CloseDateModals = () => {
-      // fetchOrders(fromDate.value, toDate.value);
+      fetchOrders(parseInt(store.getters.selectedPatient.patient_number),fromDate.value, toDate.value);
 
       startDateModal.value = false;
 
@@ -309,7 +309,6 @@ export default defineComponent({
       getDateCollected,
       Tests,
       ViewOrder,
-      SpecimensWithResults,
       specimenTypes
     };
   },

@@ -47,32 +47,7 @@ const getPatientOrders = () => {
 
             TestWithResults.value = responseData.tests_with_results;
 
-            Specimens.value = responseData.specimens;
-
-
-            TestWithResults.value.forEach((test) => {
-
-              Specimens.value.forEach(specimen => {
-
-                if (specimen.id == test.specimen_id) {
-
-                  // UNFINISHED BUSINESS!!!
-                  
-                    SpecimensWithResults.value.push(specimen);
-                    if (SpecimensWithResults.value.length > 1){
-                      SpecimensWithResults.value.forEach(sp => {
-                        if (sp.id == specimen.id){
-                          const index = SpecimensWithResults.value.indexOf(sp)
-                          SpecimensWithResults.value.splice(index,1);
-                        }
-                      })
-                    }  
-                  
-                }
-                
-              });
-              
-            });
+            Specimens.value = responseData.specimens;          
 
             Specimens.value.forEach((Specimen) => {
               if (

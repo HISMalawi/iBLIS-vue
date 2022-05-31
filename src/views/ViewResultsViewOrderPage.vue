@@ -100,7 +100,7 @@
           </ion-row>
           <ion-row>
             <ion-col size="2" class="head-col"> Test </ion-col>
-            <ion-col size="4" class="head-col"> Results </ion-col>
+            <ion-col size="4" class="head-col"> Result (s) </ion-col>
             <ion-col size="2" class="head-col"> Authorised By </ion-col>
             <ion-col size="2" class="head-col"> Authorised Date </ion-col>
             <ion-col size="2" class="head-col"> Created Date </ion-col>
