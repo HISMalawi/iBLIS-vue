@@ -99,33 +99,34 @@
             <ion-col class="head-title-col card-3">Lab Results</ion-col>
           </ion-row>
           <ion-row>
-            <ion-col class="head-col"> Test </ion-col>
-            <ion-col class="head-col"> Result </ion-col>
-            <ion-col class="head-col"> Date </ion-col>
+            <ion-col size="5" class="head-col"> Test </ion-col>
+            <ion-col size="5" class="head-col"> Date </ion-col>
+            <ion-col size="2" class="head-col"> Action </ion-col>
           </ion-row>
 
           <ion-row
             v-for="Test in Tests"
             :key="Test.id"
-            @click="OpenUploadResultsModal(Test, Test.test_name)"
           >
-            <ion-col class="cus-row" v-if="Test.specimen_id == Specimen.id">
+            <ion-col size="5" class="cus-row" v-if="Test.specimen_id == Specimen.id">
               <ion-row>
-                <ion-col>{{ Test.test_name }}</ion-col>
+                <ion-col >{{ Test.test_name }}</ion-col>
               </ion-row>
             </ion-col>
-            <ion-col class="cus-row" v-if="Test.specimen_id == Specimen.id">
-              <ion-row v-for="Result in Results" :key="Result.id">
-                <ion-col v-if="Result.test_id == Test.id">{{
-                  Result.measure_name + " : " + Result.result
-                }}</ion-col>
-              </ion-row>
-            </ion-col>
-            <ion-col class="cus-row" v-if="Test.specimen_id == Specimen.id">
+
+            <ion-col  size="5" class="cus-row" v-if="Test.specimen_id == Specimen.id">
               <ion-row>
-                <ion-col> {{ getDate(Test.time_created) }} </ion-col>
+                <ion-col > {{ getDate(Test.time_created) }} </ion-col>
               </ion-row>
             </ion-col>
+
+            <ion-col size="2" class="cus-row" v-if="Test.specimen_id == Specimen.id">
+
+              <ion-button color="primary" size="small" @click="OpenUploadResultsModal(Test, Test.test_name)">Upload</ion-button
+              >
+            </ion-col>
+
+
           </ion-row>
         </ion-grid>
       </div>
@@ -226,6 +227,7 @@ import {
   IonInput,
   IonSelect,
   IonSelectOption,
+  IonButton,
 } from "@ionic/vue";
 import { defineComponent, ref, watchEffect } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
@@ -260,6 +262,7 @@ export default defineComponent({
     IonInput,
     IonSelect,
     IonSelectOption,
+    IonButton
   },
   setup() {
     const store = useStore();
@@ -428,7 +431,6 @@ export default defineComponent({
       Patient,
       Tests,
       getDate,
-      Results,
       showModal,
       modalTitleTestName,
       OpenUploadResultsModal,
