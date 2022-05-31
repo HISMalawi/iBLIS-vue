@@ -107,7 +107,7 @@
           <ion-row v-for="Test in TestWithResults" :key="Test.id">
             <ion-col class="cus-row" v-if="Test.specimen_id == Specimen.id">
               <ion-row>
-                <ion-col>{{ Test.name }}</ion-col>
+                <ion-col>{{ Test.test_name }}</ion-col>
               </ion-row>
             </ion-col>
 
