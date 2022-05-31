@@ -160,7 +160,7 @@
               <ion-col
                 v-if="
                   Measure.measure_type_name == 'Alphanumeric Values' &&
-                  (Measure.result == '0' || Measure.result == '')
+                  (getResult(Measure) == '0' || getResult(Measure) == '')
                 "
               >
                 <ion-select
@@ -179,12 +179,12 @@
               <ion-col
                 v-else-if="
                   Measure.measure_type_name == 'Alphanumeric Values' &&
-                  Measure.result !== '0'
+                  getResult(Measure) !== '0'
                 "
               >
                 <ion-input
                   placeholder="Result"
-                  :value="Measure.result"
+                  :value="getResult(Measure)"
                   :disabled="true"
                 ></ion-input>
               </ion-col>
