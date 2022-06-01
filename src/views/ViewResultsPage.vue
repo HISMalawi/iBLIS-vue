@@ -110,7 +110,7 @@
 
           <ion-row
             class="cus-row"
-            v-for="Specimen in Specimens"
+            v-for="Specimen in filterSpecimens"
             :key="Specimen.id"
             @click="ViewOrder(Specimen)"
           >
@@ -162,7 +162,7 @@ import {
   IonSelect,
   IonSelectOption,
 } from "@ionic/vue";
-import { defineComponent, ref, watch, watchEffect } from "vue";
+import { computed, defineComponent, ref, watch, watchEffect } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import ViewResultsFooter from "@/components/ViewResultsFooter.vue";
@@ -293,6 +293,12 @@ export default defineComponent({
       }
     });
 
+    const filterSpecimens= computed(() => {
+      return Specimens.value.filter((specimen) =>
+        specimen.specimen_status_id == 2
+      );
+    });
+
     return {
       selectedTests,
       TestsSp,
@@ -309,7 +315,8 @@ export default defineComponent({
       getDateCollected,
       Tests,
       ViewOrder,
-      specimenTypes
+      specimenTypes,
+      filterSpecimens
     };
   },
 });
