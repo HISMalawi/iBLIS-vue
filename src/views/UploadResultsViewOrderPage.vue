@@ -122,7 +122,7 @@
 
             <ion-col size="2" class="cus-row" v-if="Test.specimen_id == Specimen.id">
 
-              <ion-button color="primary" size="small" @click="OpenUploadResultsModal(Test, Test.test_name)">Upload</ion-button
+              <ion-button color="primary" size="small" @click="OpenUploadResultsModal(Test, Test.test_name)">Enter Results</ion-button
               >
             </ion-col>
 
