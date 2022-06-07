@@ -70,33 +70,52 @@
             </ion-col>
 
             <ion-col size="3">
-              <ion-item class="cus-select">
-                <ion-label>Specimen</ion-label>
-                <ion-select v-model="selectedSpecimen">
-                  <ion-select-option
-                    :value="specimen"
-                    v-for="specimen in specimenTypes"
-                    :key="specimen.id"
-                    >{{ specimen.name }}</ion-select-option
-                  >
-                </ion-select>
-              </ion-item>
+              <ion-row>
+                <ion-col size="1">
+                  <ion-checkbox
+                    v-model="checkboxSpecimen"
+                    class="cb-enable-option"
+                  ></ion-checkbox>
+                </ion-col>
+                <ion-col>
+                  <ion-item class="cus-select">
+                    <ion-label>Specimen</ion-label>
+                    <ion-select v-model="selectedSpecimen">
+                      <ion-select-option
+                        :value="specimen"
+                        v-for="specimen in specimenTypes"
+                        :key="specimen.id"
+                        >{{ specimen.name }}</ion-select-option
+                      >
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
             </ion-col>
 
             <ion-col size="3">
-              <ion-item class="cus-select test-select">
-                <ion-label>Test (s)</ion-label>
-                <ion-select v-model="selectedTests" :multiple="true">
-                  <ion-select-option
-                    :value="test"
-                    v-for="test in TestsSp"
-                    :key="test.id"
-                    >{{ test.name }}</ion-select-option
-                  >
-                </ion-select>
-              </ion-item>
+              <ion-row>
+                <ion-col size="1">
+                  <ion-checkbox
+                    v-model="checkboxTests"
+                    class="cb-enable-option"
+                  ></ion-checkbox>
+                </ion-col>
+                <ion-col>
+                  <ion-item class="cus-select test-select">
+                    <ion-label>Test (s)</ion-label>
+                    <ion-select v-model="selectedTests" :multiple="true">
+                      <ion-select-option
+                        :value="test"
+                        v-for="test in TestsSp"
+                        :key="test.id"
+                        >{{ test.name }}</ion-select-option
+                      >
+                    </ion-select>
+                  </ion-item>
+                </ion-col>
+              </ion-row>
             </ion-col>
-
           </ion-row>
         </ion-grid>
 
@@ -138,8 +157,6 @@
             </ion-col>
           </ion-row>
         </ion-grid>
-
-
       </div>
     </ion-content>
 
@@ -161,6 +178,7 @@ import {
   IonDatetime,
   IonSelect,
   IonSelectOption,
+  IonCheckbox,
 } from "@ionic/vue";
 import { computed, defineComponent, ref, watch, watchEffect } from "vue";
 import CollapseToolBar from "@/components/CollapseToolBar.vue";
@@ -196,11 +214,16 @@ export default defineComponent({
     DateModalToolBar,
     IonSelect,
     IonSelectOption,
+    IonCheckbox,
   },
   setup() {
     const store = useStore();
 
     const router = useRouter();
+
+    const checkboxSpecimen = ref<boolean>(false);
+
+    const checkboxTests = ref<boolean>(false);
 
     const selectedSpecimen = ref<SpecimenType>({} as SpecimenType);
 
@@ -235,7 +258,11 @@ export default defineComponent({
 
     const OpenStartDateModal = (b: boolean) => {
       if (!b) {
-        fetchOrders(parseInt(store.getters.selectedPatient.patient_number),fromDate.value, toDate.value);
+        fetchOrders(
+          parseInt(store.getters.selectedPatient.patient_number),
+          fromDate.value,
+          toDate.value
+        );
       }
 
       startDateModal.value = b;
@@ -243,21 +270,33 @@ export default defineComponent({
 
     const OpenEndDateModal = (b: boolean) => {
       if (!b) {
-        fetchOrders(parseInt(store.getters.selectedPatient.patient_number),fromDate.value, toDate.value);
+        fetchOrders(
+          parseInt(store.getters.selectedPatient.patient_number),
+          fromDate.value,
+          toDate.value
+        );
       }
 
       endDateModal.value = b;
     };
 
     const CloseDateModals = () => {
-      fetchOrders(parseInt(store.getters.selectedPatient.patient_number),fromDate.value, toDate.value);
+      fetchOrders(
+        parseInt(store.getters.selectedPatient.patient_number),
+        fromDate.value,
+        toDate.value
+      );
 
       startDateModal.value = false;
 
       endDateModal.value = false;
     };
 
-    fetchOrders(parseInt(store.getters.selectedPatient.patient_number),fromDate.value, toDate.value);
+    fetchOrders(
+      parseInt(store.getters.selectedPatient.patient_number),
+      fromDate.value,
+      toDate.value
+    );
 
     fetchSpecimenTypes();
 
@@ -277,9 +316,7 @@ export default defineComponent({
       () => [selectedSpecimen.value],
       () => {
 
-        if (
-          Object.keys(selectedSpecimen.value).length > 0 
-        ) {
+        if (Object.keys(selectedSpecimen.value).length > 0) {
           TestsSp.value.length = 0;
           selectedTests.value = [];
           fetchTests(selectedSpecimen.value.id);
@@ -293,10 +330,44 @@ export default defineComponent({
       }
     });
 
-    const filterSpecimens= computed(() => {
-      return Specimens.value.filter((specimen) =>
-        specimen.specimen_status_id == 2
-      );
+    const checkIfArrayContains = (array: number[], value: any) => {
+      if(array.some((item) => item === value)){
+        return true;
+      } else {
+        return false;
+      }
+    };
+
+    const getSpecimenTestsID = (Specimen: Specimen) => {
+      let specimen_tests_id: number[] = [];
+
+      for (let i = 0; i < Tests.value.length; i++) {
+        if (Tests.value[i].specimen_id == Specimen.id) {
+          specimen_tests_id.push(Tests.value[i].id);
+        }
+      }
+
+      return specimen_tests_id;
+    }
+
+    const filterSpecimens = computed(() => {
+      let specimens;
+
+      if (checkboxSpecimen.value && checkboxTests.value) {
+        specimens = Specimens.value.filter(
+          (specimen: Specimen) => specimen.specimen_status_id == 2 && checkIfArrayContains(getSpecimenTestsID(specimen), selectedTests.value[0].id)
+        );
+      } else if (checkboxSpecimen.value) {
+        specimens = Specimens.value.filter(
+          (specimen: Specimen) => specimen.specimen_status_id == 2 && specimen.specimen_type == selectedSpecimen.value.name
+        );
+      } else {
+        specimens = Specimens.value.filter(
+          (specimen: Specimen) => specimen.specimen_status_id == 2
+        );
+      }
+
+      return specimens;
     });
 
     return {
@@ -316,7 +387,9 @@ export default defineComponent({
       Tests,
       ViewOrder,
       specimenTypes,
-      filterSpecimens
+      filterSpecimens,
+      checkboxSpecimen,
+      checkboxTests,
     };
   },
 });
@@ -346,8 +419,10 @@ ion-content {
   margin-top: 20px;
 }
 
-.cus-select{
-  margin-top: 7px;
+.cus-select {
+  margin-top: 2px;
 }
-
+.cb-enable-option {
+  margin-top: 15px;
+}
 </style>

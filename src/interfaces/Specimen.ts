@@ -1,6 +1,7 @@
 export interface Specimen {
     id: number;
     specimen_type_id: number;
+    specimen_type: string;
     accession_number: string;
     tracking_number: string;
     priority: string;
