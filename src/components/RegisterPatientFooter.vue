@@ -12,18 +12,25 @@
         ></ion-title
       >
 
-      <ion-title v-if="currentPage < 8 && currentPage != 2" size="small" slot="end"
+      <ion-title
+        v-if="currentPage < 8 && currentPage != 2"
+        size="small"
+        slot="end"
         ><ion-button @click="NavigateNext" :disabled="disableNext"
           >Next</ion-button
         ></ion-title
       >
 
-      <ion-title size="small" slot="end" v-if="currentPage == 2"
+      <ion-title size="small" slot="end" v-if="currentPage == 2 && Object.keys(selectedPatient).length == 0"
         ><ion-button @click="RegisterClient">Save</ion-button></ion-title
       >
 
-      <ion-title size="small" slot="end" v-if="currentPage == 8"
-        ><ion-button :disabled="disableProceed" @click="NavigateToPatientDashboard">Proceed</ion-button></ion-title
+      <ion-title size="small" slot="end" v-if="currentPage == 2 && Object.keys(selectedPatient).length > 0"
+        ><ion-button
+          :disabled="disableProceed"
+          @click="NavigateToPatientDashboard"
+          >Proceed</ion-button
+        ></ion-title
       >
     </ion-toolbar>
   </ion-footer>
@@ -66,7 +73,7 @@ export default defineComponent({
     selectedPatient: {
       type: Object as PropType<Patient>,
       required: true,
-    }
+    },
   },
   emits: ["NavigateNext", "NavigateBack", "RegisterClient"],
   setup(props, { emit }) {
@@ -91,9 +98,7 @@ export default defineComponent({
     };
 
     const RegisterClient = () => {
-
       emit("RegisterClient");
-
     };
 
     const NavigateToPatientDashboard = () => {
@@ -113,9 +118,7 @@ export default defineComponent({
     watch(
       () => [props.selectedPatient],
       () => {
-        
         disableProceed.value = false;
-
       }
     );
 
@@ -128,6 +131,8 @@ export default defineComponent({
         props.patient.dob,
         props.patient.phoneNumber,
         props.patient.physicalAddress,
+        props.selectedPatient,
+        props.selectedPatient.name,
       ],
       () => {
         if (
@@ -142,10 +147,14 @@ export default defineComponent({
           props.patient.dob !== ""
         ) {
           disableNext.value = false;
-        }  else {
+        } else if (
+          Object.keys(props.selectedPatient).length > 0 &&
+          props.selectedPatient.name.length > 0
+        ) {
+          disableNext.value = false;
+        } else {
           disableNext.value = true;
         }
-
       }
     );
 

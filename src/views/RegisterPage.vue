@@ -82,100 +82,171 @@
             </ion-row>
           </ion-col>
         </ion-row>
-        
 
-        <ion-row v-if="currentPage == 1">
+        <ion-row v-if="currentPage == 1 && patients.length > 0">
           <ion-col>
             <ion-list>
-          <ion-list-header class="card-3 other-info-head">
-            <ion-label class="gender-label"> Other Info </ion-label>
-          </ion-list-header>
+              <ion-radio-group v-model="selectedPatient">
+                <ion-list-header class="card-4-yellow">
+                  <ion-label class="matches-label">
+                    Possible Matches
+                  </ion-label>
 
-          <ion-item>
-            <ion-label position="floating"> External Patient Number </ion-label>
-            <ion-input
-              v-model="patient.externalPatientNumber"
-              placeholder="External Patient Number"
-            ></ion-input>
-          </ion-item>
+                  <ion-button
+                    color="light"
+                    @click="IgnorePossibles"
+                    class="ignore-btn"
+                    size="small"
+                    >IGNORE</ion-button
+                  >
+                </ion-list-header>
 
-          <ion-item>
-            <ion-label position="floating"> Phone Number </ion-label>
-            <ion-input
-              v-model="patient.phoneNumber"
-              placeholder="Phone Number"
-            ></ion-input>
-          </ion-item>
+                <ion-item v-for="patient in patients" :key="patient.id">
+                  <ion-label>{{
+                    patient.name +
+                    ", " +
+                    patient.gender +
+                    ", " +
+                    patient.age +
+                    "yrs"
+                  }}</ion-label>
+                  <ion-radio :value="patient"></ion-radio>
+                </ion-item>
+              </ion-radio-group>
+            </ion-list>
+          </ion-col>
+        </ion-row>
 
-          <ion-item>
-            <ion-label position="floating"> Address </ion-label>
-            <ion-input
-              v-model="patient.physicalAddress"
-              placeholder="Address"
-            ></ion-input>
-          </ion-item>
-        </ion-list>
+        <ion-row v-if="currentPage == 1 && patients.length == 0">
+          <ion-col>
+            <ion-list>
+              <ion-list-header class="card-3 other-info-head">
+                <ion-label class="gender-label"> Other Info </ion-label>
+              </ion-list-header>
 
+              <ion-item>
+                <ion-label position="floating">
+                  External Patient Number
+                </ion-label>
+                <ion-input
+                  v-model="patient.externalPatientNumber"
+                  placeholder="External Patient Number"
+                ></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label position="floating"> Phone Number </ion-label>
+                <ion-input
+                  v-model="patient.phoneNumber"
+                  placeholder="Phone Number"
+                ></ion-input>
+              </ion-item>
+
+              <ion-item>
+                <ion-label position="floating"> Address </ion-label>
+                <ion-input
+                  v-model="patient.physicalAddress"
+                  placeholder="Address"
+                ></ion-input>
+              </ion-item>
+            </ion-list>
           </ion-col>
         </ion-row>
 
         <ion-row v-if="currentPage == 2">
           <ion-col>
-            <ion-list>
-          <ion-list-header class="card-3">
-            <ion-label class="gender-label"> Client Summary</ion-label>
-          </ion-list-header>
 
-          <ion-item>
-            <ion-label
-              >Name:{{
-                " " + patient.firstname + " " + patient.lastname
-              }}</ion-label
-            >
-          </ion-item>
+            <ion-list v-if="Object.keys(selectedPatient).length > 0">
+              <ion-list-header class="card-3">
+                <ion-label class="gender-label"> Client Summary1</ion-label>
+              </ion-list-header>
 
-          <ion-item>
-            <ion-label v-if="patient.gender == '1'">Gender: Female</ion-label>
-            <ion-label v-if="patient.gender == '0'">Gender: Male</ion-label>
-          </ion-item>
+              <ion-item>
+                <ion-label>Name:{{ " " + selectedPatient.name }}</ion-label>
+              </ion-item>
 
-          <ion-item>
-            <ion-label>DOB:{{ " " + patient.dob }}</ion-label>
-          </ion-item>
+              <ion-item>
+                <ion-label>Gender:{{ " " + selectedPatient.gender }}</ion-label>
+              </ion-item>
 
-          <ion-item>
-            <ion-label v-if="patient.externalPatientNumber == ''"
-              >External Patient Number:{{ " " + "N/A" }}</ion-label
-            >
-            <ion-label v-if="patient.externalPatientNumber !== ''"
-              >External Patient Number:{{
-                " " + patient.externalPatientNumber
-              }}</ion-label
-            >
-          </ion-item>
+              <ion-item>
+                <ion-label>DOB:{{ " " + selectedPatient.dob }}</ion-label>
+              </ion-item>
 
-          <ion-item>
-            <ion-label v-if="patient.phoneNumber == ''"
-              >Phone:{{ " " + "N/A" }}</ion-label
-            >
-            <ion-label v-if="patient.phoneNumber !== ''"
-              >Phone:{{ " " + patient.phoneNumber }}</ion-label
-            >
-          </ion-item>
+              <ion-item>
+                <ion-label v-if="selectedPatient.phone_number == null"
+                  >Phone:{{ " " + "N/A" }}</ion-label
+                >
+                <ion-label v-if="selectedPatient.phone_number !== null"
+                  >Phone:{{ " " + selectedPatient.phone_number }}</ion-label
+                >
+              </ion-item>
 
-          <ion-item>
-            <ion-label v-if="patient.physicalAddress == ''"
-              >Address:{{ " " + "N/A" }}</ion-label
-            >
-            <ion-label v-if="patient.physicalAddress !== ''"
-              >Address:{{ " " + patient.physicalAddress }}</ion-label
-            >
-          </ion-item>
-        </ion-list>
+              <ion-item>
+                <ion-label v-if="selectedPatient.address == null"
+                  >Address:{{ " " + "N/A" }}</ion-label
+                >
+                <ion-label v-if="selectedPatient.address !== null"
+                  >Address:{{ " " + selectedPatient.address }}</ion-label
+                >
+              </ion-item>
+            </ion-list>
 
+            <ion-list v-if="Object.keys(selectedPatient).length == 0">
+              <ion-list-header class="card-3">
+                <ion-label class="gender-label"> Client Summary2</ion-label>
+              </ion-list-header>
+
+              <ion-item>
+                <ion-label
+                  >Name:{{
+                    " " + patient.firstname + " " + patient.lastname
+                  }}</ion-label
+                >
+              </ion-item>
+
+              <ion-item>
+                <ion-label v-if="patient.gender == '1'"
+                  >Gender: Female</ion-label
+                >
+                <ion-label v-if="patient.gender == '0'">Gender: Male</ion-label>
+              </ion-item>
+
+              <ion-item>
+                <ion-label>DOB:{{ " " + patient.dob }}</ion-label>
+              </ion-item>
+
+              <ion-item>
+                <ion-label v-if="patient.externalPatientNumber == ''"
+                  >External Patient Number:{{ " " + "N/A" }}</ion-label
+                >
+                <ion-label v-if="patient.externalPatientNumber !== ''"
+                  >External Patient Number:{{
+                    " " + patient.externalPatientNumber
+                  }}</ion-label
+                >
+              </ion-item>
+
+              <ion-item>
+                <ion-label v-if="patient.phoneNumber == ''"
+                  >Phone:{{ " " + "N/A" }}</ion-label
+                >
+                <ion-label v-if="patient.phoneNumber !== ''"
+                  >Phone:{{ " " + patient.phoneNumber }}</ion-label
+                >
+              </ion-item>
+
+              <ion-item>
+                <ion-label v-if="patient.physicalAddress == ''"
+                  >Address:{{ " " + "N/A" }}</ion-label
+                >
+                <ion-label v-if="patient.physicalAddress !== ''"
+                  >Address:{{ " " + patient.physicalAddress }}</ion-label
+                >
+              </ion-item>
+            </ion-list>
           </ion-col>
         </ion-row>
-
       </div>
     </ion-content>
 
@@ -206,6 +277,8 @@ import {
   // IonDatetime,
   IonRow,
   IonCol,
+  IonButton,
+  onIonViewDidLeave,
 } from "@ionic/vue";
 import { defineComponent, reactive, ref, watch, watchEffect } from "vue";
 import { useStore } from "@/store";
@@ -219,7 +292,9 @@ import { SearchClient } from "@/interfaces/SearchClient";
 import AddPatient from "@/composables/addPatient";
 import { Patient } from "@/interfaces/Patient";
 import { useRouter } from "vue-router";
+import SearchPatient from "@/composables/searchPatient";
 import Utils from "@/composables/utils";
+import { search } from "ionicons/icons";
 
 export default defineComponent({
   name: "RegisterPage",
@@ -239,6 +314,7 @@ export default defineComponent({
     RegisterPatientFooter,
     IonRow,
     IonCol,
+    IonButton,
   },
   setup() {
     const store = useStore();
@@ -254,6 +330,8 @@ export default defineComponent({
     const patient: PatientReg = reactive({} as PatientReg);
 
     const selectedPatient = ref<Patient>({} as Patient);
+
+    const { search, patients } = SearchPatient();
 
     patient.externalPatientNumber = "";
     patient.phoneNumber = "";
@@ -278,6 +356,18 @@ export default defineComponent({
         client.value.gender = "0";
       }
     }
+
+    const SearchClient = () => {
+      if (
+        client.value.first_name.length > 0 &&
+        client.value.last_name.length > 0
+      ) {
+        search(
+          client.value.first_name + " " + client.value.last_name,
+          client.value.gender
+        );
+      }
+    };
 
     const RegisterClient = () => {
       patient.firstname = CapitalizeAllFirstLetters(patient.firstname);
@@ -308,6 +398,19 @@ export default defineComponent({
       return format(parseISO(value), "yyyy-MM-dd");
     };
 
+    const IgnorePossibles = () => {
+      selectedPatient.value = {} as Patient;
+      patients.value.length = 0;
+    };
+
+    watch(
+      () => [client.value.gender],
+      () => {
+        patients.value.length = 0;
+        SearchClient();
+      }
+    );
+
     watch(
       () => [dateOfBirth.value],
       () => {
@@ -328,6 +431,11 @@ export default defineComponent({
       }
     });
 
+    onIonViewDidLeave(() => {
+      selectedPatient.value = {} as Patient;
+      patients.value.length = 0;
+    });
+
     return {
       numberOfPages,
       currentPage,
@@ -339,6 +447,8 @@ export default defineComponent({
       dateOfBirth,
       patient,
       selectedPatient,
+      patients,
+      IgnorePossibles,
     };
   },
 });
@@ -365,14 +475,10 @@ ion-textarea {
 .matches-label {
   font-size: 22px;
 }
-.poss-match-list {
-  padding: 0 10px;
-}
 .other-info-head {
   margin-bottom: 20px;
 }
-
-.cus-label {
-  margin-bottom: 15px !important;
+.ignore-btn {
+  margin-right: 10px;
 }
 </style>
