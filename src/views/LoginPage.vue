@@ -15,7 +15,7 @@
                 <ion-col class="login-avatar-col">
                   <img
                     class="login-avatar"
-                    src="../assets/user-avater-icon.png"
+                    src="../assets/mw-moh-logo.png"
                   />
                 </ion-col>
               </ion-row>
