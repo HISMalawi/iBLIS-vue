@@ -163,9 +163,10 @@
                   (getResult(Measure) == '0' || getResult(Measure) == '')
                 "
               >
-                <ion-select
+                <ion-select 
                   v-model="Measure.result"
                   @click="TriggerForUpdate(Measure)"
+                  interface="action-sheet"
                 >
                   <ion-select-option
                     v-for="Range in Measure.ranges"
@@ -482,4 +483,5 @@ ion-input {
   background-color: white;
   font-size: 20px;
 }
+
 </style>
