@@ -184,22 +184,22 @@ export default defineComponent({
 
     if (store.getters.previousLink == "/summary") {
 
-      fromDate.value = store.getters.fromDate;
+      fromDate.value = format(parseISO(store.getters.fromDate), "dd-MMM-yyyy");
 
-      toDate.value = store.getters.toDate;
+      toDate.value = format(parseISO(store.getters.toDate), "dd-MMM-yyyy");
       
     } else {
 
-      fromDate.value = now;
+      fromDate.value = format(parseISO(now), "dd-MMM-yyyy");
 
-      toDate.value = now;
+      toDate.value = format(parseISO(now), "dd-MMM-yyyy")
 
     }
 
     const { fetchOrders, Specimens, Tests } = GetSiteRejectedOrders();
 
     const formatDate = (value: string) => {
-      return format(parseISO(value), "yyyy-MM-dd");
+      return format(parseISO(value), "dd-MMM-yyyy");
     };
 
     const OpenStartDateModal = (b: boolean) => {
@@ -229,7 +229,7 @@ export default defineComponent({
     const getDateCollected = (Specimen: Specimen) => {
       let date_time: string = Specimen.date_of_collection;
 
-      return date_time.substring(0, 10);
+      return formatDate(date_time.substring(0, 10));
     };
 
     fetchOrders(fromDate.value, toDate.value);

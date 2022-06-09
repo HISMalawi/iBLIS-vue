@@ -179,6 +179,7 @@ import { Patient } from "@/interfaces/Patient";
 import GetPatientOrders from "@/composables/getPatientOrders";
 import GetTestsResults from "@/composables/getTestsResults";
 import { useRouter } from "vue-router";
+import Utils from "@/composables/utils";
 export default defineComponent({
   name: "ViewResultsViewOrderPage",
   components: {
@@ -198,6 +199,8 @@ export default defineComponent({
 
     const router = useRouter();
 
+    const { formatDate } = Utils();
+
     watchEffect(() => {
       if (!store.getters.isLoggedIn) {
         router.push({ name: "Login", replace: true });
@@ -214,9 +217,9 @@ export default defineComponent({
 
     const toDate = ref<string>("");
 
-    fromDate.value = now;
+    fromDate.value = formatDate(now);
 
-    toDate.value = now;
+    toDate.value = formatDate(now);
 
     const Patient: Patient = store.getters.selectedPatient;
 
@@ -237,7 +240,7 @@ export default defineComponent({
     const getDate = (date_string: string) => {
       let date_time: string = date_string;
 
-      return date_time.substring(0, 10);
+      return formatDate(date_time.substring(0, 10));
     };
 
     return { Specimen, Patient, TestWithResults, getDate, Results, Users };

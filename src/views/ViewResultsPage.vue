@@ -194,6 +194,7 @@ import GetSpecimenTypes from "@/composables/getSpecimenTypes";
 import { SpecimenType } from "@/interfaces/SpecimenType";
 import GetTestsBySpecimenTypeID from "@/composables/getTestsBySpecimenTypeID";
 import { Test } from "@/interfaces/Test";
+import Utils from "@/composables/utils";
 
 export default defineComponent({
   name: "ViewResultsPage",
@@ -221,6 +222,8 @@ export default defineComponent({
 
     const router = useRouter();
 
+    const { formatDate } = Utils();
+
     const checkboxSpecimen = ref<boolean>(false);
 
     const checkboxTests = ref<boolean>(false);
@@ -242,9 +245,9 @@ export default defineComponent({
 
     const toDate = ref<string>("");
 
-    fromDate.value = now;
+    fromDate.value = format(parseISO(now), "dd-MMM-yyyy");
 
-    toDate.value = now;
+    toDate.value = format(parseISO(now), "dd-MMM-yyyy");
 
     const { fetchSpecimenTypes, specimenTypes } = GetSpecimenTypes();
 
@@ -252,9 +255,6 @@ export default defineComponent({
 
     const { fetchOrders, Specimens, Tests } = GetPatientOrders();
 
-    const formatDate = (value: string) => {
-      return format(parseISO(value), "yyyy-MM-dd");
-    };
 
     const OpenStartDateModal = (b: boolean) => {
       if (!b) {
@@ -303,7 +303,7 @@ export default defineComponent({
     const getDateCollected = (Specimen: Specimen) => {
       let date_time: string = Specimen.date_of_collection;
 
-      return date_time.substring(0, 10);
+      return formatDate(date_time.substring(0, 10));
     };
 
     const ViewOrder = (Specimen: Specimen) => {

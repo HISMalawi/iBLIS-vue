@@ -139,6 +139,7 @@ import { Specimen } from "@/interfaces/Specimen";
 import { useRouter } from "vue-router";
 import { format, parseISO } from "date-fns";
 import DateModalToolBar from "@/components/DateModalToolBar.vue";
+import Utils from "@/composables/utils";
 
 export default defineComponent({
   name: "UploadResultsPage",
@@ -166,6 +167,8 @@ export default defineComponent({
     const startDateModal = ref<boolean>(false);
     const endDateModal = ref<boolean>(false);
 
+    const { formatDate } = Utils();
+
     const now = new Date()
       .toISOString()
       .replace(/T/, " ") // replace T with a space
@@ -176,9 +179,9 @@ export default defineComponent({
 
     const toDate = ref<string>("");
 
-    fromDate.value = now;
+    fromDate.value = format(parseISO(now), "dd-MMM-yyyy");
 
-    toDate.value = now;
+    toDate.value = format(parseISO(now), "dd-MMM-yyyy");
 
     const { fetchOrders, Specimens, Tests } = GetPatientOrders();
 
@@ -191,17 +194,13 @@ export default defineComponent({
     const getDateCollected = (Specimen: Specimen) => {
       let date_time: string = Specimen.date_of_collection;
 
-      return date_time.substring(0, 10);
+      return formatDate(date_time.substring(0, 10));
     };
 
     const ViewOrder = (Specimen: Specimen) => {
       store.dispatch(ActionTypes.SET_SELECTED_SPECIMEN, Specimen);
 
       router.push({ name: "UploadResultsViewOrder", replace: true });
-    };
-
-    const formatDate = (value: string) => {
-      return format(parseISO(value), "yyyy-MM-dd");
     };
 
     const OpenStartDateModal = (b: boolean) => {

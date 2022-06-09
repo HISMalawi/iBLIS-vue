@@ -93,7 +93,7 @@
           </ion-item>
 
           <ion-item>
-            <ion-label>DOB:{{ " " + selectedPatient.dob }}</ion-label>
+            <ion-label>DOB:{{ " " + formatDate(selectedPatient.dob) }}</ion-label>
           </ion-item>
 
           <ion-item>
@@ -154,6 +154,7 @@ import { SearchClient } from "@/interfaces/SearchClient";
 import { Patient } from "@/interfaces/Patient";
 import SearchPatient from "@/composables/searchPatient";
 import { MutationTypes, useStore } from "@/store";
+import Utils from "@/composables/utils";
 
 export default defineComponent({
   name: "SearchPage",
@@ -177,6 +178,8 @@ export default defineComponent({
     const store = useStore();
 
     const router = useRouter();
+
+    const { formatDate } = Utils();
 
     const numberOfPages = ref<number>(4);
     const currentPage = ref<number>(1);
@@ -245,7 +248,8 @@ export default defineComponent({
       NavigateToRegisterClient,
       patients,
       selectedPatient,
-      SearchClient
+      SearchClient,
+      formatDate,
     };
   },
 });

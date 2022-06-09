@@ -1,6 +1,7 @@
 import { Storage } from "@capacitor/storage";
 import { MutationTypes, useStore } from "@/store";
 import { Printer } from "@/interfaces/Printer";
+import { format, parseISO } from "date-fns";
 const store = useStore();
 
 const utils = () => {
@@ -67,13 +68,18 @@ const utils = () => {
     return value;
   };
 
+  const formatDate = (value: string) => {
+    return format(parseISO(value), "dd-MMM-yyyy");
+  };
+
   return {
     CapitalizeFirstLetter,
     CapitalizeAllFirstLetters,
     SetServerAddress,
     GetServerAddress,
     SetDefaultPrinter,
-    GetDefaultPrinter
+    GetDefaultPrinter,
+    formatDate,
   };
 };
 

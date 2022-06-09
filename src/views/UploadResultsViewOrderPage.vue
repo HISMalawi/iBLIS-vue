@@ -244,6 +244,7 @@ import GetTestMeasures from "@/composables/getTestMeasures";
 import { Measure } from "@/interfaces/Measure";
 import UploadResults from "@/composables/uploadResults";
 import { useRouter } from "vue-router";
+import Utils from "@/composables/utils";
 export default defineComponent({
   name: "UploadResultsViewOrderPage",
   components: {
@@ -268,6 +269,8 @@ export default defineComponent({
     const store = useStore();
 
     const router = useRouter();
+
+    const { formatDate } = Utils();
 
     watchEffect(() => {
       if (!store.getters.isLoggedIn) {
@@ -337,7 +340,7 @@ export default defineComponent({
     const getDate = (date_string: string) => {
       let date_time: string = date_string;
 
-      return date_time.substring(0, 10);
+      return formatDate(date_time.substring(0, 10));
     };
 
     const resultChange = (measure: Measure, update: string) => {

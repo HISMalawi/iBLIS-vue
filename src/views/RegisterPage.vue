@@ -75,7 +75,7 @@
                   <ion-input
                     v-model="dateOfBirth"
                     type="date"
-                    placeholder="DD/MM/YYYY"
+                    placeholder="DD/MMM/YYYY"
                   ></ion-input>
                 </ion-item>
               </ion-col>
@@ -158,7 +158,7 @@
 
             <ion-list v-if="Object.keys(selectedPatient).length > 0">
               <ion-list-header class="card-3">
-                <ion-label class="gender-label"> Client Summary1</ion-label>
+                <ion-label class="gender-label"> Client Summary</ion-label>
               </ion-list-header>
 
               <ion-item>
@@ -170,7 +170,7 @@
               </ion-item>
 
               <ion-item>
-                <ion-label>DOB:{{ " " + selectedPatient.dob }}</ion-label>
+                <ion-label>DOB:{{ " " + formatDate(selectedPatient.dob) }}</ion-label>
               </ion-item>
 
               <ion-item>
@@ -194,7 +194,7 @@
 
             <ion-list v-if="Object.keys(selectedPatient).length == 0">
               <ion-list-header class="card-3">
-                <ion-label class="gender-label"> Client Summary2</ion-label>
+                <ion-label class="gender-label"> Client Summary</ion-label>
               </ion-list-header>
 
               <ion-item>
@@ -213,7 +213,7 @@
               </ion-item>
 
               <ion-item>
-                <ion-label>DOB:{{ " " + patient.dob }}</ion-label>
+                <ion-label>DOB:{{ " " + formatDate(patient.dob) }}</ion-label>
               </ion-item>
 
               <ion-item>
@@ -294,7 +294,6 @@ import { Patient } from "@/interfaces/Patient";
 import { useRouter } from "vue-router";
 import SearchPatient from "@/composables/searchPatient";
 import Utils from "@/composables/utils";
-import { search } from "ionicons/icons";
 
 export default defineComponent({
   name: "RegisterPage",
@@ -322,7 +321,7 @@ export default defineComponent({
 
     const { save } = AddPatient();
 
-    const { CapitalizeAllFirstLetters } = Utils();
+    const { CapitalizeAllFirstLetters, formatDate} = Utils();
 
     const numberOfPages = ref<number>(4);
     const currentPage = ref<number>(1);
@@ -394,10 +393,6 @@ export default defineComponent({
       currentPage.value = currentPage.value - 1;
     };
 
-    const formatDate = (value: string) => {
-      return format(parseISO(value), "yyyy-MM-dd");
-    };
-
     const IgnorePossibles = () => {
       selectedPatient.value = {} as Patient;
       patients.value.length = 0;
@@ -414,7 +409,7 @@ export default defineComponent({
     watch(
       () => [dateOfBirth.value],
       () => {
-        patient.dob = dateOfBirth.value;
+        patient.dob = format(parseISO(dateOfBirth.value), "dd-MMM-yyyy");
       }
     );
 

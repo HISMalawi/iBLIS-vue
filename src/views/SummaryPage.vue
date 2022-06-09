@@ -202,9 +202,9 @@ export default defineComponent({
 
     const toDate = ref<string>("");
 
-    fromDate.value = now;
+    fromDate.value = format(parseISO(now), "dd-MMM-yyyy");
 
-    toDate.value = now;
+    toDate.value = format(parseISO(now), "dd-MMM-yyyy");
 
     const {
       fetchSummary,
@@ -224,7 +224,7 @@ export default defineComponent({
     };
 
     const formatDate = (value: string) => {
-      return format(parseISO(value), "yyyy-MM-dd");
+      return format(parseISO(value), "dd-MMM-yyyy");
     };
 
     const OpenStartDateModal = (b: boolean) => {
