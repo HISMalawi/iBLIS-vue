@@ -409,7 +409,7 @@ export default defineComponent({
     watch(
       () => [dateOfBirth.value],
       () => {
-        patient.dob = format(parseISO(dateOfBirth.value), "dd-MMM-yyyy");
+        patient.dob = format(parseISO(dateOfBirth.value), "yyyy-MM-dd");
       }
     );
 
