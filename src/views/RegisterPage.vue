@@ -332,6 +332,8 @@ export default defineComponent({
 
     const { search, patients } = SearchPatient();
 
+    patients.value.length = 0;
+
     patient.externalPatientNumber = "";
     patient.phoneNumber = "";
     patient.physicalAddress = "";
