@@ -189,7 +189,7 @@
               </ion-item>
 
               <ion-item>
-                <ion-label>DOB:{{ " " + selectedPatient.dob }}</ion-label>
+                <ion-label>DOB:{{ " " + formatDate(selectedPatient.dob) }}</ion-label>
               </ion-item>
 
               <ion-item>
@@ -399,7 +399,7 @@ export default defineComponent({
         client.value.last_name.length > 0
       ) {
         search(
-          client.value.first_name + " " + client.value.last_name,
+          client.value.first_name.trim() + " " + client.value.last_name.trim(),
           client.value.gender
         );
       }
