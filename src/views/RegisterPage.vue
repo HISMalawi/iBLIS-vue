@@ -93,6 +93,7 @@
                   <ion-input
                     v-model="dateOfBirth"
                     @click="OpenDateModal(true)"
+                    placeholder="DD/MM/YYYY"
                     readonly
                   ></ion-input>
                 </ion-item>
