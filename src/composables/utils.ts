@@ -73,6 +73,13 @@ const utils = () => {
     return format(parseISO(value), "dd-MMM-yyyy");
   };
 
+  const blisDateFormat = (value: string) => {
+
+    const date = new Date(value);
+    
+    return format(date, 'yyyy-MM-dd').toString();
+  };
+
   return {
     CapitalizeFirstLetter,
     CapitalizeAllFirstLetters,
@@ -81,6 +88,7 @@ const utils = () => {
     SetDefaultPrinter,
     GetDefaultPrinter,
     formatDate,
+    blisDateFormat,
   };
 };
 

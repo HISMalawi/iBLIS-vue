@@ -9,6 +9,24 @@
       <collapse-tool-bar pageTitle="iBLIS | Register Client" />
 
       <div id="container">
+
+        <ion-modal
+          :is-open="DateModal"
+          @didDismiss="OpenDateModal(false)"
+        >
+          <ion-content force-overscroll="false">
+            <date-modal-tool-bar
+              pageTitle="Date of Birth"
+              @CloseDateModals="CloseDateModal"
+            />
+            <ion-datetime
+              class="cus-datetime"
+              presentation="date"
+              @ionChange="(ev: DatetimeCustomEvent) => dateOfBirth = formatDate(ev.detail.value)"
+            ></ion-datetime>
+          </ion-content>
+        </ion-modal>
+
         <ion-row v-if="currentPage == 1">
           <ion-col>
             <ion-list-header class="card-3">
@@ -74,8 +92,8 @@
                 <ion-item>
                   <ion-input
                     v-model="dateOfBirth"
-                    type="date"
-                    placeholder="DD/MMM/YYYY"
+                    @click="OpenDateModal(true)"
+                    readonly
                   ></ion-input>
                 </ion-item>
               </ion-col>
@@ -170,7 +188,7 @@
               </ion-item>
 
               <ion-item>
-                <ion-label>DOB:{{ " " + formatDate(selectedPatient.dob) }}</ion-label>
+                <ion-label>DOB:{{ " " + selectedPatient.dob }}</ion-label>
               </ion-item>
 
               <ion-item>
@@ -213,7 +231,7 @@
               </ion-item>
 
               <ion-item>
-                <ion-label>DOB:{{ " " + formatDate(patient.dob) }}</ion-label>
+                <ion-label>DOB:{{ " " + patient.dob }}</ion-label>
               </ion-item>
 
               <ion-item>
@@ -274,11 +292,12 @@ import {
   IonItem,
   IonLabel,
   IonListHeader,
-  // IonDatetime,
+  IonDatetime,
   IonRow,
   IonCol,
   IonButton,
   onIonViewDidLeave,
+  IonModal,
 } from "@ionic/vue";
 import { defineComponent, reactive, ref, watch, watchEffect } from "vue";
 import { useStore } from "@/store";
@@ -293,6 +312,7 @@ import AddPatient from "@/composables/addPatient";
 import { Patient } from "@/interfaces/Patient";
 import { useRouter } from "vue-router";
 import SearchPatient from "@/composables/searchPatient";
+import DateModalToolBar from "@/components/DateModalToolBar.vue";
 import Utils from "@/composables/utils";
 
 export default defineComponent({
@@ -309,11 +329,13 @@ export default defineComponent({
     IonItem,
     IonLabel,
     IonListHeader,
-    // IonDatetime,
+    IonDatetime,
     RegisterPatientFooter,
     IonRow,
     IonCol,
     IonButton,
+    IonModal,
+    DateModalToolBar,
   },
   setup() {
     const store = useStore();
@@ -321,7 +343,9 @@ export default defineComponent({
 
     const { save } = AddPatient();
 
-    const { CapitalizeAllFirstLetters, formatDate} = Utils();
+    const { CapitalizeAllFirstLetters, formatDate, blisDateFormat} = Utils();
+
+    const DateModal = ref<boolean>(false);
 
     const numberOfPages = ref<number>(4);
     const currentPage = ref<number>(1);
@@ -339,7 +363,7 @@ export default defineComponent({
     patient.physicalAddress = "";
     patient.age = -1;
 
-    const dateOfBirth = ref();
+    const dateOfBirth = ref<string>("");
 
     const client = ref<SearchClient>({} as SearchClient);
 
@@ -358,6 +382,16 @@ export default defineComponent({
       }
     }
 
+
+    const OpenDateModal = (b: boolean) => {
+      DateModal.value = b;
+    };
+
+    const CloseDateModal = () => {
+
+      DateModal.value = false;
+    };
+
     const SearchClient = () => {
       if (
         client.value.first_name.length > 0 &&
@@ -375,7 +409,10 @@ export default defineComponent({
 
       patient.lastname = CapitalizeAllFirstLetters(patient.lastname);
 
+      patient.dob = blisDateFormat(patient.dob);
+
       save(patient);
+
     };
 
     const MoveNextField = () => {
@@ -411,7 +448,7 @@ export default defineComponent({
     watch(
       () => [dateOfBirth.value],
       () => {
-        patient.dob = format(parseISO(dateOfBirth.value), "yyyy-MM-dd");
+        patient.dob = dateOfBirth.value;
       }
     );
 
@@ -446,6 +483,9 @@ export default defineComponent({
       selectedPatient,
       patients,
       IgnorePossibles,
+      DateModal,
+      OpenDateModal,
+      CloseDateModal,
     };
   },
 });
@@ -477,5 +517,10 @@ ion-textarea {
 }
 .ignore-btn {
   margin-right: 10px;
+}
+.cus-datetime {
+  align-self: center !important;
+  margin: auto;
+  margin-top: 20px;
 }
 </style>
