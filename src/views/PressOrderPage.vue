@@ -346,7 +346,7 @@ export default defineComponent({
         const AlertExitApp = () => {
           const presentAlert = async () => {
             const alert = await alertController.create({
-              header: "Heads Up!",
+              header: "Attention!",
               message:
                 "Barcode printer not configured, Click configure to setup or proceed to ignore!",
               buttons: [

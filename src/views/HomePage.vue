@@ -155,7 +155,7 @@ export default defineComponent({
       const presentAlert = async () => {
         const alert = await alertController.create({
           cssClass: "order-status-alert",
-          header: "Heads Up!",
+          header: "Attention!",
           message: "Are you sure you want to Exit?",
           buttons: [
             {
